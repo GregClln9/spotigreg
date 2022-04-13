@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
+import 'package:spotigreg_front/provider/tracks_provider.dart';
 import 'package:spotigreg_front/screens/home.dart';
 import 'package:spotigreg_front/themes/themedata.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SearchProvider()),
+          ChangeNotifierProvider(create: (context) => TracksProvider()),
           ChangeNotifierProvider(
             create: (BuildContext context) {},
             builder: (context, child) {
