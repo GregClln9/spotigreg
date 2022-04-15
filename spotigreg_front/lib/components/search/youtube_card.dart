@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class YoutubeResults extends StatefulWidget {
-  YoutubeResults(
+class YoutubeCard extends StatefulWidget {
+  YoutubeCard(
       {Key? key,
       required this.author,
       required this.thumbnails,
@@ -13,10 +13,10 @@ class YoutubeResults extends StatefulWidget {
   dynamic title;
 
   @override
-  State<YoutubeResults> createState() => _YoutubeResultsState();
+  State<YoutubeCard> createState() => _YoutubeCardState();
 }
 
-class _YoutubeResultsState extends State<YoutubeResults> {
+class _YoutubeCardState extends State<YoutubeCard> {
   @override
   Widget build(BuildContext context) {
     return Column(

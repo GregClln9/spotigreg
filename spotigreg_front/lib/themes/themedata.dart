@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 ThemeData themedata = ThemeData(
-  primarySwatch: Colors.blue,
+  primarySwatch: Colors.blueGrey,
   errorColor: Colors.red,
 );

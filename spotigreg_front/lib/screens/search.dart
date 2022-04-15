@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotigreg_front/components/search/youtube_modal_bottom.dart';
-import 'package:spotigreg_front/components/search/youtube_results.dart';
+import 'package:spotigreg_front/screens/download_modal_bottom.dart';
+import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   CustomSearchDelegate();
@@ -35,31 +34,34 @@ class CustomSearchDelegate extends SearchDelegate {
           future: YoutubeUtils.searchYoutube(query),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              // print(snapshot.data[0]);
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       child: AspectRatio(
                         aspectRatio: 1.4,
-                        child: YoutubeResults(
+                        child: YoutubeCard(
                             author: snapshot.data[index].author,
                             thumbnails:
                                 snapshot.data[index].thumbnails.mediumResUrl,
                             title: snapshot.data[index].title),
                       ),
-                      onTap: () {
+                      onTap: () async {
+                        var url = await YoutubeUtils.getUrlYoutube(
+                            snapshot.data[index].id);
                         showModalBottomSheet(
                             context: context,
                             builder: (builder) {
-                              return YoutubeModalBottom(
-                                function: () async {
-                                  var yt = YoutubeExplode();
-                                  var manifest = await yt.videos.streamsClient
-                                      .getManifest(snapshot.data[index].id);
-                                  print(manifest.audioOnly
-                                      .withHighestBitrate()
-                                      .url);
-                                },
+                              return DownloadModalBottom(
+                                id: snapshot.data[index].id.toString(),
+                                title: snapshot.data[index].title,
+                                duration:
+                                    snapshot.data[index].duration.toString(),
+                                cover: snapshot
+                                    .data[index].thumbnails.mediumResUrl,
+                                url: url,
+                                artiste: snapshot.data[index].author,
                               );
                             });
                       },
@@ -93,7 +95,7 @@ class CustomSearchDelegate extends SearchDelegate {
                   itemBuilder: (context, index) {
                     return Dismissible(
                       background: Container(
-                        color: const Color.fromARGB(255, 212, 41, 28),
+                        color: const Color.fromARGB(255, 204, 67, 67),
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) {

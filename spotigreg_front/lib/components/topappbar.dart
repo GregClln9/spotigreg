@@ -19,7 +19,7 @@ class _TopAppBarState extends State<TopAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: const Text("SpotiGreg"),
+      title: const Text("SpotiGreg 💖"),
     );
   }
 }
