@@ -56,7 +56,7 @@ class _TrackCardState extends State<TrackCard> {
           width: 5,
         ),
         SizedBox(
-          width: mWidth * 0.6,
+          width: mWidth * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

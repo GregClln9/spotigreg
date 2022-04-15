@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotigreg_front/screens/download_modal_bottom.dart';
+import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
@@ -34,7 +34,6 @@ class CustomSearchDelegate extends SearchDelegate {
           future: YoutubeUtils.searchYoutube(query),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              // print(snapshot.data[0]);
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {

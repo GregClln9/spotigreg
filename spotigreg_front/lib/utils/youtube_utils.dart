@@ -12,7 +12,8 @@ class YoutubeUtils {
 
   static Future<String> getUrlYoutube(videoId) async {
     var yt = YoutubeExplode();
-    var manifest = await yt.videos.streamsClient.getManifest(videoId);
+    StreamManifest manifest =
+        await yt.videos.streamsClient.getManifest(videoId);
     return manifest.audioOnly[0].url.toString();
   }
 }

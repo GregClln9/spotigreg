@@ -17,21 +17,44 @@ class TracksUtils {
       cover: cover,
       url: url,
     );
-    box.add(track);
-    print(title + " downloaded.");
+    box.add(track).catchError((error) {
+      print("Error when added " + title + " track");
+    }).then((value) {
+      print(title + " ADDED.");
+    });
+  }
+
+  static putTrackUrl(String id, String url) {
+    TracksHive? track;
+    for (var i = 0; i < box.length; i++) {
+      if (box.get(i)?.id == id) {
+        track = box.get(i);
+        box.putAt(i, track!).catchError((error) {
+          print("Error when updated " + id + " track");
+        }).then((value) {
+          print("Track with id: " + id + " UPDATED.");
+        });
+      }
+    }
   }
 
   static deleteTrack(String id) {
     for (var i = 0; i < box.length; i++) {
       if (box.get(i)!.id == id) {
-        box.delete(i);
+        box.delete(i).catchError((error) {
+          print("Error when deleted " + id + " track");
+        }).then((value) {
+          print("Track with id: " + id + " DELETED.");
+        });
       }
     }
-    print("Track with id: " + id + " deleted.");
   }
 
   static deleteAllTracks() {
-    box.clear();
-    print("All tracks are deleteted.");
+    box.clear().catchError((error) {
+      print("Error when deleted all tracks");
+    }).then((value) {
+      print("All tracks are DELETED.");
+    });
   }
 }

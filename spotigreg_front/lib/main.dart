@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:spotigreg_front/provider/music_provider.dart';
 import 'package:spotigreg_front/provider/player_provider.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/screens/home.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => SearchProvider()),
           ChangeNotifierProvider(create: (context) => PlayerProvider()),
+          ChangeNotifierProvider(create: (context) => MusicProvider()),
           ChangeNotifierProvider(
             create: (BuildContext context) {},
             builder: (context, child) {

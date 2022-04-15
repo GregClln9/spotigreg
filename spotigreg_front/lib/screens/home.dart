@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
-import 'package:spotigreg_front/components/topappbar.dart';
+import 'package:spotigreg_front/layout/topappbar.dart';
+import 'package:spotigreg_front/provider/music_provider.dart';
 import 'package:spotigreg_front/provider/player_provider.dart';
-import 'package:spotigreg_front/components/home/player.dart';
+import 'package:spotigreg_front/layout/player.dart';
 import 'package:spotigreg_front/screens/search.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
@@ -21,24 +23,10 @@ class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
-  void initState() {
-    super.initState();
-    // for (var i = 5; i < box.length; i++) {
-    //   if (box.get(i)?.url != null) {
-    //     _audioPlayer
-    //         .setAudioSource(ConcatenatingAudioSource(
-    //             children: [AudioSource.uri(Uri.parse(box.get(i)!.url))]))
-    //         .catchError((error) {
-    //       print(error.toString());
-    //     });
-    //   }
-    // }
-  }
-
-  @override
   Widget build(BuildContext context) {
     Box<TracksHive> box = Boxes.getTracks();
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
 
     return Scaffold(
         appBar: TopAppBar(scaffoldKey: _key),
@@ -72,43 +60,57 @@ class _HomeState extends State<Home> {
                     ]),
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: box.length,
-                    itemBuilder: ((context, index) {
-                      return Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                          child: InkWell(
-                            onTap: (() {
-                              playerProvider.setCurrentTrack(
-                                box.getAt(index)!.title.toString(),
-                                box.getAt(index)!.artiste.toString(),
-                                box.getAt(index)!.cover.toString(),
-                                box.getAt(index)!.url.toString(),
-                              );
+                child: StreamBuilder<PlayerState>(
+                    stream: musicProvider.audioPlayer.playerStateStream,
+                    builder: (context, snapshot) {
+                      return ListView.builder(
+                          itemCount: box.length,
+                          itemBuilder: ((context, index) {
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                child: InkWell(
+                                  onTap: (() {
+                                    print(box.getAt(index)!.url.toString());
+                                    if (playerProvider.currentId ==
+                                        box.getAt(index)!.id.toString()) {
+                                      musicProvider.musicInit(
+                                          box.getAt(index)!.url.toString(),
+                                          context);
+                                    } else {
+                                      playerProvider.setCurrentTrack(
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                      );
+                                      musicProvider.musicInit(
+                                          box.getAt(index)!.url.toString(),
+                                          context);
 
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation1, animation2) =>
-                                          super.widget,
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            }),
-                            // onDoubleTap: () {
-                            //   TracksUtils.deleteTrack(
-                            //     box.getAt(index)!.id.toString(),
-                            //   );
-                            // },
-                            child: TrackCard(
-                              cover: box.getAt(index)!.cover.toString(),
-                              artiste: box.getAt(index)!.artiste.toString(),
-                              title: box.getAt(index)!.title.toString(),
-                            ),
-                          ));
-                    })),
+                                      Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
+                                              super.widget,
+                                          transitionDuration: Duration.zero,
+                                          reverseTransitionDuration:
+                                              Duration.zero,
+                                        ),
+                                      );
+                                    }
+                                  }),
+                                  child: TrackCard(
+                                    cover: box.getAt(index)!.cover.toString(),
+                                    artiste:
+                                        box.getAt(index)!.artiste.toString(),
+                                    title: box.getAt(index)!.title.toString(),
+                                  ),
+                                ));
+                          }));
+                    }),
               ),
             ],
           ),
