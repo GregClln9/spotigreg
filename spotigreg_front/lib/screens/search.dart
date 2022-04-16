@@ -52,6 +52,10 @@ class CustomSearchDelegate extends SearchDelegate {
                         showModalBottomSheet(
                             context: context,
                             builder: (builder) {
+                              print(url);
+                              print("DURATION : " +
+                                  snapshot.data[index].duration.toString());
+
                               return DownloadModalBottom(
                                 id: snapshot.data[index].id.toString(),
                                 title: snapshot.data[index].title,

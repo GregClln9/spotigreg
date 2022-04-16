@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -13,100 +14,116 @@ class Player extends StatefulWidget {
 }
 
 class _PlayerState extends State<Player> {
-  // final _audioPlayer = AudioPlayer();
-
-  // @override
-  // void dispose() {
-  //   _audioPlayer.dispose();
-  //   super.dispose();
-  // }
-
-  // Widget _playerButton(PlayerState playerState) {
-  //   // 1
-  //   final processingState = playerState.processingState;
-  //   if (processingState == ProcessingState.loading ||
-  //       processingState == ProcessingState.buffering) {
-  //     // 2
-  //     return Container(
-  //       margin: const EdgeInsets.all(8.0),
-  //       width: 2.0,
-  //       height: 2.0,
-  //       child: const CircularProgressIndicator(),
-  //     );
-  //   } else if (_audioPlayer.playing != true) {
-  //     return IconButton(
-  //       icon: const Icon(Icons.play_arrow),
-  //       iconSize: 20.0,
-  //       onPressed: _audioPlayer.play,
-  //     );
-  //   } else if (processingState != ProcessingState.completed) {
-  //     // 4
-  //     return IconButton(
-  //       icon: const Icon(Icons.pause),
-  //       iconSize: 20.0,
-  //       onPressed: _audioPlayer.pause,
-  //     );
-  //   } else {
-  //     // 5
-  //     return IconButton(
-  //       icon: const Icon(Icons.replay),
-  //       iconSize: 1.0,
-  //       onPressed: () => _audioPlayer.seek(Duration.zero,
-  //           index: _audioPlayer.effectiveIndices?.first),
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     double mHeight = MediaQuery.of(context).size.height;
 
+    musicProvider.audioPlayer.positionStream.listen((position) {
+      final oldState = musicProvider.progressNotifier.value;
+      musicProvider.progressNotifier.value = DurationState(
+        progress: position,
+        buffered: oldState.buffered,
+        total: oldState.total,
+      );
+    });
+
+    musicProvider.audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
+      final oldState = musicProvider.progressNotifier.value;
+      musicProvider.progressNotifier.value = DurationState(
+        progress: oldState.progress,
+        buffered: bufferedPosition,
+        total: oldState.total,
+      );
+    });
+
+    musicProvider.audioPlayer.durationStream.listen((totalDuration) {
+      final oldState = musicProvider.progressNotifier.value;
+      musicProvider.progressNotifier.value = DurationState(
+        progress: oldState.progress,
+        buffered: oldState.buffered,
+        total: totalDuration ?? Duration.zero,
+      );
+    });
+
     return Container(
         color: Colors.blueGrey,
         height: mHeight * 0.1,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              TrackCard(
-                  cover: playerProvider.currentCover,
-                  artiste: playerProvider.currentArtiste,
-                  title: playerProvider.currentTitle),
-              const SizedBox(width: 5),
-              StreamBuilder<PlayerState>(
-                stream: musicProvider.audioPlayer.playerStateStream,
-                builder: (context, snapshot) {
-                  print(musicProvider.audioPlayer.loopMode.toString());
-                  print(musicProvider.audioPlayer.playing.toString());
-                  return Row(
-                    children: [
-                      IconButton(
-                          onPressed: (() {
-                            musicProvider.musicRepeat();
-                            setState(() {});
-                          }),
-                          icon:
-                              musicProvider.audioPlayer.loopMode == LoopMode.one
-                                  ? const Icon(Icons.repeat_one)
-                                  : const Icon(Icons.repeat)),
-                      IconButton(
-                          onPressed: (() {
-                            if (musicProvider.audioPlayer.playing) {
-                              musicProvider.musicPause();
-                            } else {
-                              musicProvider.musicPlay();
-                            }
-                            setState(() {});
-                          }),
-                          icon: musicProvider.audioPlayer.playing
-                              ? const Icon(Icons.pause)
-                              : const Icon(Icons.play_arrow)),
-                    ],
+              ValueListenableBuilder<DurationState>(
+                valueListenable: musicProvider.progressNotifier,
+                builder: (_, value, __) {
+                  return ProgressBar(
+                    thumbColor: Colors.black,
+                    progressBarColor: Colors.blue,
+                    progress: value.progress,
+                    buffered: value.buffered,
+                    total: value.total,
+                    onSeek: musicProvider.seek,
                   );
                 },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TrackCard(
+                      cover: playerProvider.currentCover,
+                      artiste: playerProvider.currentArtiste,
+                      title: playerProvider.currentTitle),
+                  const SizedBox(width: 5),
+                  StreamBuilder<PlayerState>(
+                    stream: musicProvider.audioPlayer.playerStateStream,
+                    builder: (context, snapshot) {
+                      print(musicProvider.audioPlayer.loopMode.toString());
+                      print(musicProvider.audioPlayer.playing.toString());
+                      return Row(
+                        children: [
+                          // Repeat
+                          IconButton(
+                              onPressed: (() {
+                                musicProvider.musicRepeat();
+                                setState(() {});
+                              }),
+                              icon: musicProvider.audioPlayer.loopMode ==
+                                      LoopMode.one
+                                  ? const Icon(Icons.repeat_one)
+                                  : const Icon(Icons.repeat)),
+                          // Previous Track
+                          IconButton(
+                              onPressed: (() {
+                                musicProvider.previousTrack();
+                                setState(() {});
+                              }),
+                              icon: const Icon(Icons.arrow_left_rounded)),
+                          // Play pause
+                          IconButton(
+                              onPressed: (() {
+                                if (musicProvider.audioPlayer.playing) {
+                                  musicProvider.musicPause();
+                                } else {
+                                  musicProvider.musicPlay();
+                                }
+                                setState(() {});
+                              }),
+                              icon: musicProvider.audioPlayer.playing
+                                  ? const Icon(Icons.pause)
+                                  : const Icon(Icons.play_arrow)),
+                          // Next Track
+                          IconButton(
+                              onPressed: (() {
+                                musicProvider.nextTrack();
+                                setState(() {});
+                              }),
+                              icon: const Icon(Icons.arrow_right_rounded)),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

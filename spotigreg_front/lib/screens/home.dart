@@ -76,6 +76,11 @@ class _HomeState extends State<Home> {
                                         box.getAt(index)!.id.toString()) {
                                       musicProvider.musicInit(
                                           box.getAt(index)!.url.toString(),
+                                          box.getAt(index)!.duration.toString(),
+                                          box.getAt(index)!.id.toString(),
+                                          box.getAt(index)!.artiste.toString(),
+                                          box.getAt(index)!.artiste.toString(),
+                                          box.getAt(index)!.cover.toString(),
                                           context);
                                     } else {
                                       playerProvider.setCurrentTrack(
@@ -87,6 +92,11 @@ class _HomeState extends State<Home> {
                                       );
                                       musicProvider.musicInit(
                                           box.getAt(index)!.url.toString(),
+                                          box.getAt(index)!.duration.toString(),
+                                          box.getAt(index)!.id.toString(),
+                                          box.getAt(index)!.artiste.toString(),
+                                          box.getAt(index)!.artiste.toString(),
+                                          box.getAt(index)!.cover.toString(),
                                           context);
 
                                       Navigator.pushReplacement(
