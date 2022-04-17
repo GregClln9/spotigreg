@@ -4,7 +4,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
-import 'package:spotigreg_front/provider/player_provider.dart';
 
 class Player extends StatefulWidget {
   const Player({Key? key}) : super(key: key);
@@ -15,10 +14,17 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     double mHeight = MediaQuery.of(context).size.height;
+    wait2sec() async {
+      await musicProvider.nextTrack();
+    }
 
     musicProvider.audioPlayer.positionStream.listen((position) {
       final oldState = musicProvider.progressNotifier.value;
@@ -71,15 +77,19 @@ class _PlayerState extends State<Player> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TrackCard(
-                      cover: playerProvider.currentCover,
-                      artiste: playerProvider.currentArtiste,
-                      title: playerProvider.currentTitle),
+                      cover: musicProvider.currentCover,
+                      artiste: musicProvider.currentArtiste,
+                      title: musicProvider.currentTitle),
                   const SizedBox(width: 5),
                   StreamBuilder<PlayerState>(
                     stream: musicProvider.audioPlayer.playerStateStream,
                     builder: (context, snapshot) {
-                      print(musicProvider.audioPlayer.loopMode.toString());
-                      print(musicProvider.audioPlayer.playing.toString());
+                      final playerState = snapshot.data;
+                      final processingState = playerState?.processingState;
+                      if (processingState == ProcessingState.completed) {
+                        wait2sec();
+                        setState(() {});
+                      }
                       return Row(
                         children: [
                           // Repeat
@@ -95,7 +105,9 @@ class _PlayerState extends State<Player> {
                           // Previous Track
                           IconButton(
                               onPressed: (() {
-                                musicProvider.previousTrack();
+                                musicProvider.sortByMoreRecent
+                                    ? musicProvider.nextTrack()
+                                    : musicProvider.previousTrack();
                                 setState(() {});
                               }),
                               icon: const Icon(Icons.arrow_left_rounded)),
@@ -109,13 +121,17 @@ class _PlayerState extends State<Player> {
                                 }
                                 setState(() {});
                               }),
-                              icon: musicProvider.audioPlayer.playing
-                                  ? const Icon(Icons.pause)
-                                  : const Icon(Icons.play_arrow)),
+                              icon: !musicProvider.audioPlayer.playing ||
+                                      processingState ==
+                                          ProcessingState.completed
+                                  ? const Icon(Icons.play_arrow)
+                                  : const Icon(Icons.pause)),
                           // Next Track
                           IconButton(
                               onPressed: (() {
-                                musicProvider.nextTrack();
+                                musicProvider.sortByMoreRecent
+                                    ? musicProvider.previousTrack()
+                                    : musicProvider.nextTrack();
                                 setState(() {});
                               }),
                               icon: const Icon(Icons.arrow_right_rounded)),

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/layout/topappbar.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
-import 'package:spotigreg_front/provider/player_provider.dart';
 import 'package:spotigreg_front/layout/player.dart';
 import 'package:spotigreg_front/screens/search.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
@@ -25,7 +24,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Box<TracksHive> box = Boxes.getTracks();
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
 
     return Scaffold(
@@ -66,38 +64,41 @@ class _HomeState extends State<Home> {
                       return ListView.builder(
                           itemCount: box.length,
                           itemBuilder: ((context, index) {
+                            index = box.length - index - 1;
                             return Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 0, 10, 10),
                                 child: InkWell(
                                   onTap: (() {
-                                    print(box.getAt(index)!.url.toString());
-                                    if (playerProvider.currentId ==
+                                    if (musicProvider.currentId ==
                                         box.getAt(index)!.id.toString()) {
                                       musicProvider.musicInit(
-                                          box.getAt(index)!.url.toString(),
-                                          box.getAt(index)!.duration.toString(),
-                                          box.getAt(index)!.id.toString(),
-                                          box.getAt(index)!.artiste.toString(),
-                                          box.getAt(index)!.artiste.toString(),
-                                          box.getAt(index)!.cover.toString(),
-                                          context);
+                                        index.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.duration.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                      );
                                     } else {
-                                      playerProvider.setCurrentTrack(
+                                      musicProvider.setCurrentTrack(
                                         box.getAt(index)!.title.toString(),
                                         box.getAt(index)!.artiste.toString(),
                                         box.getAt(index)!.cover.toString(),
                                         box.getAt(index)!.url.toString(),
                                         box.getAt(index)!.id.toString(),
                                       );
+
                                       musicProvider.musicInit(
-                                          box.getAt(index)!.url.toString(),
-                                          box.getAt(index)!.duration.toString(),
-                                          box.getAt(index)!.id.toString(),
-                                          box.getAt(index)!.artiste.toString(),
-                                          box.getAt(index)!.artiste.toString(),
-                                          box.getAt(index)!.cover.toString(),
-                                          context);
+                                        index.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.duration.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                      );
 
                                       Navigator.pushReplacement(
                                         context,

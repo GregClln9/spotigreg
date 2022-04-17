@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
-import 'package:spotigreg_front/provider/player_provider.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/screens/home.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
@@ -28,7 +27,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => SearchProvider()),
-          ChangeNotifierProvider(create: (context) => PlayerProvider()),
           ChangeNotifierProvider(create: (context) => MusicProvider()),
           ChangeNotifierProvider(
             create: (BuildContext context) {},
