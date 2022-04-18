@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -15,11 +17,37 @@ class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _TopAppBarState extends State<TopAppBar> {
+  List<String> listOfEmoji = [
+    "💖",
+    "🥺",
+    "😳",
+    "🤪",
+    "😴",
+    "😵‍💫",
+    "💔",
+    "💜",
+    "💕",
+    "❤️",
+    "🌙",
+    "💫",
+    "🌞",
+    "🥀",
+    "👋",
+  ];
   @override
   Widget build(BuildContext context) {
+    final _random = Random();
     return AppBar(
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {},
+        ),
+      ],
       elevation: 0,
-      title: const Text("SpotiGreg 💖"),
+      title: Text(
+          "SpotiGreg. " + listOfEmoji[_random.nextInt(listOfEmoji.length)]),
+      centerTitle: false,
     );
   }
 }

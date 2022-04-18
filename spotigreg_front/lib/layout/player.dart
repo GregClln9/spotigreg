@@ -22,8 +22,11 @@ class _PlayerState extends State<Player> {
   Widget build(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     double mHeight = MediaQuery.of(context).size.height;
+
     wait2sec() async {
-      await musicProvider.nextTrack();
+      musicProvider.sortByMoreRecent
+          ? await musicProvider.previousTrack()
+          : await musicProvider.nextTrack();
     }
 
     musicProvider.audioPlayer.positionStream.listen((position) {
@@ -119,7 +122,6 @@ class _PlayerState extends State<Player> {
                                 } else {
                                   musicProvider.musicPlay();
                                 }
-                                setState(() {});
                               }),
                               icon: !musicProvider.audioPlayer.playing ||
                                       processingState ==
