@@ -134,7 +134,7 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                               child: Center(
                                 child: Text(
-                                  "Cliquez sur + pour ajouter de nouveau track",
+                                  "Aucun titre sauvargdé, cliquez sur + pour en ajouter.",
                                   style: TextStyle(color: secondaryText),
                                   textAlign: TextAlign.center,
                                 ),
