@@ -118,6 +118,11 @@ class MusicProvider extends ChangeNotifier {
     if (_repeat) {
       audioPlayer.seekToNext();
     } else {
+      try {
+        box.getAt(index)!.title.toString();
+      } catch (e) {
+        return;
+      }
       setCurrentTrack(
         box.getAt(index)!.title.toString(),
         box.getAt(index)!.artiste.toString(),
@@ -125,7 +130,6 @@ class MusicProvider extends ChangeNotifier {
         box.getAt(index)!.url.toString(),
         box.getAt(index)!.id.toString(),
       );
-
       musicInit(
         (index).toString(),
         box.getAt(index)!.url.toString(),

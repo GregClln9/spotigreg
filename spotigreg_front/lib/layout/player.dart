@@ -76,6 +76,13 @@ class _PlayerState extends State<Player> {
               builder: (context, snapshot) {
                 final playerState = snapshot.data;
                 final processingState = playerState?.processingState;
+                if (processingState == ProcessingState.completed) {
+                  if (musicProvider.sortByMoreRecent) {
+                    musicProvider.previousTrack();
+                  } else {
+                    musicProvider.nextTrack();
+                  }
+                }
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
