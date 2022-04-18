@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 
 // ignore: must_be_immutable
@@ -26,9 +27,12 @@ class DownloadModalBottom extends StatefulWidget {
 class _DownloadModalBottomState extends State<DownloadModalBottom> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
+    double mHeight = MediaQuery.of(context).size.height;
+
+    return SizedBox(
+      height: mHeight * 0.1,
+      child: Center(
+        child: IconButton(
             onPressed: (() {
               TracksUtils.addTrack(
                   widget.id,
@@ -39,8 +43,8 @@ class _DownloadModalBottomState extends State<DownloadModalBottom> {
                   widget.url.toString());
               setState(() {});
             }),
-            icon: const Icon(Icons.download))
-      ],
+            icon: Icon(Icons.download, color: primaryColor)),
+      ),
     );
   }
 }

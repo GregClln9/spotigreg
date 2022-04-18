@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
+import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
 import 'package:spotigreg_front/route/route.dart' as route;
 
@@ -73,7 +74,8 @@ class CustomSearchDelegate extends SearchDelegate {
                     );
                   });
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.white));
             }
           });
     });
@@ -107,9 +109,14 @@ class CustomSearchDelegate extends SearchDelegate {
                         searchProvider.removeSearchHistory(
                             searchProvider.searchHistory.elementAt(index));
                       },
-                      child: ListTile(
-                        title: Text(
-                          searchProvider.searchHistory.elementAt(index),
+                      child: InkWell(
+                        onTap: (() {
+                          query = searchProvider.searchHistory.elementAt(index);
+                        }),
+                        child: ListTile(
+                          title: Text(
+                            searchProvider.searchHistory.elementAt(index),
+                          ),
                         ),
                       ),
                     );
@@ -117,13 +124,24 @@ class CustomSearchDelegate extends SearchDelegate {
             ),
           ),
           Center(
-            child: InkWell(
-                onTap: () {
-                  searchProvider.removeAllSearchHistory();
-                  setState(() {});
-                },
-                child: const Text('Effacer les recherces récentes')),
-          )
+              child: InkWell(
+                  onTap: () {
+                    searchProvider.removeAllSearchHistory();
+                    setState(() {});
+                  },
+                  child: Container(
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 4, 15, 4),
+                      child: Text(
+                        'Effacer les recherces récentes',
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: secondaryText),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        )),
+                  )))
         ],
       );
     });

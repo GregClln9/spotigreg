@@ -21,7 +21,6 @@ class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
-    double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
 
     musicProvider.audioPlayer.positionStream.listen((position) {
@@ -77,12 +76,8 @@ class _PlayerState extends State<Player> {
               builder: (context, snapshot) {
                 final playerState = snapshot.data;
                 final processingState = playerState?.processingState;
-                // if (processingState == ProcessingState.completed) {
-                //   wait2sec();
-                //   setState(() {});
-                // }
                 return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
@@ -93,6 +88,7 @@ class _PlayerState extends State<Player> {
                         )),
                     // Previous Track
                     IconButton(
+                        iconSize: 45,
                         onPressed: (() {
                           musicProvider.sortByMoreRecent
                               ? musicProvider.nextTrack()
@@ -133,28 +129,18 @@ class _PlayerState extends State<Player> {
                         ),
                       ),
                     ),
-                    // IconButton(
-                    //     iconSize: 50,
-                    //     onPressed: (() {
-                    //       if (musicProvider.audioPlayer.playing) {
-                    //         musicProvider.musicPause();
-                    //       } else {
-                    //         musicProvider.musicPlay();
-                    //       }
-                    //     }),
-                    //     icon: !musicProvider.audioPlayer.playing ||
-                    //             processingState == ProcessingState.completed
-                    //         ? const Icon(Icons.play_circle_outline_rounded)
-                    //         : const Icon(Icons.pause_circle_outline_rounded)),
                     // Next Track
                     IconButton(
+                        iconSize: 45,
                         onPressed: (() {
                           musicProvider.sortByMoreRecent
                               ? musicProvider.previousTrack()
                               : musicProvider.nextTrack();
                           setState(() {});
                         }),
-                        icon: const Icon(Icons.skip_next_rounded)),
+                        icon: const Icon(
+                          Icons.skip_next_rounded,
+                        )),
                     // Repeat
                     IconButton(
                         onPressed: (() {

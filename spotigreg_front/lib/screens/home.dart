@@ -70,63 +70,76 @@ class _HomeState extends State<Home> {
                 child: StreamBuilder<PlayerState>(
                     stream: musicProvider.audioPlayer.playerStateStream,
                     builder: (context, snapshot) {
-                      return ListView.builder(
-                          itemCount: box.length,
-                          itemBuilder: ((context, index) {
-                            if (musicProvider.sortByMoreRecent) {
-                              index = box.length - index - 1;
-                            }
-                            return InkWell(
-                              onTap: (() {
-                                if (musicProvider.currentId ==
-                                    box.getAt(index)!.id.toString()) {
-                                  musicProvider.musicInit(
-                                    index.toString(),
-                                    box.getAt(index)!.url.toString(),
-                                    box.getAt(index)!.duration.toString(),
-                                    box.getAt(index)!.id.toString(),
-                                    box.getAt(index)!.artiste.toString(),
-                                    box.getAt(index)!.title.toString(),
-                                    box.getAt(index)!.cover.toString(),
-                                  );
-                                } else {
-                                  musicProvider.setCurrentTrack(
-                                    box.getAt(index)!.title.toString(),
-                                    box.getAt(index)!.artiste.toString(),
-                                    box.getAt(index)!.cover.toString(),
-                                    box.getAt(index)!.url.toString(),
-                                    box.getAt(index)!.id.toString(),
-                                  );
-
-                                  musicProvider.musicInit(
-                                    index.toString(),
-                                    box.getAt(index)!.url.toString(),
-                                    box.getAt(index)!.duration.toString(),
-                                    box.getAt(index)!.id.toString(),
-                                    box.getAt(index)!.artiste.toString(),
-                                    box.getAt(index)!.title.toString(),
-                                    box.getAt(index)!.cover.toString(),
-                                  );
-
-                                  Navigator.pushReplacement(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              super.widget,
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
-                                    ),
-                                  );
+                      return box.length > 0
+                          ? ListView.builder(
+                              itemCount: box.length,
+                              itemBuilder: ((context, index) {
+                                if (musicProvider.sortByMoreRecent) {
+                                  index = box.length - index - 1;
                                 }
-                              }),
-                              child: TrackCard(
-                                cover: box.getAt(index)!.cover.toString(),
-                                artiste: box.getAt(index)!.artiste.toString(),
-                                title: box.getAt(index)!.title.toString(),
+                                return InkWell(
+                                  onTap: (() {
+                                    if (musicProvider.currentId ==
+                                        box.getAt(index)!.id.toString()) {
+                                      musicProvider.musicInit(
+                                        index.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.duration.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                      );
+                                    } else {
+                                      musicProvider.setCurrentTrack(
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                      );
+
+                                      musicProvider.musicInit(
+                                        index.toString(),
+                                        box.getAt(index)!.url.toString(),
+                                        box.getAt(index)!.duration.toString(),
+                                        box.getAt(index)!.id.toString(),
+                                        box.getAt(index)!.artiste.toString(),
+                                        box.getAt(index)!.title.toString(),
+                                        box.getAt(index)!.cover.toString(),
+                                      );
+
+                                      Navigator.pushReplacement(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
+                                              super.widget,
+                                          transitionDuration: Duration.zero,
+                                          reverseTransitionDuration:
+                                              Duration.zero,
+                                        ),
+                                      );
+                                    }
+                                  }),
+                                  child: TrackCard(
+                                    cover: box.getAt(index)!.cover.toString(),
+                                    artiste:
+                                        box.getAt(index)!.artiste.toString(),
+                                    title: box.getAt(index)!.title.toString(),
+                                  ),
+                                );
+                              }))
+                          : Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                              child: Center(
+                                child: Text(
+                                  "Vous n'avez toujours pas de titres disponibles... Cliquez sur + pour en ajouter",
+                                  style: TextStyle(color: secondaryText),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             );
-                          }));
                     }),
               ),
             ],

@@ -46,6 +46,12 @@ class _TopAppBarState extends State<TopAppBar> {
     "☺️",
     "😔",
     "🙃",
+    "😤",
+    "🕺",
+    "💃",
+    "🌈",
+    "📀",
+    "💿",
   ];
   @override
   Widget build(BuildContext context) {

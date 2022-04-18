@@ -12,24 +12,30 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(title: const Text('Préférences')),
         body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Settings'),
-            InkWell(
-              child: const Text("Delete All Tracks"),
-              onDoubleTap: () {
-                setState(() {
-                  TracksUtils.deleteAllTracks();
-                });
-              },
-            )
-          ],
-        ),
-      ),
-    ));
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: InkWell(
+                    child: const Text(
+                      "Double tap for delete all Tracks",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        TracksUtils.deleteAllTracks();
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
