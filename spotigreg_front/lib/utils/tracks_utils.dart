@@ -29,7 +29,8 @@ class TracksUtils {
     for (var i = 0; i < box.length; i++) {
       if (box.get(i)?.id == id) {
         track = box.get(i);
-        box.putAt(i, track!).catchError((error) {
+        track!.url = url;
+        box.putAt(i, track).catchError((error) {
           print("Error when updated " + id + " track");
         }).then((value) {
           print("Track with id: " + id + " UPDATED.");

@@ -39,8 +39,8 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSortByMoreRecent(bool newSortByMoreRecent) {
-    _sortByMoreRecent = !newSortByMoreRecent;
+  void setSortByMoreRecent() {
+    _sortByMoreRecent = !sortByMoreRecent;
     notifyListeners();
   }
 
@@ -48,40 +48,41 @@ class MusicProvider extends ChangeNotifier {
       String id, String title, String artiste, String artUri) async {
     _currentIdPosition = idPosition;
 
-    _audioPlayer.setAudioSource(
-      ClippingAudioSource(
-          child: ProgressiveAudioSource(Uri.parse(url),
-              tag: MediaItem(
-                  id: id,
-                  artist: artiste,
-                  artUri: Uri.parse(artUri),
-                  title: title)),
-          start: const Duration(minutes: 0),
-          end: parseDuration(duration)),
-      initialIndex: 0,
-    );
-
-    getUrl(url) {
-      _audioPlayer
-          .setAudioSource(AudioSource.uri(Uri.parse(url)))
-          .catchError((error) async {
-        await YoutubeUtils.getUrlYoutube(currentId).then(
-          (newUrl) {
-            _audioPlayer
-                .setAudioSource(AudioSource.uri(Uri.parse(newUrl)))
-                .then((value) {
-              TracksUtils.putTrackUrl(currentId, newUrl);
-            }).catchError((error) {
-              // ignore: avoid_print
-              print("error newUrl, snackbar : " + error.toString());
-            });
-          },
-        ).catchError((error));
-        // ignore: avoid_print
-        print("error setAudioSource (URL dead or wrong URL) : " +
-            error.toString());
-      });
-    }
+    _audioPlayer
+        .setAudioSource(ClippingAudioSource(
+            child: AudioSource.uri(Uri.parse(url)),
+            tag: MediaItem(
+                id: id,
+                artist: artiste,
+                artUri: Uri.parse(artUri),
+                title: title),
+            start: const Duration(minutes: 0),
+            end: parseDuration(duration)))
+        .catchError((error) async {
+      await YoutubeUtils.getUrlYoutube(currentId).then(
+        (newUrl) {
+          _audioPlayer
+              .setAudioSource(ClippingAudioSource(
+                  child: AudioSource.uri(Uri.parse(newUrl)),
+                  tag: MediaItem(
+                      id: id,
+                      artist: artiste,
+                      artUri: Uri.parse(artUri),
+                      title: title),
+                  start: const Duration(minutes: 0),
+                  end: parseDuration(duration)))
+              .then((value) {
+            TracksUtils.putTrackUrl(currentId, newUrl);
+          }).catchError((error) {
+            // ignore: avoid_print
+            print("error newUrl, snackbar : " + error.toString());
+          });
+        },
+      ).catchError((error));
+      // ignore: avoid_print
+      print(
+          "error setAudioSource (URL dead or wrong URL) : " + error.toString());
+    });
 
     notifyListeners();
   }

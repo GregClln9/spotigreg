@@ -23,53 +23,56 @@ class _TrackCardState extends State<TrackCard> {
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width;
-    return Row(
-      children: [
-        ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            child: SizedBox(
-              width: mWidth * 0.1,
-              height: mWidth * 0.1,
-              child: Image.network(widget.cover, fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) {
-                  return child;
-                }
-                return Shimmer.fromColors(
-                    period: const Duration(milliseconds: 500),
-                    child: Container(
-                      width: double.infinity,
-                      height: 8.0,
-                      color: Colors.white,
-                    ),
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!);
-              }, errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: mWidth * 0.1,
-                  height: mWidth * 0.1,
-                  color: const Color.fromARGB(255, 161, 162, 163),
-                );
-              }),
-            )),
-        const SizedBox(
-          width: 5,
-        ),
-        SizedBox(
-          width: mWidth * 0.2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(widget.artiste, overflow: TextOverflow.ellipsis)
-            ],
+    return SizedBox(
+      height: mWidth * 0.12,
+      child: Row(
+        children: [
+          ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+              child: SizedBox(
+                width: mWidth * 0.1,
+                height: mWidth * 0.1,
+                child: Image.network(widget.cover, fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Shimmer.fromColors(
+                      period: const Duration(milliseconds: 500),
+                      child: Container(
+                        width: double.infinity,
+                        height: 8.0,
+                        color: Colors.white,
+                      ),
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!);
+                }, errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: mWidth * 0.1,
+                    height: mWidth * 0.1,
+                    color: const Color.fromARGB(255, 161, 162, 163),
+                  );
+                }),
+              )),
+          const SizedBox(
+            width: 5,
           ),
-        )
-      ],
+          SizedBox(
+            width: mWidth * 0.2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.title,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(widget.artiste, overflow: TextOverflow.ellipsis)
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -49,10 +49,19 @@ class _HomeState extends State<Home> {
                           ? box.length.toString() + " titre"
                           : box.length.toString() + " titres"),
                       InkWell(
+                        child: const Text("Sort By.."),
+                        onTap: () {
+                          setState(() {
+                            musicProvider.setSortByMoreRecent();
+                          });
+                        },
+                      ),
+                      InkWell(
                         child: const Text("Delete All"),
                         onDoubleTap: () {
-                          TracksUtils.deleteAllTracks();
-                          setState(() {});
+                          setState(() {
+                            TracksUtils.deleteAllTracks();
+                          });
                         },
                       )
                     ]),
@@ -61,66 +70,67 @@ class _HomeState extends State<Home> {
                 child: StreamBuilder<PlayerState>(
                     stream: musicProvider.audioPlayer.playerStateStream,
                     builder: (context, snapshot) {
-                      return ListView.builder(
-                          itemCount: box.length,
-                          itemBuilder: ((context, index) {
-                            index = box.length - index - 1;
-                            return Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                child: InkWell(
-                                  onTap: (() {
-                                    if (musicProvider.currentId ==
-                                        box.getAt(index)!.id.toString()) {
-                                      musicProvider.musicInit(
-                                        index.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.duration.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                      );
-                                    } else {
-                                      musicProvider.setCurrentTrack(
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                      );
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: ListView.builder(
+                            itemCount: box.length,
+                            itemBuilder: ((context, index) {
+                              if (musicProvider.sortByMoreRecent) {
+                                index = box.length - index - 1;
+                              }
+                              return InkWell(
+                                onTap: (() {
+                                  if (musicProvider.currentId ==
+                                      box.getAt(index)!.id.toString()) {
+                                    musicProvider.musicInit(
+                                      index.toString(),
+                                      box.getAt(index)!.url.toString(),
+                                      box.getAt(index)!.duration.toString(),
+                                      box.getAt(index)!.id.toString(),
+                                      box.getAt(index)!.artiste.toString(),
+                                      box.getAt(index)!.title.toString(),
+                                      box.getAt(index)!.cover.toString(),
+                                    );
+                                  } else {
+                                    musicProvider.setCurrentTrack(
+                                      box.getAt(index)!.title.toString(),
+                                      box.getAt(index)!.artiste.toString(),
+                                      box.getAt(index)!.cover.toString(),
+                                      box.getAt(index)!.url.toString(),
+                                      box.getAt(index)!.id.toString(),
+                                    );
 
-                                      musicProvider.musicInit(
-                                        index.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.duration.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                      );
+                                    musicProvider.musicInit(
+                                      index.toString(),
+                                      box.getAt(index)!.url.toString(),
+                                      box.getAt(index)!.duration.toString(),
+                                      box.getAt(index)!.id.toString(),
+                                      box.getAt(index)!.artiste.toString(),
+                                      box.getAt(index)!.title.toString(),
+                                      box.getAt(index)!.cover.toString(),
+                                    );
 
-                                      Navigator.pushReplacement(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation1,
-                                                  animation2) =>
-                                              super.widget,
-                                          transitionDuration: Duration.zero,
-                                          reverseTransitionDuration:
-                                              Duration.zero,
-                                        ),
-                                      );
-                                    }
-                                  }),
-                                  child: TrackCard(
-                                    cover: box.getAt(index)!.cover.toString(),
-                                    artiste:
-                                        box.getAt(index)!.artiste.toString(),
-                                    title: box.getAt(index)!.title.toString(),
-                                  ),
-                                ));
-                          }));
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                super.widget,
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  }
+                                }),
+                                child: TrackCard(
+                                  cover: box.getAt(index)!.cover.toString(),
+                                  artiste: box.getAt(index)!.artiste.toString(),
+                                  title: box.getAt(index)!.title.toString(),
+                                ),
+                              );
+                            })),
+                      );
                     }),
               ),
             ],
