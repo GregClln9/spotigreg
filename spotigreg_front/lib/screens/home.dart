@@ -9,7 +9,7 @@ import 'package:spotigreg_front/screens/search.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:spotigreg_front/utils/tracks_utils.dart';
+import 'package:spotigreg_front/themes/colors.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -30,8 +30,12 @@ class _HomeState extends State<Home> {
         appBar: TopAppBar(scaffoldKey: _key),
         bottomNavigationBar: const Player(),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: primaryColor,
             onPressed: (() {
-              showSearch(context: context, delegate: CustomSearchDelegate());
+              showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                  useRootNavigator: true);
             }),
             child: const Icon(
               Icons.add,
@@ -45,92 +49,84 @@ class _HomeState extends State<Home> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(box.length <= 1
-                          ? box.length.toString() + " titre"
-                          : box.length.toString() + " titres"),
+                      Text(
+                        box.length <= 1
+                            ? box.length.toString() + " titre"
+                            : box.length.toString() + " titres",
+                        style: TextStyle(color: secondaryText),
+                      ),
                       InkWell(
-                        child: const Text("Sort By.."),
+                        child:
+                            Icon(Icons.swap_vert_rounded, color: secondaryText),
                         onTap: () {
                           setState(() {
                             musicProvider.setSortByMoreRecent();
                           });
                         },
                       ),
-                      InkWell(
-                        child: const Text("Delete All"),
-                        onDoubleTap: () {
-                          setState(() {
-                            TracksUtils.deleteAllTracks();
-                          });
-                        },
-                      )
                     ]),
               ),
               Expanded(
                 child: StreamBuilder<PlayerState>(
                     stream: musicProvider.audioPlayer.playerStateStream,
                     builder: (context, snapshot) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: ListView.builder(
-                            itemCount: box.length,
-                            itemBuilder: ((context, index) {
-                              if (musicProvider.sortByMoreRecent) {
-                                index = box.length - index - 1;
-                              }
-                              return InkWell(
-                                onTap: (() {
-                                  if (musicProvider.currentId ==
-                                      box.getAt(index)!.id.toString()) {
-                                    musicProvider.musicInit(
-                                      index.toString(),
-                                      box.getAt(index)!.url.toString(),
-                                      box.getAt(index)!.duration.toString(),
-                                      box.getAt(index)!.id.toString(),
-                                      box.getAt(index)!.artiste.toString(),
-                                      box.getAt(index)!.title.toString(),
-                                      box.getAt(index)!.cover.toString(),
-                                    );
-                                  } else {
-                                    musicProvider.setCurrentTrack(
-                                      box.getAt(index)!.title.toString(),
-                                      box.getAt(index)!.artiste.toString(),
-                                      box.getAt(index)!.cover.toString(),
-                                      box.getAt(index)!.url.toString(),
-                                      box.getAt(index)!.id.toString(),
-                                    );
+                      return ListView.builder(
+                          itemCount: box.length,
+                          itemBuilder: ((context, index) {
+                            if (musicProvider.sortByMoreRecent) {
+                              index = box.length - index - 1;
+                            }
+                            return InkWell(
+                              onTap: (() {
+                                if (musicProvider.currentId ==
+                                    box.getAt(index)!.id.toString()) {
+                                  musicProvider.musicInit(
+                                    index.toString(),
+                                    box.getAt(index)!.url.toString(),
+                                    box.getAt(index)!.duration.toString(),
+                                    box.getAt(index)!.id.toString(),
+                                    box.getAt(index)!.artiste.toString(),
+                                    box.getAt(index)!.title.toString(),
+                                    box.getAt(index)!.cover.toString(),
+                                  );
+                                } else {
+                                  musicProvider.setCurrentTrack(
+                                    box.getAt(index)!.title.toString(),
+                                    box.getAt(index)!.artiste.toString(),
+                                    box.getAt(index)!.cover.toString(),
+                                    box.getAt(index)!.url.toString(),
+                                    box.getAt(index)!.id.toString(),
+                                  );
 
-                                    musicProvider.musicInit(
-                                      index.toString(),
-                                      box.getAt(index)!.url.toString(),
-                                      box.getAt(index)!.duration.toString(),
-                                      box.getAt(index)!.id.toString(),
-                                      box.getAt(index)!.artiste.toString(),
-                                      box.getAt(index)!.title.toString(),
-                                      box.getAt(index)!.cover.toString(),
-                                    );
+                                  musicProvider.musicInit(
+                                    index.toString(),
+                                    box.getAt(index)!.url.toString(),
+                                    box.getAt(index)!.duration.toString(),
+                                    box.getAt(index)!.id.toString(),
+                                    box.getAt(index)!.artiste.toString(),
+                                    box.getAt(index)!.title.toString(),
+                                    box.getAt(index)!.cover.toString(),
+                                  );
 
-                                    Navigator.pushReplacement(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (context, animation1, animation2) =>
-                                                super.widget,
-                                        transitionDuration: Duration.zero,
-                                        reverseTransitionDuration:
-                                            Duration.zero,
-                                      ),
-                                    );
-                                  }
-                                }),
-                                child: TrackCard(
-                                  cover: box.getAt(index)!.cover.toString(),
-                                  artiste: box.getAt(index)!.artiste.toString(),
-                                  title: box.getAt(index)!.title.toString(),
-                                ),
-                              );
-                            })),
-                      );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                              super.widget,
+                                      transitionDuration: Duration.zero,
+                                      reverseTransitionDuration: Duration.zero,
+                                    ),
+                                  );
+                                }
+                              }),
+                              child: TrackCard(
+                                cover: box.getAt(index)!.cover.toString(),
+                                artiste: box.getAt(index)!.artiste.toString(),
+                                title: box.getAt(index)!.title.toString(),
+                              ),
+                            );
+                          }));
                     }),
               ),
             ],

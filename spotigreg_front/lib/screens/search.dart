@@ -4,6 +4,7 @@ import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
+import 'package:spotigreg_front/route/route.dart' as route;
 
 class CustomSearchDelegate extends SearchDelegate {
   CustomSearchDelegate();
@@ -12,7 +13,12 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget? buildLeading(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      onPressed: () => close(context, "close"),
+      onPressed: () {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          route.homePage,
+          (route) => false,
+        );
+      },
     );
   }
 

@@ -4,9 +4,8 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
-import 'package:spotigreg_front/screens/home.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
-import 'package:spotigreg_front/themes/themedata.dart';
+import 'package:spotigreg_front/route/route.dart' as route;
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -34,8 +33,9 @@ class MyApp extends StatelessWidget {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'SpotiGreg',
-                theme: themedata,
-                home: const Home(),
+                theme: ThemeData.dark(),
+                onGenerateRoute: route.controller,
+                initialRoute: route.homePage,
               );
             },
           ),

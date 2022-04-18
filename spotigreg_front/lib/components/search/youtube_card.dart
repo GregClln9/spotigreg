@@ -30,14 +30,16 @@ class _YoutubeCardState extends State<YoutubeCard> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(1, 5, 0, 0),
+          padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 widget.author,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
+              const SizedBox(height: 5),
               Text(
                 widget.title,
                 overflow: TextOverflow.ellipsis,
