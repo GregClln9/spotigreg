@@ -52,24 +52,24 @@ class _PlayerState extends State<Player> {
     });
 
     return SizedBox(
-        height: mHeight * 0.1,
+        height: mHeight * 0.13,
         child: Column(
           children: [
             ValueListenableBuilder<DurationState>(
               valueListenable: musicProvider.progressNotifier,
               builder: (_, value, __) {
                 return ProgressBar(
-                  thumbRadius: 6.0,
-                  thumbGlowRadius: 20.0,
-                  thumbColor: Colors.white,
-                  progressBarColor: Colors.white,
-                  bufferedBarColor: primaryColor.withOpacity(0.5),
-                  baseBarColor: secondaryText,
-                  progress: value.progress,
-                  buffered: value.buffered,
-                  total: value.total,
-                  onSeek: musicProvider.seek,
-                );
+                    thumbRadius: 6.0,
+                    thumbGlowRadius: 20.0,
+                    thumbColor: Colors.white,
+                    progressBarColor: Colors.white,
+                    bufferedBarColor: primaryColor.withOpacity(0.5),
+                    baseBarColor: secondaryText,
+                    progress: value.progress,
+                    buffered: value.buffered,
+                    total: value.total,
+                    onSeek: musicProvider.seek,
+                    timeLabelTextStyle: TextStyle(color: secondaryText));
               },
             ),
             StreamBuilder<PlayerState>(
@@ -99,24 +99,53 @@ class _PlayerState extends State<Player> {
                               : musicProvider.previousTrack();
                           setState(() {});
                         }),
-                        icon: const Icon(Icons.arrow_left_rounded)),
+                        icon: const Icon(Icons.skip_previous_rounded)),
                     // Play pause
-                    IconButton(
-                        onPressed: (() {
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                      child: InkWell(
+                        onTap: (() {
                           if (musicProvider.audioPlayer.playing) {
                             musicProvider.musicPause();
                           } else {
                             musicProvider.musicPlay();
                           }
                         }),
-                        icon: !musicProvider.audioPlayer.playing ||
-                                processingState == ProcessingState.completed
-                            ? const Icon(
-                                Icons.play_circle_outline_rounded,
-                                size: 40,
-                              )
-                            : const Icon(Icons.pause_circle_outline_rounded,
-                                size: 40)),
+                        child: Container(
+                          width: 55,
+                          height: 55,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(50))),
+                          child: Center(
+                              child: Icon(
+                            !musicProvider.audioPlayer.playing ||
+                                    processingState == ProcessingState.completed
+                                ? Icons.play_arrow_rounded
+                                : Icons.pause,
+                            size: 45,
+                            color: const Color.fromARGB(255, 48, 48, 48),
+                          )),
+                        ),
+                      ),
+                    ),
+                    // IconButton(
+                    //     iconSize: 50,
+                    //     onPressed: (() {
+                    //       if (musicProvider.audioPlayer.playing) {
+                    //         musicProvider.musicPause();
+                    //       } else {
+                    //         musicProvider.musicPlay();
+                    //       }
+                    //     }),
+                    //     icon: !musicProvider.audioPlayer.playing ||
+                    //             processingState == ProcessingState.completed
+                    //         ? const Icon(Icons.play_circle_outline_rounded)
+                    //         : const Icon(Icons.pause_circle_outline_rounded)),
                     // Next Track
                     IconButton(
                         onPressed: (() {
@@ -125,7 +154,7 @@ class _PlayerState extends State<Player> {
                               : musicProvider.nextTrack();
                           setState(() {});
                         }),
-                        icon: const Icon(Icons.arrow_right_rounded)),
+                        icon: const Icon(Icons.skip_next_rounded)),
                     // Repeat
                     IconButton(
                         onPressed: (() {
