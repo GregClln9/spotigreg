@@ -102,7 +102,7 @@ class CustomSearchDelegate extends SearchDelegate {
                   itemBuilder: (context, index) {
                     return Dismissible(
                       background: Container(
-                        color: const Color.fromARGB(255, 204, 67, 67),
+                        color: redDiss,
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) {

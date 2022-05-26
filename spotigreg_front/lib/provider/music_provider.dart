@@ -59,7 +59,7 @@ class MusicProvider extends ChangeNotifier {
             start: const Duration(minutes: 0),
             end: parseDuration(duration)))
         .catchError((error) async {
-      await YoutubeUtils.getUrlYoutube(currentId).then(
+      await YoutubeUtils.getUrlYoutube(id).then(
         (newUrl) {
           _audioPlayer
               .setAudioSource(ClippingAudioSource(
@@ -72,7 +72,7 @@ class MusicProvider extends ChangeNotifier {
                   start: const Duration(minutes: 0),
                   end: parseDuration(duration)))
               .then((value) {
-            TracksUtils.putTrackUrl(currentId, newUrl);
+            TracksUtils.putTrackUrl(id, newUrl);
           }).catchError((error) {
             // ignore: avoid_print
             print("error newUrl, snackbar : " + error.toString());
@@ -83,7 +83,6 @@ class MusicProvider extends ChangeNotifier {
       print(
           "error setAudioSource (URL dead or wrong URL) : " + error.toString());
     });
-
     notifyListeners();
   }
 

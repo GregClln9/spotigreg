@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
-
 import '../storage/tracks_hive.dart';
 
 // ignore: must_be_immutable

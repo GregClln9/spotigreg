@@ -14,11 +14,6 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     double mHeight = MediaQuery.of(context).size.height;
@@ -76,13 +71,16 @@ class _PlayerState extends State<Player> {
               builder: (context, snapshot) {
                 final playerState = snapshot.data;
                 final processingState = playerState?.processingState;
-                if (processingState == ProcessingState.completed) {
-                  if (musicProvider.sortByMoreRecent) {
-                    musicProvider.previousTrack();
-                  } else {
-                    musicProvider.nextTrack();
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  if (processingState == ProcessingState.completed) {
+                    if (musicProvider.sortByMoreRecent) {
+                      musicProvider.previousTrack();
+                    } else {
+                      musicProvider.nextTrack();
+                    }
                   }
-                }
+                });
+
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +104,7 @@ class _PlayerState extends State<Player> {
                     // Play pause
                     Padding(
                       padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      child: InkWell(
+                      child: GestureDetector(
                         onTap: (() {
                           if (musicProvider.audioPlayer.playing) {
                             musicProvider.musicPause();

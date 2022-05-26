@@ -10,6 +10,7 @@ import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spotigreg_front/themes/colors.dart';
+import 'package:spotigreg_front/utils/tracks_utils.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -79,6 +80,10 @@ class _HomeState extends State<Home> {
                                 }
                                 return InkWell(
                                   onTap: (() {
+                                    // TEST a suppprimer
+                                    print(box.getAt(index)!.title.toString());
+                                    print(box.getAt(index)!.id.toString());
+                                    //
                                     if (musicProvider.currentId ==
                                         box.getAt(index)!.id.toString()) {
                                       musicProvider.musicInit(
@@ -122,11 +127,23 @@ class _HomeState extends State<Home> {
                                       );
                                     }
                                   }),
-                                  child: TrackCard(
-                                    cover: box.getAt(index)!.cover.toString(),
-                                    artiste:
-                                        box.getAt(index)!.artiste.toString(),
-                                    title: box.getAt(index)!.title.toString(),
+                                  child: Dismissible(
+                                    background: Container(
+                                      color: redDiss,
+                                    ),
+                                    key: UniqueKey(),
+                                    onDismissed: (DismissDirection direction) {
+                                      setState(() {
+                                        TracksUtils.deleteTrack(
+                                            box.getAt(index)!.id.toString());
+                                      });
+                                    },
+                                    child: TrackCard(
+                                      cover: box.getAt(index)!.cover.toString(),
+                                      artiste:
+                                          box.getAt(index)!.artiste.toString(),
+                                      title: box.getAt(index)!.title.toString(),
+                                    ),
                                   ),
                                 );
                               }))

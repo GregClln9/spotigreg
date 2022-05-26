@@ -8,12 +8,13 @@ import 'package:spotigreg_front/storage/tracks_hive.dart';
 import 'package:spotigreg_front/route/route.dart' as route;
 
 Future<void> main() async {
+  // Hive
   await Hive.initFlutter();
   Hive.registerAdapter<TracksHive>(TracksHiveAdapter());
   await Hive.openBox<TracksHive>('tracks');
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.example.spotigregFront',
-    androidNotificationChannelName: 'Spotigreg Front',
+    androidNotificationChannelName: 'Spotigreg',
     androidNotificationOngoing: true,
   );
   runApp(const MyApp());
