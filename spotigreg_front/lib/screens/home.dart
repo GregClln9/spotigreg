@@ -81,8 +81,8 @@ class _HomeState extends State<Home> {
                                 return InkWell(
                                   onTap: (() {
                                     // TEST a suppprimer
-                                    print(box.getAt(index)!.title.toString());
-                                    print(box.getAt(index)!.id.toString());
+                                    // print(box.getAt(index)!.title.toString());
+                                    // print(box.getAt(index)!.id.toString());
                                     //
                                     if (musicProvider.currentId ==
                                         box.getAt(index)!.id.toString()) {

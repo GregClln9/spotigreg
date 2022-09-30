@@ -71,7 +71,7 @@ class _PlayerState extends State<Player> {
               builder: (context, snapshot) {
                 final playerState = snapshot.data;
                 final processingState = playerState?.processingState;
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (processingState == ProcessingState.completed) {
                     if (musicProvider.sortByMoreRecent) {
                       musicProvider.previousTrack();

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
+import '../storage/tracks_hive.dart';
 
 class MusicProvider extends ChangeNotifier {
   final _audioPlayer = AudioPlayer();
   late bool _repeat = false;
   late bool _sortByMoreRecent = true;
+  Box<TracksHive> box = Boxes.getTracks();
 
   // Current track
   late String _currentTitle = "currentTitle";
@@ -88,7 +92,54 @@ class MusicProvider extends ChangeNotifier {
 
   musicInit(String idPosition, String url, String duration, String id,
       String title, String artiste, String artUri) {
-    musicLoadUrl(idPosition, url, duration, id, title, artiste, artUri);
+    // musicLoadUrl(idPosition, url, duration, id, title, artiste, artUri);
+    print(
+      box.getAt(1)!.title.toString(),
+    );
+    for (int i = 0; i < box.length; i++) {
+      print(i.toString());
+    }
+    _audioPlayer.setAudioSource(ConcatenatingAudioSource(
+      useLazyPreparation: true,
+      children: [
+        ClippingAudioSource(
+            start: const Duration(minutes: 0),
+            end: parseDuration(duration),
+            child: AudioSource.uri(
+              Uri.parse(url),
+              tag: MediaItem(
+                id: '1',
+                album: "Album name",
+                title: "Song name",
+                artUri: Uri.parse(url),
+              ),
+            )),
+        ClippingAudioSource(
+            start: const Duration(minutes: 0),
+            end: parseDuration(duration),
+            child: AudioSource.uri(
+              Uri.parse(url),
+              tag: MediaItem(
+                id: '2',
+                album: "ZAZA",
+                title: "ZAZA",
+                artUri: Uri.parse(url),
+              ),
+            )),
+        ClippingAudioSource(
+            start: const Duration(minutes: 0),
+            end: parseDuration(duration),
+            child: AudioSource.uri(
+              Uri.parse(url),
+              tag: MediaItem(
+                id: '3',
+                album: "PIPI",
+                title: "PIPI",
+                artUri: Uri.parse(url),
+              ),
+            )),
+      ],
+    ));
     musicPlay();
     notifyListeners();
   }
