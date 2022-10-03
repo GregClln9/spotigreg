@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
-import 'package:spotigreg_front/utils/tracks_utils.dart';
-import 'package:spotigreg_front/utils/youtube_utils.dart';
 import '../storage/tracks_hive.dart';
 
 class MusicProvider extends ChangeNotifier {
@@ -48,104 +45,105 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> musicLoadUrl(String idPosition, String url, String duration,
-      String id, String title, String artiste, String artUri) async {
-    _currentIdPosition = idPosition;
+  // Future<void> musicLoadUrl(String idPosition, String url, String duration,
+  //     String id, String title, String artiste, String artUri) async {
+  //   _currentIdPosition = idPosition;
 
-    _audioPlayer
-        .setAudioSource(ClippingAudioSource(
-            child: AudioSource.uri(Uri.parse(url)),
-            tag: MediaItem(
-                id: id,
-                artist: artiste,
-                artUri: Uri.parse(artUri),
-                title: title),
-            start: const Duration(minutes: 0),
-            end: parseDuration(duration)))
-        .catchError((error) async {
-      await YoutubeUtils.getUrlYoutube(id).then(
-        (newUrl) {
-          _audioPlayer
-              .setAudioSource(ClippingAudioSource(
-                  child: AudioSource.uri(Uri.parse(newUrl)),
-                  tag: MediaItem(
-                      id: id,
-                      artist: artiste,
-                      artUri: Uri.parse(artUri),
-                      title: title),
-                  start: const Duration(minutes: 0),
-                  end: parseDuration(duration)))
-              .then((value) {
-            TracksUtils.putTrackUrl(id, newUrl);
-          }).catchError((error) {
-            // ignore: avoid_print
-            print("error newUrl, snackbar : " + error.toString());
-          });
-        },
-      ).catchError((error));
-      // ignore: avoid_print
-      print(
-          "error setAudioSource (URL dead or wrong URL) : " + error.toString());
-    });
-    notifyListeners();
-  }
+  //   _audioPlayer
+  //       .setAudioSource(ClippingAudioSource(
+  //           child: AudioSource.uri(Uri.parse(url)),
+  //           tag: MediaItem(
+  //               id: id,
+  //               artist: artiste,
+  //               artUri: Uri.parse(artUri),
+  //               title: title),
+  //           start: const Duration(minutes: 0),
+  //           end: parseDuration(duration)))
+  //       .catchError((error) async {
+  //     await YoutubeUtils.getUrlYoutube(id).then(
+  //       (newUrl) {
+  //         _audioPlayer
+  //             .setAudioSource(ClippingAudioSource(
+  //                 child: AudioSource.uri(Uri.parse(newUrl)),
+  //                 tag: MediaItem(
+  //                     id: id,
+  //                     artist: artiste,
+  //                     artUri: Uri.parse(artUri),
+  //                     title: title),
+  //                 start: const Duration(minutes: 0),
+  //                 end: parseDuration(duration)))
+  //             .then((value) {
+  //           TracksUtils.putTrackUrl(id, newUrl);
+  //         }).catchError((error) {
+  //           // ignore: avoid_print
+  //           print("error newUrl, snackbar : " + error.toString());
+  //         });
+  //       },
+  //     ).catchError((error));
+  //     // ignore: avoid_print
+  //     print(
+  //         "error setAudioSource (URL dead or wrong URL) : " + error.toString());
+  //   });
+  //   notifyListeners();
+  // }
 
   musicInit(String idPosition, String url, String duration, String id,
-      String title, String artiste, String artUri) {
+      String title, String artiste, String artUri) async {
     // musicLoadUrl(idPosition, url, duration, id, title, artiste, artUri);
-    print(
-      box.getAt(1)!.title.toString(),
-    );
-    for (int i = 0; i < box.length; i++) {
-      print(i.toString());
-    }
-    _audioPlayer.setAudioSource(ConcatenatingAudioSource(
+    _currentIdPosition = idPosition;
+
+    final playlist = ConcatenatingAudioSource(
       useLazyPreparation: true,
       children: [
-        ClippingAudioSource(
-            start: const Duration(minutes: 0),
-            end: parseDuration(duration),
-            child: AudioSource.uri(
-              Uri.parse(url),
-              tag: MediaItem(
-                id: '1',
-                album: "Album name",
-                title: "Song name",
-                artUri: Uri.parse(url),
-              ),
-            )),
-        ClippingAudioSource(
-            start: const Duration(minutes: 0),
-            end: parseDuration(duration),
-            child: AudioSource.uri(
-              Uri.parse(url),
-              tag: MediaItem(
-                id: '2',
-                album: "ZAZA",
-                title: "ZAZA",
-                artUri: Uri.parse(url),
-              ),
-            )),
-        ClippingAudioSource(
-            start: const Duration(minutes: 0),
-            end: parseDuration(duration),
-            child: AudioSource.uri(
-              Uri.parse(url),
-              tag: MediaItem(
-                id: '3',
-                album: "PIPI",
-                title: "PIPI",
-                artUri: Uri.parse(url),
-              ),
-            )),
+        AudioSource.uri(Uri.parse(box.getAt(0)!.url.toString())),
+        AudioSource.uri(Uri.parse(box.getAt(1)!.url.toString())),
+        AudioSource.uri(Uri.parse(box.getAt(2)!.url.toString())),
       ],
-    ));
+    );
+
+    await _audioPlayer.setAudioSource(playlist);
+
+    // await _audioPlayer.setAudioSource(ConcatenatingAudioSource(
+    //   useLazyPreparation: true,
+    //   children: [
+    //     // for (int i = int.parse(idPosition); i < box.length; i++)
+    //     ClippingAudioSource(
+    //         start: const Duration(minutes: 0),
+    //         end: parseDuration(box.getAt(0)!.duration.toString()),
+    //         child: AudioSource.uri(
+    //           Uri.parse(box.getAt(0)!.url.toString()),
+    //           tag: MediaItem(
+    //             id: box.getAt(0)!.id.toString(),
+    //             album: box.getAt(0)!.title.toString(),
+    //             title: box.getAt(0)!.title.toString(),
+    //             artUri: Uri.parse(
+    //               box.getAt(0)!.cover.toString(),
+    //             ),
+    //           ),
+    //         )),
+    //     ClippingAudioSource(
+    //         start: const Duration(minutes: 0),
+    //         end: parseDuration(box.getAt(0)!.duration.toString()),
+    //         child: AudioSource.uri(
+    //           Uri.parse(box.getAt(1)!.url.toString()),
+    //           tag: MediaItem(
+    //             id: box.getAt(0)!.id.toString(),
+    //             album: box.getAt(0)!.title.toString(),
+    //             title: box.getAt(0)!.title.toString(),
+    //             artUri: Uri.parse(
+    //               box.getAt(0)!.cover.toString(),
+    //             ),
+    //           ),
+    //         )),
+    //   ],
+    // ));
     musicPlay();
     notifyListeners();
   }
 
-  void musicPlay() {
+  void musicPlay() async {
     _audioPlayer.play();
+    // await _audioPlayer.setLoopMode(LoopMode.all);
     notifyListeners();
   }
 
@@ -154,42 +152,42 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  nextTrack() {
-    nextAndPrevious(int.parse(_currentIdPosition) + 1);
+  nextTrack() async {
+    print("nextTRACK");
+    await _audioPlayer.seek(Duration.zero,
+        index: int.parse(_currentIdPosition) + 1);
+    _currentIdPosition = (int.parse(_currentIdPosition) + 1).toString();
+
     notifyListeners();
   }
 
-  previousTrack() {
+  previousTrack() async {
+    print("previousTRACK");
     nextAndPrevious(int.parse(_currentIdPosition) - 1);
+    await _audioPlayer.seek(Duration.zero,
+        index: (int.parse(_currentIdPosition) - 1));
+    _currentIdPosition = (int.parse(_currentIdPosition) - 1).toString();
     notifyListeners();
   }
 
   nextAndPrevious(int index) {
-    if (_repeat) {
-      audioPlayer.seekToNext();
-    } else {
-      try {
-        box.getAt(index)!.title.toString();
-      } catch (e) {
-        return;
-      }
-      setCurrentTrack(
-        box.getAt(index)!.title.toString(),
-        box.getAt(index)!.artiste.toString(),
-        box.getAt(index)!.cover.toString(),
-        box.getAt(index)!.url.toString(),
-        box.getAt(index)!.id.toString(),
-      );
-      musicInit(
-        (index).toString(),
-        box.getAt(index)!.url.toString(),
-        box.getAt(index)!.duration.toString(),
-        box.getAt(index)!.id.toString(),
-        box.getAt(index)!.artiste.toString(),
-        box.getAt(index)!.title.toString(),
-        box.getAt(index)!.cover.toString(),
-      );
+    // if (_repeat) {
+    //   audioPlayer.seekToNext();
+    // } else {
+    try {
+      box.getAt(index)!.title.toString();
+    } catch (e) {
+      return;
     }
+    setCurrentTrack(
+      box.getAt(index)!.title.toString(),
+      box.getAt(index)!.artiste.toString(),
+      box.getAt(index)!.cover.toString(),
+      box.getAt(index)!.url.toString(),
+      box.getAt(index)!.id.toString(),
+    );
+
+    // }
   }
 
   void musicRepeat() async {
