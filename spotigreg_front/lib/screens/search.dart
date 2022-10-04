@@ -34,7 +34,7 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     final searchProvider = Provider.of<SearchProvider>(context, listen: false);
     WidgetsBinding.instance
-        ?.addPostFrameCallback((_) => searchProvider.setSearchHistory(query));
+        .addPostFrameCallback((_) => searchProvider.setSearchHistory(query));
 
     return StatefulBuilder(builder: (context, setState) {
       return FutureBuilder<dynamic>(

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:spotigreg_front/audio_service/service_locator.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
-import 'package:spotigreg_front/storage/tracks_hive.dart';
 import 'package:spotigreg_front/route/route.dart' as route;
+import 'package:spotigreg_front/storage/tracks_hive.dart';
 
 Future<void> main() async {
   // Hive
   await Hive.initFlutter();
   Hive.registerAdapter<TracksHive>(TracksHiveAdapter());
   await Hive.openBox<TracksHive>('tracks');
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.example.spotigregFront',
-    androidNotificationChannelName: 'Spotigreg',
-    androidNotificationOngoing: true,
-  );
+  // await JustAudioBackground.init(
+  //   androidNotificationChannelId: 'com.example.spotigregFront',
+  //   androidNotificationChannelName: 'Spotigreg',
+  //   androidNotificationOngoing: true,
+  // );
+  await setupServiceLocator();
   runApp(const MyApp());
 }
 
