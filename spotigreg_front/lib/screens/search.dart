@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/components/search/youtube_card.dart';
+import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
@@ -56,6 +56,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       onTap: () async {
                         var url = await YoutubeUtils.getUrlYoutube(
                             snapshot.data[index].id);
+                        print(url);
                         showModalBottomSheet(
                             context: context,
                             builder: (builder) {

@@ -17,6 +17,6 @@ class YoutubeUtils {
     var yt = YoutubeExplode();
     StreamManifest manifest =
         await yt.videos.streamsClient.getManifest(videoId);
-    return manifest.audioOnly[0].url.toString();
+    return manifest.audio[1].url.toString();
   }
 }

@@ -7,7 +7,7 @@ import 'package:spotigreg_front/utils/youtube_utils.dart';
 class MusicProvider extends ChangeNotifier {
   final _audioPlayer = AudioPlayer();
   late bool _repeat = false;
-  late bool _sortByMoreRecent = true;
+  late bool _sortByMoreRecent = false;
 
   // Current track
   late String _currentTitle = "currentTitle";

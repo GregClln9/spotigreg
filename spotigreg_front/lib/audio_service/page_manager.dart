@@ -39,8 +39,6 @@ class PageManager {
               album: song['album'] ?? '',
               title: song['title'] ?? '',
               extras: {'url': song['url']},
-              duration: const Duration(hours: 0, minutes: 30, seconds: 0),
-              // duration: parseDuration(song['duration'] as String),
             ))
         .toList();
     _audioHandler.addQueueItems(mediaItems);
@@ -55,7 +53,6 @@ class PageManager {
         final newList = playlist.map((item) => item.title).toList();
         playlistNotifier.value = newList;
       }
-      _updateSkipButtons();
     });
   }
 
@@ -101,13 +98,11 @@ class PageManager {
 
   void _listenToTotalDuration() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      print(mediaItem?.duration.toString());
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: oldState.current,
         buffered: oldState.buffered,
         total: mediaItem?.duration ?? Duration.zero,
-        // total: const Duration(hours: 0, minutes: 38, seconds: 0),
       );
     });
   }
@@ -115,20 +110,7 @@ class PageManager {
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
-      _updateSkipButtons();
     });
-  }
-
-  void _updateSkipButtons() {
-    final mediaItem = _audioHandler.mediaItem.value;
-    final playlist = _audioHandler.queue.value;
-    if (playlist.length < 2 || mediaItem == null) {
-      isFirstSongNotifier.value = true;
-      isLastSongNotifier.value = true;
-    } else {
-      isFirstSongNotifier.value = playlist.first == mediaItem;
-      isLastSongNotifier.value = playlist.last == mediaItem;
-    }
   }
 
   void play() => _audioHandler.play();
@@ -173,25 +155,8 @@ class PageManager {
       album: song['album'] ?? '',
       title: song['title'] ?? '',
       extras: {'url': song['url']},
-      duration: const Duration(hours: 0, minutes: 30, seconds: 0),
-      // duration: parseDuration(song['duration'] as String),
     );
     _audioHandler.addQueueItem(mediaItem);
-  }
-
-  Duration parseDuration(String s) {
-    int hours = 0;
-    int minutes = 0;
-    int micros;
-    List<String> parts = s.split(':');
-    if (parts.length > 2) {
-      hours = int.parse(parts[parts.length - 3]);
-    }
-    if (parts.length > 1) {
-      minutes = int.parse(parts[parts.length - 2]);
-    }
-    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-    return Duration(hours: hours, minutes: minutes, microseconds: micros);
   }
 
   void remove() {

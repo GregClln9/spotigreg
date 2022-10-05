@@ -1,6 +1,5 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:spotigreg_front/utils/tracks_utils.dart';
 
 Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
@@ -75,25 +74,13 @@ class MyAudioHandler extends BaseAudioHandler {
   void _listenForDurationChanges() {
     _player.durationStream.listen((duration) {
       var index = _player.currentIndex;
-
       final newQueue = queue.value;
       if (index == null || newQueue.isEmpty) return;
-
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
       final oldMediaItem = newQueue[index];
-      var fakeIndex = ((box.length - int.parse(index.toString()) - 1));
-      print("fakeIndex");
-      print(fakeIndex);
-      print("fakeIndex");
-      print("index");
-      print(index);
-      print(box.getAt(index)!.title);
-      print("index");
-
-      final newMediaItem = oldMediaItem.copyWith(
-          duration: parseDuration(box.getAt(index)!.duration));
+      final newMediaItem = oldMediaItem.copyWith(duration: duration);
       newQueue[index] = newMediaItem;
       queue.add(newQueue);
       mediaItem.add(newMediaItem);
@@ -222,19 +209,4 @@ class MyAudioHandler extends BaseAudioHandler {
     await _player.stop();
     return super.stop();
   }
-}
-
-Duration parseDuration(String s) {
-  int hours = 0;
-  int minutes = 0;
-  int micros;
-  List<String> parts = s.split(':');
-  if (parts.length > 2) {
-    hours = int.parse(parts[parts.length - 3]);
-  }
-  if (parts.length > 1) {
-    minutes = int.parse(parts[parts.length - 2]);
-  }
-  micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-  return Duration(hours: hours, minutes: minutes, microseconds: micros);
 }

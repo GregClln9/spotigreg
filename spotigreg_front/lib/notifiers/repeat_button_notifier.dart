@@ -11,7 +11,7 @@ class RepeatButtonNotifier extends ValueNotifier<RepeatState> {
 }
 
 enum RepeatState {
-  off,
-  repeatSong,
   repeatPlaylist,
+  repeatSong,
+  off,
 }

@@ -8,10 +8,11 @@ abstract class PlaylistRepository {
 }
 
 class DemoPlaylist extends PlaylistRepository {
+  final Box<TracksHive> box = Boxes.getTracks();
+
   @override
-  Future<List<Map<String, String>>> fetchInitialPlaylist(
-      {int length = 1}) async {
-    return List.generate(length, (index) => _nextSong());
+  Future<List<Map<String, String>>> fetchInitialPlaylist() async {
+    return List.generate(box.length, (index) => _nextSong());
   }
 
   @override
@@ -20,21 +21,15 @@ class DemoPlaylist extends PlaylistRepository {
   }
 
   var _songIndex = -1;
-  static const _maxSongNumber = 16;
 
   Map<String, String> _nextSong() {
     Box<TracksHive> box = Boxes.getTracks();
-    _songIndex = (_songIndex % _maxSongNumber) + 1;
-    print("_songIndex");
-    print(_songIndex);
-    print("_songIndex");
-    // print(box.getAt(_songIndex)!.duration.toString());
+    _songIndex += 1;
     return {
       'id': box.getAt(_songIndex)!.id.toString(),
       'title': box.getAt(_songIndex)!.title.toString(),
       'album': box.getAt(_songIndex)!.title.toString(),
       'url': box.getAt(_songIndex)!.url.toString(),
-      'duration': box.getAt(_songIndex)!.duration.toString(),
     };
   }
 }
