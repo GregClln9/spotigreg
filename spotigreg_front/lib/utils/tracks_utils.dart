@@ -26,11 +26,11 @@ class TracksUtils {
 
   static putTrackUrl(String id, String url) {
     TracksHive? track;
-    for (var i = 0; i < box.length; i++) {
-      if (box.get(i)?.id == id) {
-        track = box.get(i);
+    for (int key in box.keys) {
+      if (box.get(key)!.id == id) {
+        track = box.get(key);
         track!.url = url;
-        box.putAt(i, track).catchError((error) {
+        box.putAt(key, track).catchError((error) {
           print("Error when updated " + id + " track");
         }).then((value) {
           print("Track with id: " + id + " UPDATED.");
@@ -40,9 +40,9 @@ class TracksUtils {
   }
 
   static deleteTrack(String id) {
-    for (var i = 0; i < box.length; i++) {
-      if (box.get(i)!.id == id) {
-        box.delete(i).catchError((error) {
+    for (int key in box.keys) {
+      if (box.get(key)!.id == id) {
+        box.delete(key).catchError((error) {
           print("Error when deleted " + id + " track");
         }).then((value) {
           print("Track with id: " + id + " DELETED.");

@@ -5,6 +5,8 @@ class SearchProvider extends ChangeNotifier {
 
   Set<String> get searchHistory => _searchHistory;
 
+  // passer ca sous shared_preference
+
   void setSearchHistory(String newWord) {
     if (newWord.isNotEmpty) {
       _searchHistory.add(newWord);

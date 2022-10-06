@@ -67,14 +67,14 @@ class RepeatButton extends StatelessWidget {
       builder: (context, value, child) {
         Icon icon;
         switch (value) {
+          case RepeatState.repeatPlaylist:
+            icon = const Icon(Icons.repeat);
+            break;
           case RepeatState.off:
             icon = const Icon(Icons.repeat, color: Colors.grey);
             break;
           case RepeatState.repeatSong:
             icon = const Icon(Icons.repeat_one);
-            break;
-          case RepeatState.repeatPlaylist:
-            icon = const Icon(Icons.repeat);
             break;
         }
         return IconButton(

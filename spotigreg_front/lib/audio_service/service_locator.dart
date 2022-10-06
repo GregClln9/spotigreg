@@ -5,8 +5,6 @@ import 'audio_handler.dart';
 import 'playlist_repository.dart';
 import 'package:get_it/get_it.dart';
 
-//ici le seul moment ou on utilise getIT mdr
-
 GetIt getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/provider/music_provider.dart';
@@ -40,6 +39,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Box<TracksHive> box = Boxes.getTracks();
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+    final pageManager = getIt<PageManager>();
     return Scaffold(
         appBar: TopAppBar(scaffoldKey: _key),
         bottomNavigationBar: const Player(),
@@ -81,9 +81,9 @@ class _HomeState extends State<Home> {
                     ]),
               ),
               Expanded(
-                child: StreamBuilder<PlayerState>(
-                    stream: musicProvider.audioPlayer.playerStateStream,
-                    builder: (context, snapshot) {
+                child: ValueListenableBuilder<List<String>>(
+                    valueListenable: pageManager.playlistNotifier,
+                    builder: (context, playlistTitles, _) {
                       return box.length > 0
                           ? ListView.builder(
                               itemCount: box.length,
@@ -93,52 +93,19 @@ class _HomeState extends State<Home> {
                                 }
                                 return InkWell(
                                   onTap: (() {
-                                    // TEST a suppprimer
                                     print(box.getAt(index)!.title.toString());
                                     print(box.getAt(index)!.id.toString());
-                                    //
-                                    if (musicProvider.currentId ==
-                                        box.getAt(index)!.id.toString()) {
-                                      musicProvider.musicInit(
-                                        index.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.duration.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                      );
-                                    } else {
-                                      musicProvider.setCurrentTrack(
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                      );
-
-                                      musicProvider.musicInit(
-                                        index.toString(),
-                                        box.getAt(index)!.url.toString(),
-                                        box.getAt(index)!.duration.toString(),
-                                        box.getAt(index)!.id.toString(),
-                                        box.getAt(index)!.artiste.toString(),
-                                        box.getAt(index)!.title.toString(),
-                                        box.getAt(index)!.cover.toString(),
-                                      );
-
-                                      Navigator.pushReplacement(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation1,
-                                                  animation2) =>
-                                              super.widget,
-                                          transitionDuration: Duration.zero,
-                                          reverseTransitionDuration:
-                                              Duration.zero,
-                                        ),
-                                      );
-                                    }
+                                    // Navigator.pushReplacement(
+                                    //   context,
+                                    //   PageRouteBuilder(
+                                    //     pageBuilder:
+                                    //         (context, animation1, animation2) =>
+                                    //             super.widget,
+                                    //     transitionDuration: Duration.zero,
+                                    //     reverseTransitionDuration:
+                                    //         Duration.zero,
+                                    //   ),
+                                    // );
                                   }),
                                   child: Dismissible(
                                     background: Container(
@@ -177,69 +144,3 @@ class _HomeState extends State<Home> {
         ));
   }
 }
-
-// class Playlist extends StatelessWidget {
-//   const Playlist({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return Expanded(
-//       child: 
-// ValueListenableBuilder<List<String>>(
-//         valueListenable: pageManager.playlistNotifier,
-//         builder: (context, playlistTitles, _) {
-//           return ListView.builder(
-//             itemCount: playlistTitles.length,
-//             itemBuilder: (context, index) {
-//               return ListTile(
-//                 title: Text(playlistTitles[index]),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
-// class AddRemoveSongButtons extends StatelessWidget {
-//   const AddRemoveSongButtons({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return FloatingActionButton(
-//         backgroundColor: primaryColor,
-//         onPressed: (() {
-//           showSearch(
-//               context: context,
-//               delegate: CustomSearchDelegate(),
-//               useRootNavigator: true);
-//         }),
-//         child: const Icon(
-//           Icons.add,
-//         ));
-//   }
-// }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   Box<TracksHive> box = Boxes.getTracks();
-  //   final musicProvider = Provider.of<MusicProvider>(context, listen: false);
-
-  //   return Scaffold(
-  //       appBar: TopAppBar(scaffoldKey: _key),
-  //       bottomNavigationBar: const Player(),
-  //       floatingActionButton: FloatingActionButton(
-  //           backgroundColor: primaryColor,
-  //           onPressed: (() {
-  //             showSearch(
-  //                 context: context,
-  //                 delegate: CustomSearchDelegate(),
-  //                 useRootNavigator: true);
-  //           }),
-  //           child: const Icon(
-  //             Icons.add,
-  //           )),
-        // body: 
-       
-        // );
-  // }

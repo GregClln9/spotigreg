@@ -22,8 +22,6 @@ class TrackCard extends StatefulWidget {
 }
 
 class _TrackCardState extends State<TrackCard> {
-  get children => null;
-
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
