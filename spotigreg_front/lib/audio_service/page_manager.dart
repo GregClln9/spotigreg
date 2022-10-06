@@ -33,6 +33,11 @@ class PageManager {
   Future<void> _loadPlaylist() async {
     final songRepository = getIt<PlaylistRepository>();
     final playlist = await songRepository.fetchInitialPlaylist();
+
+    // for (var song in playlist) {
+    //   print(song);
+    // }
+
     final mediaItems = playlist
         .map((song) => MediaItem(
               id: song['id'] ?? '',

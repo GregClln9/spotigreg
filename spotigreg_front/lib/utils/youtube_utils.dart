@@ -7,7 +7,7 @@ class YoutubeUtils {
     //   query,
     // );
     // return test.nextPage();
-    return await yt.search.getVideos(query);
+    return yt.search.search(query);
   }
 
   static Future<String> getUrlYoutube(videoId) async {

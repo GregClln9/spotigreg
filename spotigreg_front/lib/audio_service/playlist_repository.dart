@@ -24,12 +24,17 @@ class DemoPlaylist extends PlaylistRepository {
 
   Map<String, String> _nextSong() {
     Box<TracksHive> box = Boxes.getTracks();
+
     _songIndex += 1;
+    int boxIndex = box.keys.elementAt(_songIndex);
+
+    print(boxIndex);
+
     return {
-      'id': box.getAt(_songIndex)!.id.toString(),
-      'title': box.getAt(_songIndex)!.title.toString(),
-      'album': box.getAt(_songIndex)!.title.toString(),
-      'url': box.getAt(_songIndex)!.url.toString(),
+      'id': box.get(boxIndex)!.id.toString(),
+      'title': box.get(boxIndex)!.title.toString(),
+      'album': box.get(boxIndex)!.title.toString(),
+      'url': box.get(boxIndex)!.url.toString(),
     };
   }
 }
