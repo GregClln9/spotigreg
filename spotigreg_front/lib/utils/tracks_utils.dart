@@ -29,7 +29,6 @@ class TracksUtils {
   }
 
   static putTrackUrl(String id, String url) {
-    // print("putTrackUrl");
     TracksHive? track;
     for (int key in box.keys) {
       if (box.get(key)!.id == id) {
@@ -61,8 +60,7 @@ class TracksUtils {
     box.clear().catchError((error) {
       showSnackBar(context, "Erreur", SnackBarState.error);
     }).then((value) {
-      showSnackBar(
-          context, "Toutes les tracks sont supprimées", SnackBarState.info);
+      showSnackBar(context, "Les tracks sont supprimées", SnackBarState.info);
     });
   }
 }

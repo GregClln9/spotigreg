@@ -26,7 +26,6 @@ class _HomeState extends ConsumerState<Home> {
     super.initState();
     final pageManager = ref.read(pageManagerProvider);
     pageManager.init();
-    pageManager.updateUrl();
   }
 
   @override
@@ -40,6 +39,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     Box<TracksHive> box = Boxes.getTracks();
     return Scaffold(
+        key: _key,
         appBar: TopAppBar(scaffoldKey: _key),
         bottomNavigationBar: const Player(),
         floatingActionButton: FloatingActionButton(
@@ -71,15 +71,15 @@ class _HomeState extends ConsumerState<Home> {
                             : box.length.toString() + " titres",
                         style: TextStyle(color: secondaryText),
                       ),
-                      InkWell(
-                        child:
-                            Icon(Icons.swap_vert_rounded, color: secondaryText),
-                        onTap: () {
-                          setState(() {
-                            // musicProvider.setSortByMoreRecent();
-                          });
-                        },
-                      ),
+                      // InkWell(
+                      //   child:
+                      //       Icon(Icons.swap_vert_rounded, color: secondaryText),
+                      //   onTap: () {
+                      //     setState(() {
+                      //       musicProvider.setSortByMoreRecent();
+                      //     });
+                      //   },
+                      // ),
                     ]),
               ),
               Expanded(

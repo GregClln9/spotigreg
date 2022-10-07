@@ -3,7 +3,6 @@ import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
-
 import '../utils/utils.dart';
 
 class CustomSearchDelegate extends SearchDelegate {

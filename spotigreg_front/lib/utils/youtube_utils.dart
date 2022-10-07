@@ -11,7 +11,6 @@ class YoutubeUtils {
   }
 
   static Future<String> getUrlYoutube(videoId) async {
-    print("getUrlYoutube");
     var yt = YoutubeExplode();
     StreamManifest manifest =
         await yt.videos.streamsClient.getManifest(videoId);

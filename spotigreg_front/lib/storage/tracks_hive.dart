@@ -10,7 +10,7 @@ class TracksHive {
       required this.artiste,
       required this.duration,
       required this.url,
-      required this.cover, age});
+      required this.cover});
 
   @HiveField(0)
   String id;

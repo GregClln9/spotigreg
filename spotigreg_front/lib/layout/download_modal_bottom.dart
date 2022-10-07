@@ -33,6 +33,7 @@ class DownloadModalBottom extends ConsumerWidget {
     final TextEditingController artisteController = TextEditingController();
 
     double mHeight = MediaQuery.of(context).size.height;
+    // bool isInit = false;
 
     titleController.text = title.toString();
     artisteController.text = artiste.toString();
@@ -80,7 +81,7 @@ class DownloadModalBottom extends ConsumerWidget {
             Flexible(
               flex: 2,
               child: IconButton(
-                  onPressed: (() {
+                  onPressed: (() async {
                     for (int key in box.keys) {
                       if (box.get(key)?.id == id) {
                         showSnackBar(context, 'Vidéo déjà enregistrée !',
@@ -99,11 +100,21 @@ class DownloadModalBottom extends ConsumerWidget {
                           context);
 
                       final pageManager = ref.read(pageManagerProvider);
+                      // if (pageManager.playlistNotifier.value.isEmpty) {
+                      //   isInit = true;
+                      // }
+
                       pageManager.add(
                           box.get(box.keys.last)!.artiste.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.url.toString());
+
+                      // if (isInit) {
+                      //   // pageManager.dispose();
+                      //   // await PageManager.checkUrl();
+                      //   // await PageManager.initAudioHandler();
+                      // }
 
                       Navigator.pop(context);
                     }
