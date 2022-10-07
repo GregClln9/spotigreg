@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class YoutubeCard extends StatefulWidget {
-  YoutubeCard(
+  const YoutubeCard(
       {Key? key,
       required this.author,
       required this.thumbnails,
       required this.title})
       : super(key: key);
-  dynamic thumbnails;
-  dynamic author;
-  dynamic title;
+  final dynamic thumbnails;
+  final dynamic author;
+  final dynamic title;
 
   @override
   State<YoutubeCard> createState() => _YoutubeCardState();

@@ -28,7 +28,7 @@ class _SettingsState extends State<Settings> {
                     ),
                     onTap: () {
                       setState(() {
-                        TracksUtils.deleteAllTracks();
+                        TracksUtils.deleteAllTracks(context);
                       });
                     },
                   ),

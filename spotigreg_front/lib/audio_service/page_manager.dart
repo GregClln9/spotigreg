@@ -31,24 +31,7 @@ class PageManager {
         androidStopForegroundOnPause: true,
       ),
     );
-  }
-
-  Future<void> loadPlaylist() async {
-    final playlist = await PlaylistRepository().fetchInitialPlaylist();
-
-    // for (var song in playlist) {
-    //   print(song);
-    // }
-
-    final mediaItems = playlist
-        .map((song) => MediaItem(
-              id: song['id'] ?? '',
-              album: song['album'] ?? '',
-              title: song['title'] ?? '',
-              extras: {'url': song['url']},
-            ))
-        .toList();
-    _audioHandler.addQueueItems(mediaItems);
+    _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
   }
 
   // Events: Calls coming from the UI
@@ -60,6 +43,19 @@ class PageManager {
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+  }
+
+  Future<void> loadPlaylist() async {
+    final playlist = await PlaylistRepository().fetchInitialPlaylist();
+    final mediaItems = playlist
+        .map((song) => MediaItem(
+              id: song['id'] ?? '',
+              album: song['album'] ?? '',
+              title: song['title'] ?? '',
+              extras: {'url': song['url']},
+            ))
+        .toList();
+    _audioHandler.addQueueItems(mediaItems);
   }
 
   void _listenToChangesInPlaylist() {
@@ -131,6 +127,11 @@ class PageManager {
     });
   }
 
+  void playFromSong(int index) {
+    _audioHandler.skipToQueueItem(index);
+    play();
+  }
+
   void play() => _audioHandler.play();
   void pause() => _audioHandler.pause();
 
@@ -165,13 +166,12 @@ class PageManager {
     }
   }
 
-  Future<void> add() async {
-    final song = await PlaylistRepository().fetchAnotherSong();
+  Future<void> add(String id, String album, String title, String url) async {
     final mediaItem = MediaItem(
-      id: song['id'] ?? '',
-      album: song['album'] ?? '',
-      title: song['title'] ?? '',
-      extras: {'url': song['url']},
+      id: id,
+      album: album,
+      title: title,
+      extras: {'url': url},
     );
     _audioHandler.addQueueItem(mediaItem);
   }

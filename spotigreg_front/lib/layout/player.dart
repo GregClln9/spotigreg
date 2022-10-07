@@ -18,11 +18,7 @@ class _PlayerState extends ConsumerState<Player> {
   @override
   Widget build(BuildContext context) {
     double mHeight = MediaQuery.of(context).size.height;
-
     final pageManager = ref.read(pageManagerProvider);
-    // pageManager.init();
-
-    // final pageManager = getIt<PageManager>();
     return SizedBox(
         height: mHeight * 0.13,
         child: Column(
@@ -65,8 +61,6 @@ class RepeatButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-
-    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<RepeatState>(
       valueListenable: pageManager.repeatButtonNotifier,
       builder: (context, value, child) {
@@ -96,8 +90,6 @@ class PreviousSongButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-
-    // final pageManager = getIt<PageManager>();
     return IconButton(
         iconSize: 45,
         onPressed: pageManager.previous,
@@ -110,8 +102,6 @@ class PlayButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-
-    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<ButtonState>(
       valueListenable: pageManager.playButtonNotifier,
       builder: (_, value, __) {
@@ -141,7 +131,7 @@ class PlayButton extends ConsumerWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(50))),
               child: Center(
                   child: Icon(
-                (value == ButtonState.playing || value == ButtonState.loading)
+                (value == ButtonState.playing)
                     ? Icons.pause
                     : Icons.play_arrow_rounded,
                 size: 45,
@@ -160,8 +150,6 @@ class NextSongButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-
-    // final pageManager = getIt<PageManager>();
     return IconButton(
         iconSize: 45,
         onPressed: pageManager.next,
@@ -176,8 +164,6 @@ class ShuffleButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-
-    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<bool>(
       valueListenable: pageManager.isShuffleModeEnabledNotifier,
       builder: (context, isEnabled, child) {

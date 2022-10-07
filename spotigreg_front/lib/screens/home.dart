@@ -30,19 +30,14 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   void dispose() {
-    // getIt<PageManager>().dispose();
     final pageManager = ref.read(pageManagerProvider);
     pageManager.dispose();
-    // PageManager().dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Box<TracksHive> box = Boxes.getTracks();
-    // final musicProvider = Provider.of<MusicProvider>(context, listen: false);
-    // final pageManager = getIt<PageManager>();
-    // final pageManager = ref.read(pageManagerProvider);
     return Scaffold(
         appBar: TopAppBar(scaffoldKey: _key),
         bottomNavigationBar: const Player(),
@@ -50,9 +45,12 @@ class _HomeState extends ConsumerState<Home> {
             backgroundColor: primaryColor,
             onPressed: (() {
               showSearch(
-                  context: context,
-                  delegate: CustomSearchDelegate(),
-                  useRootNavigator: true);
+                      context: context,
+                      delegate: CustomSearchDelegate(),
+                      useRootNavigator: true)
+                  .then((value) {
+                setState(() {});
+              });
             }),
             child: const Icon(
               Icons.add,
@@ -93,19 +91,9 @@ class _HomeState extends ConsumerState<Home> {
                             // }
                             return InkWell(
                               onTap: (() {
-                                print(box.getAt(index)!.title.toString());
-                                print(box.getAt(index)!.id.toString());
-                                // Navigator.pushReplacement(
-                                //   context,
-                                //   PageRouteBuilder(
-                                //     pageBuilder:
-                                //         (context, animation1, animation2) =>
-                                //             super.widget,
-                                //     transitionDuration: Duration.zero,
-                                //     reverseTransitionDuration:
-                                //         Duration.zero,
-                                //   ),
-                                // );
+                                final pageManager =
+                                    ref.read(pageManagerProvider);
+                                pageManager.playFromSong(index);
                               }),
                               child: Dismissible(
                                 background: Container(
@@ -115,7 +103,8 @@ class _HomeState extends ConsumerState<Home> {
                                 onDismissed: (DismissDirection direction) {
                                   setState(() {
                                     TracksUtils.deleteTrack(
-                                        box.getAt(index)!.id.toString());
+                                        box.getAt(index)!.id.toString(),
+                                        context);
                                   });
                                 },
                                 child: TrackCard(

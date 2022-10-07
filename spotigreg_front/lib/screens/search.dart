@@ -3,7 +3,8 @@ import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
-import 'package:spotigreg_front/route/route.dart' as route;
+
+import '../utils/utils.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   CustomSearchDelegate();
@@ -13,10 +14,7 @@ class CustomSearchDelegate extends SearchDelegate {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          route.homePage,
-          (route) => false,
-        );
+        Navigator.pop(context);
       },
     );
   }
@@ -52,23 +50,31 @@ class CustomSearchDelegate extends SearchDelegate {
                             title: snapshot.data[index].title),
                       ),
                       onTap: () async {
-                        var url = await YoutubeUtils.getUrlYoutube(
-                            snapshot.data[index].id);
-                        print(url);
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (builder) {
-                              return DownloadModalBottom(
-                                id: snapshot.data[index].id.toString(),
-                                title: snapshot.data[index].title,
-                                duration:
-                                    snapshot.data[index].duration.toString(),
-                                cover: snapshot
-                                    .data[index].thumbnails.mediumResUrl,
-                                url: url,
-                                artiste: snapshot.data[index].author,
-                              );
-                            });
+                        try {
+                          var url = await YoutubeUtils.getUrlYoutube(
+                              snapshot.data[index].id);
+
+                          showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (builder) {
+                                return DownloadModalBottom(
+                                  id: snapshot.data[index].id.toString(),
+                                  title: snapshot.data[index].title,
+                                  duration:
+                                      snapshot.data[index].duration.toString(),
+                                  cover: snapshot
+                                      .data[index].thumbnails.mediumResUrl,
+                                  url: url,
+                                  artiste: snapshot.data[index].author,
+                                );
+                              }).then((value) {});
+                        } catch (e) {
+                          showSnackBar(
+                              context,
+                              "Oups, cette vidéo n'est pas disponible !",
+                              SnackBarState.info);
+                        }
                       },
                     );
                   });

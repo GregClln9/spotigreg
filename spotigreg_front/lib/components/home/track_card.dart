@@ -4,17 +4,16 @@ import 'package:shimmer/shimmer.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
-// ignore: must_be_immutable
 class TrackCard extends ConsumerStatefulWidget {
-  TrackCard(
+  const TrackCard(
       {Key? key,
       required this.cover,
       required this.artiste,
       required this.title})
       : super(key: key);
-  String cover;
-  String artiste;
-  String title;
+  final String cover;
+  final String artiste;
+  final String title;
 
   @override
   _TrackCardState createState() => _TrackCardState();

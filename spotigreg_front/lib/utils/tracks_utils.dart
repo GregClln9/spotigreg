@@ -1,14 +1,16 @@
 // ignore_for_file: avoid_print
 
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spotigreg_front/storage/boxes.dart';
 import 'package:spotigreg_front/storage/tracks_hive.dart';
+import 'package:spotigreg_front/utils/utils.dart';
 
 Box<TracksHive> box = Boxes.getTracks();
 
 class TracksUtils {
   static addTrack(String id, String title, String artiste, String duration,
-      String cover, String url) {
+      String cover, String url, BuildContext context) {
     final track = TracksHive(
       id: id,
       title: title,
@@ -18,13 +20,15 @@ class TracksUtils {
       url: url,
     );
     box.add(track).catchError((error) {
-      print("Error when added " + title + " track");
+      showSnackBar(
+          context, "Erreur durant l'ajout de " + title, SnackBarState.error);
     }).then((value) {
-      print(title + " ADDED.");
+      showSnackBar(context, title + " est ajouté dans la playlist",
+          SnackBarState.success);
     });
   }
 
-  static putTrackUrl(String id, String url) {
+  static putTrackUrl(String id, String url, BuildContext context) {
     TracksHive? track;
     for (int key in box.keys) {
       if (box.get(key)!.id == id) {
@@ -39,23 +43,25 @@ class TracksUtils {
     }
   }
 
-  static deleteTrack(String id) {
+  static deleteTrack(String id, BuildContext context) {
     for (int key in box.keys) {
       if (box.get(key)!.id == id) {
         box.delete(key).catchError((error) {
-          print("Error when deleted " + id + " track");
+          showSnackBar(context, "Erreur", SnackBarState.error);
         }).then((value) {
-          print("Track with id: " + id + " DELETED.");
+          showSnackBar(
+              context, "Le track " + id + " est supprimé", SnackBarState.info);
         });
       }
     }
   }
 
-  static deleteAllTracks() {
+  static deleteAllTracks(BuildContext context) {
     box.clear().catchError((error) {
-      print("Error when deleted all tracks");
+      showSnackBar(context, "Erreur", SnackBarState.error);
     }).then((value) {
-      print("All tracks are DELETED.");
+      showSnackBar(
+          context, "Toutes les tracks sont supprimées", SnackBarState.info);
     });
   }
 }
