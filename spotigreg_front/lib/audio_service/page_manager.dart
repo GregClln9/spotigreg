@@ -13,6 +13,7 @@ import './playlist_repository.dart';
 late AudioHandler _audioHandler;
 final pageManagerProvider = Provider((ref) => PageManager());
 final _audioPlayer = AudioPlayer();
+late bool isLoading = true;
 
 class PageManager {
   // Listeners: Updates going to the UI
@@ -40,19 +41,21 @@ class PageManager {
 
   static Future<void> checkUrl() async {
     for (int key in box.keys) {
+      // box.get(key)!.url.toString()
       await _audioPlayer
           .setAudioSource(ClippingAudioSource(
-            child: AudioSource.uri(Uri.parse(box.get(key)!.url.toString())),
+            child: AudioSource.uri(Uri.parse("eeeeeeeee")),
           ))
-          .then((value) => print("NO NEED URL"))
+          // .then((value) => print("NO NEED URL"))
           .catchError((onError) async {
-        print("NEED NEW URL");
+        // print("NEED NEW URL");
         await YoutubeUtils.getUrlYoutube(box.get(key)!.id.toString())
             .then((newUrlValue) {
           TracksUtils.putTrackUrl(box.get(key)!.id.toString(), newUrlValue);
         });
       });
     }
+    isLoading = false;
     _audioPlayer.dispose();
   }
 

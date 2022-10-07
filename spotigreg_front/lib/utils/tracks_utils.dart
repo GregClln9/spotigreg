@@ -29,13 +29,13 @@ class TracksUtils {
   }
 
   static putTrackUrl(String id, String url) {
-    print("putTrackUrl");
+    // print("putTrackUrl");
     TracksHive? track;
     for (int key in box.keys) {
       if (box.get(key)!.id == id) {
         track = box.get(key);
         track!.url = url;
-        box.putAt(key, track).catchError((error) {
+        box.put(key, track).catchError((error) {
           print("Error when updated " + id + " track");
         }).then((value) {
           print("Track with id: " + id + " UPDATED.");
