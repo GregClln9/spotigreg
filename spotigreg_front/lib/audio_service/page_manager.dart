@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:spotigreg_front/audio_service/audio_handler.dart';
+import 'package:spotigreg_front/utils/tracks_utils.dart';
+import 'package:spotigreg_front/utils/youtube_utils.dart';
 import '../notifiers/play_button_notifier.dart';
 import '../notifiers/progress_notifier.dart';
 import '../notifiers/repeat_button_notifier.dart';
@@ -9,6 +12,7 @@ import './playlist_repository.dart';
 
 late AudioHandler _audioHandler;
 final pageManagerProvider = Provider((ref) => PageManager());
+final _audioPlayer = AudioPlayer();
 
 class PageManager {
   // Listeners: Updates going to the UI
@@ -34,6 +38,24 @@ class PageManager {
     _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
   }
 
+  static Future<void> checkUrl() async {
+    for (int key in box.keys) {
+      await _audioPlayer
+          .setAudioSource(ClippingAudioSource(
+            child: AudioSource.uri(Uri.parse(box.get(key)!.url.toString())),
+          ))
+          .then((value) => print("NO NEED URL"))
+          .catchError((onError) async {
+        print("NEED NEW URL");
+        await YoutubeUtils.getUrlYoutube(box.get(key)!.id.toString())
+            .then((newUrlValue) {
+          TracksUtils.putTrackUrl(box.get(key)!.id.toString(), newUrlValue);
+        });
+      });
+    }
+    _audioPlayer.dispose();
+  }
+
   // Events: Calls coming from the UI
   void init() async {
     await loadPlaylist();
@@ -43,6 +65,45 @@ class PageManager {
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+  }
+
+  void updateUrl() {
+    // _audioHandler
+    //     .setAudioSource(ClippingAudioSource(
+    //         child: AudioSource.uri(Uri.parse(url)),
+    //         tag: MediaItem(
+    //             id: id,
+    //             artist: artiste,
+    //             artUri: Uri.parse(artUri),
+    //             title: title),
+    //         start: const Duration(minutes: 0),
+    //         end: parseDuration(duration)))
+    //     .catchError((error) async {
+    //   await YoutubeUtils.getUrlYoutube(id).then(
+    //     (newUrl) {
+    //       _audioPlayer
+    //           .setAudioSource(ClippingAudioSource(
+    //               child: AudioSource.uri(Uri.parse(newUrl)),
+    //               tag: MediaItem(
+    //                   id: id,
+    //                   artist: artiste,
+    //                   artUri: Uri.parse(artUri),
+    //                   title: title),
+    //               start: const Duration(minutes: 0),
+    //               end: parseDuration(duration)))
+    //           .then((value) {
+    //         TracksUtils.putTrackUrl(id, newUrl);
+    //       }).catchError((error) {
+    //         // ignore: avoid_print
+    //         print("error newUrl, snackbar : " + error.toString());
+    //       });
+    //     },
+    //   ).catchError((error));
+    //   // ignore: avoid_print
+    //   print(
+    //       "error setAudioSource (URL dead or wrong URL) : " + error.toString());
+    // });
+    TracksUtils.putTrackUrl;
   }
 
   Future<void> loadPlaylist() async {
@@ -177,8 +238,7 @@ class PageManager {
   }
 
   void remove(int index) {
-    // final lastIndex = _audioHandler.queue.value.length - 1;
-    // if (lastIndex < 0) return;
+    if (index < 0) return;
     _audioHandler.removeQueueItemAt(index);
   }
 

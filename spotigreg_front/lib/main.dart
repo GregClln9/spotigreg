@@ -10,7 +10,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter<TracksHive>(TracksHiveAdapter());
   await Hive.openBox<TracksHive>('tracks');
-  PageManager.initAudioHandler();
+  await PageManager.checkUrl();
+  await PageManager.initAudioHandler();
   runApp(const ProviderScope(child: MyApp()));
 }
 

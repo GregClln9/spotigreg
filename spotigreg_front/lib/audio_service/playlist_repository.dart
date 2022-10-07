@@ -20,6 +20,7 @@ class PlaylistRepository {
 
     _songIndex += 1;
     int boxIndex = box.keys.elementAt(_songIndex);
+
     return {
       'id': box.get(boxIndex)!.id.toString(),
       'title': box.get(boxIndex)!.title.toString(),

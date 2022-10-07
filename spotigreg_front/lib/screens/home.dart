@@ -26,6 +26,7 @@ class _HomeState extends ConsumerState<Home> {
     super.initState();
     final pageManager = ref.read(pageManagerProvider);
     pageManager.init();
+    pageManager.updateUrl();
   }
 
   @override
