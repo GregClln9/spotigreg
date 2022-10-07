@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
-import '../../audio_service/service_locator.dart';
-
 // ignore: must_be_immutable
-class TrackCard extends StatefulWidget {
+class TrackCard extends ConsumerStatefulWidget {
   TrackCard(
       {Key? key,
       required this.cover,
@@ -18,13 +17,13 @@ class TrackCard extends StatefulWidget {
   String title;
 
   @override
-  State<TrackCard> createState() => _TrackCardState();
+  _TrackCardState createState() => _TrackCardState();
 }
 
-class _TrackCardState extends State<TrackCard> {
+class _TrackCardState extends ConsumerState<TrackCard> {
   @override
   Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+    final pageManager = ref.read(pageManagerProvider);
     bool currentStream = false;
     double mWidth = MediaQuery.of(context).size.width;
 

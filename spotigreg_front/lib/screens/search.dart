@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:spotigreg_front/components/search/youtube_card.dart';
 import 'package:spotigreg_front/layout/download_modal_bottom.dart';
-import 'package:spotigreg_front/provider/search_provider.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
 import 'package:spotigreg_front/route/route.dart' as route;
@@ -32,9 +30,9 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final searchProvider = Provider.of<SearchProvider>(context, listen: false);
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => searchProvider.setSearchHistory(query));
+    // final searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) => searchProvider.setSearchHistory(query));
 
     return StatefulBuilder(builder: (context, setState) {
       return FutureBuilder<dynamic>(
@@ -86,8 +84,8 @@ class CustomSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     double mHeight = MediaQuery.of(context).size.height;
     return StatefulBuilder(builder: (context, setState) {
-      final searchProvider =
-          Provider.of<SearchProvider>(context, listen: false);
+      // final searchProvider =
+      // Provider.of<SearchProvider>(context, listen: false);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,38 +94,37 @@ class CustomSearchDelegate extends SearchDelegate {
             child: Text("Recherches récentes"),
           ),
           SingleChildScrollView(
-            child: SizedBox(
-              height: mHeight * 0.8,
-              child: ListView.builder(
-                  itemCount: searchProvider.searchHistory.length,
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                      background: Container(
-                        color: redDiss,
-                      ),
-                      key: UniqueKey(),
-                      onDismissed: (DismissDirection direction) {
-                        searchProvider.removeSearchHistory(
-                            searchProvider.searchHistory.elementAt(index));
-                      },
-                      child: InkWell(
-                        onTap: (() {
-                          query = searchProvider.searchHistory.elementAt(index);
-                        }),
-                        child: ListTile(
-                          title: Text(
-                            searchProvider.searchHistory.elementAt(index),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+            child: SizedBox(height: mHeight * 0.8, child: const Text('')
+                // ListView.builder(
+                //     itemCount: searchProvider.searchHistory.length,
+                //     itemBuilder: (context, index) {
+                //       return Dismissible(
+                //         background: Container(
+                //           color: redDiss,
+                //         ),
+                //         key: UniqueKey(),
+                //         onDismissed: (DismissDirection direction) {
+                //           searchProvider.removeSearchHistory(
+                //               searchProvider.searchHistory.elementAt(index));
+                //         },
+                //         child: InkWell(
+                //           onTap: (() {
+                //             query = searchProvider.searchHistory.elementAt(index);
+                //           }),
+                //           child: ListTile(
+                //             title: Text(
+                //               searchProvider.searchHistory.elementAt(index),
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     }),
+                ),
           ),
           Center(
               child: InkWell(
                   onTap: () {
-                    searchProvider.removeAllSearchHistory();
+                    // searchProvider.removeAllSearchHistory();
                     setState(() {});
                   },
                   child: Container(

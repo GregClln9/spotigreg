@@ -1,10 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotigreg_front/audio_service/audio_handler.dart';
 import '../notifiers/play_button_notifier.dart';
 import '../notifiers/progress_notifier.dart';
 import '../notifiers/repeat_button_notifier.dart';
 import 'package:audio_service/audio_service.dart';
 import './playlist_repository.dart';
-import './service_locator.dart';
+
+late AudioHandler _audioHandler;
+final pageManagerProvider = Provider((ref) => PageManager());
 
 class PageManager {
   // Listeners: Updates going to the UI
@@ -17,22 +21,20 @@ class PageManager {
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
-  final _audioHandler = getIt<AudioHandler>();
-
-  // Events: Calls coming from the UI
-  void init() async {
-    await _loadPlaylist();
-    _listenToChangesInPlaylist();
-    _listenToPlaybackState();
-    _listenToCurrentPosition();
-    _listenToBufferedPosition();
-    _listenToTotalDuration();
-    _listenToChangesInSong();
+  static Future<void> initAudioHandler() async {
+    _audioHandler = await AudioService.init(
+      builder: () => MyAudioHandler(),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.mycompany.myapp.audio',
+        androidNotificationChannelName: 'Audio Service Demo',
+        androidNotificationOngoing: true,
+        androidStopForegroundOnPause: true,
+      ),
+    );
   }
 
-  Future<void> _loadPlaylist() async {
-    final songRepository = getIt<PlaylistRepository>();
-    final playlist = await songRepository.fetchInitialPlaylist();
+  Future<void> loadPlaylist() async {
+    final playlist = await PlaylistRepository().fetchInitialPlaylist();
 
     // for (var song in playlist) {
     //   print(song);
@@ -47,6 +49,17 @@ class PageManager {
             ))
         .toList();
     _audioHandler.addQueueItems(mediaItems);
+  }
+
+  // Events: Calls coming from the UI
+  void init() async {
+    await loadPlaylist();
+    _listenToChangesInPlaylist();
+    _listenToPlaybackState();
+    _listenToCurrentPosition();
+    _listenToBufferedPosition();
+    _listenToTotalDuration();
+    _listenToChangesInSong();
   }
 
   void _listenToChangesInPlaylist() {
@@ -153,8 +166,7 @@ class PageManager {
   }
 
   Future<void> add() async {
-    final songRepository = getIt<PlaylistRepository>();
-    final song = await songRepository.fetchAnotherSong();
+    final song = await PlaylistRepository().fetchAnotherSong();
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',

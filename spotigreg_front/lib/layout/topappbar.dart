@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:spotigreg_front/route/route.dart' as route;
 import 'package:flutter/material.dart';
-import 'package:spotigreg_front/screens/home.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -65,17 +64,7 @@ class _TopAppBarState extends State<TopAppBar> {
             color: secondaryText,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, route.settingsPage).then((value) {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const Home(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            });
+            Navigator.pushNamed(context, route.settingsPage);
           },
         ),
       ],

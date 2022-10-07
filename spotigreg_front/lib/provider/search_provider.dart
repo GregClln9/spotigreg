@@ -1,26 +1,26 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class SearchProvider extends ChangeNotifier {
-  late Set<String> _searchHistory = {};
+// class SearchProvider extends ChangeNotifier {
+//   late Set<String> _searchHistory = {};
 
-  Set<String> get searchHistory => _searchHistory;
+//   Set<String> get searchHistory => _searchHistory;
 
-  // passer ca sous shared_preference
+//   // passer ca sous shared_preference
 
-  void setSearchHistory(String newWord) {
-    if (newWord.isNotEmpty) {
-      _searchHistory.add(newWord);
-    }
-    notifyListeners();
-  }
+//   void setSearchHistory(String newWord) {
+//     if (newWord.isNotEmpty) {
+//       _searchHistory.add(newWord);
+//     }
+//     notifyListeners();
+//   }
 
-  void removeSearchHistory(String newWord) {
-    _searchHistory.remove(newWord);
-    notifyListeners();
-  }
+//   void removeSearchHistory(String newWord) {
+//     _searchHistory.remove(newWord);
+//     notifyListeners();
+//   }
 
-  void removeAllSearchHistory() {
-    _searchHistory = {};
-    notifyListeners();
-  }
-}
+//   void removeAllSearchHistory() {
+//     _searchHistory = {};
+//     notifyListeners();
+//   }
+// }

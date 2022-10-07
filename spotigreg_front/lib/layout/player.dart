@@ -1,25 +1,28 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
-import 'package:spotigreg_front/audio_service/service_locator.dart';
 import 'package:spotigreg_front/notifiers/play_button_notifier.dart';
 import 'package:spotigreg_front/notifiers/progress_notifier.dart';
 import 'package:spotigreg_front/notifiers/repeat_button_notifier.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
-class Player extends StatefulWidget {
+class Player extends ConsumerStatefulWidget {
   const Player({Key? key}) : super(key: key);
 
   @override
-  State<Player> createState() => _PlayerState();
+  _PlayerState createState() => _PlayerState();
 }
 
-class _PlayerState extends State<Player> {
+class _PlayerState extends ConsumerState<Player> {
   @override
   Widget build(BuildContext context) {
     double mHeight = MediaQuery.of(context).size.height;
 
-    final pageManager = getIt<PageManager>();
+    final pageManager = ref.read(pageManagerProvider);
+    // pageManager.init();
+
+    // final pageManager = getIt<PageManager>();
     return SizedBox(
         height: mHeight * 0.13,
         child: Column(
@@ -57,11 +60,13 @@ class _PlayerState extends State<Player> {
   }
 }
 
-class RepeatButton extends StatelessWidget {
+class RepeatButton extends ConsumerWidget {
   const RepeatButton({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<RepeatState>(
       valueListenable: pageManager.repeatButtonNotifier,
       builder: (context, value, child) {
@@ -86,11 +91,13 @@ class RepeatButton extends StatelessWidget {
   }
 }
 
-class PreviousSongButton extends StatelessWidget {
+class PreviousSongButton extends ConsumerWidget {
   const PreviousSongButton({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    // final pageManager = getIt<PageManager>();
     return IconButton(
         iconSize: 45,
         onPressed: pageManager.previous,
@@ -98,11 +105,13 @@ class PreviousSongButton extends StatelessWidget {
   }
 }
 
-class PlayButton extends StatelessWidget {
+class PlayButton extends ConsumerWidget {
   const PlayButton({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<ButtonState>(
       valueListenable: pageManager.playButtonNotifier,
       builder: (_, value, __) {
@@ -146,11 +155,13 @@ class PlayButton extends StatelessWidget {
   }
 }
 
-class NextSongButton extends StatelessWidget {
+class NextSongButton extends ConsumerWidget {
   const NextSongButton({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    // final pageManager = getIt<PageManager>();
     return IconButton(
         iconSize: 45,
         onPressed: pageManager.next,
@@ -160,11 +171,13 @@ class NextSongButton extends StatelessWidget {
   }
 }
 
-class ShuffleButton extends StatelessWidget {
+class ShuffleButton extends ConsumerWidget {
   const ShuffleButton({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    // final pageManager = getIt<PageManager>();
     return ValueListenableBuilder<bool>(
       valueListenable: pageManager.isShuffleModeEnabledNotifier,
       builder: (context, isEnabled, child) {
