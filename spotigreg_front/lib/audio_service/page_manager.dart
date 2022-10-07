@@ -176,10 +176,10 @@ class PageManager {
     _audioHandler.addQueueItem(mediaItem);
   }
 
-  void remove() {
-    final lastIndex = _audioHandler.queue.value.length - 1;
-    if (lastIndex < 0) return;
-    _audioHandler.removeQueueItemAt(lastIndex);
+  void remove(int index) {
+    // final lastIndex = _audioHandler.queue.value.length - 1;
+    // if (lastIndex < 0) return;
+    _audioHandler.removeQueueItemAt(index);
   }
 
   void dispose() {

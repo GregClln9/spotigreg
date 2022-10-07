@@ -42,14 +42,24 @@ class DownloadModalBottom extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        color: const Color.fromARGB(255, 61, 61, 61),
-        height: mHeight * 0.3,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: const Color.fromARGB(255, 61, 61, 61),
+        ),
+        height: mHeight * 0.35,
         child: Column(
           children: [
             Flexible(
                 flex: 5,
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(150, 10, 150, 0),
+                      child: Divider(
+                        color: secondaryText,
+                        thickness: 4,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: CustomTextField(

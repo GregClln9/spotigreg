@@ -102,6 +102,9 @@ class _HomeState extends ConsumerState<Home> {
                                 key: UniqueKey(),
                                 onDismissed: (DismissDirection direction) {
                                   setState(() {
+                                    final pageManager =
+                                        ref.read(pageManagerProvider);
+                                    pageManager.remove(index);
                                     TracksUtils.deleteTrack(
                                         box.getAt(index)!.id.toString(),
                                         context);
