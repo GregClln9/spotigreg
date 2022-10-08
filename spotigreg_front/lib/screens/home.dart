@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/layout/player.dart';
@@ -84,7 +85,11 @@ class _HomeState extends ConsumerState<Home> {
                       //       Icon(Icons.swap_vert_rounded, color: secondaryText),
                       //   onTap: () {
                       //     setState(() {
-                      //       musicProvider.setSortByMoreRecent();
+                      //       final pageManager = ref.read(pageManagerProvider);
+                      //       pageManager.sortByMoreRecent =
+                      //           !pageManager.sortByMoreRecent;
+                      //       pageManager.clearPlaylist();
+                      //       pageManager.init();
                       //     });
                       //   },
                       // ),
@@ -95,30 +100,40 @@ class _HomeState extends ConsumerState<Home> {
                       ? ListView.builder(
                           itemCount: box.length,
                           itemBuilder: ((context, index) {
-                            // if (musicProvider.sortByMoreRecent) {
-                            // index = box.length - index - 1;
+                            // final pageManager = ref.read(pageManagerProvider);
+                            // if (pageManager.sortByMoreRecent) {
+                            //   index = box.length - index - 1;
                             // }
+
                             return InkWell(
                               onTap: (() {
                                 final pageManager =
                                     ref.read(pageManagerProvider);
                                 pageManager.playFromSong(index);
                               }),
-                              child: Dismissible(
-                                background: Container(
-                                  color: redDiss,
-                                ),
+                              child: Slidable(
                                 key: UniqueKey(),
-                                onDismissed: (DismissDirection direction) {
-                                  setState(() {
-                                    final pageManager =
-                                        ref.read(pageManagerProvider);
-                                    pageManager.remove(index);
-                                    TracksUtils.deleteTrack(
-                                        box.getAt(index)!.id.toString(),
-                                        context);
-                                  });
-                                },
+                                endActionPane: ActionPane(
+                                  extentRatio: 0.4,
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: ((context) {
+                                        setState(() {
+                                          final pageManager =
+                                              ref.read(pageManagerProvider);
+                                          pageManager.remove(index);
+                                          TracksUtils.deleteTrack(
+                                              box.getAt(index)!.id.toString(),
+                                              context);
+                                        });
+                                      }),
+                                      backgroundColor: redDiss,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete_outline_rounded,
+                                    ),
+                                  ],
+                                ),
                                 child: TrackCard(
                                   cover: box.getAt(index)!.cover.toString(),
                                   artiste: box.getAt(index)!.artiste.toString(),

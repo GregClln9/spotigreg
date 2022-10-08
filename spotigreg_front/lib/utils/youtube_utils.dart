@@ -6,14 +6,13 @@ class YoutubeUtils {
   static searchYoutube(query, WidgetRef ref) async {
     final searchHistory = ref.read(searchProvider);
     searchHistory.searchHistoryList!.add(query);
-    // final prefs = await SharedPreferences.getInstance();
-    // dynamic searchHistory = prefs.getStringList('searchHistory');
-    // await prefs.setStringList('searchHistory', searchHistory.add(query));
     var yt = YoutubeExplode();
+
     // var test = await yt.search.getVideos(
     //   query,
     // );
     // return test.nextPage();
+
     return yt.search.search(query);
   }
 

@@ -13,6 +13,7 @@ class SearchHistory {
   }
 
   saveSearch(dynamic data, WidgetRef ref) async {
+    if (data == null) return;
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList('searchHistory', data);
   }

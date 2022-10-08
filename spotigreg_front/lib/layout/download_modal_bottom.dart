@@ -33,8 +33,6 @@ class DownloadModalBottom extends ConsumerWidget {
     final TextEditingController artisteController = TextEditingController();
 
     double mHeight = MediaQuery.of(context).size.height;
-    // bool isInit = false;
-
     titleController.text = title.toString();
     artisteController.text = artiste.toString();
 
@@ -91,32 +89,32 @@ class DownloadModalBottom extends ConsumerWidget {
                       }
                     }
                     if (!alreadyDownload) {
-                      TracksUtils.addTrack(
-                          id.toString(),
-                          titleController.text,
-                          artisteController.text,
-                          duration.toString(),
-                          cover.toString(),
-                          url.toString(),
-                          context);
-
                       final pageManager = ref.read(pageManagerProvider);
-                      // if (pageManager.playlistNotifier.value.isEmpty) {
-                      //   isInit = true;
-                      // }
+                      try {
+                        TracksUtils.addTrack(
+                            id.toString(),
+                            titleController.text,
+                            artisteController.text,
+                            duration.toString(),
+                            cover.toString(),
+                            url.toString(),
+                            context);
+                      } catch (e) {
+                        showSnackBar(
+                            context,
+                            "Erreur pendant le téléchargement",
+                            SnackBarState.error);
+                        Navigator.pop(context);
+                        return;
+                      }
 
                       pageManager.add(
-                          box.get(box.keys.last)!.artiste.toString(),
-                          box.get(box.keys.last)!.title.toString(),
-                          box.get(box.keys.last)!.title.toString(),
-                          box.get(box.keys.last)!.url.toString());
-
-                      // if (isInit) {
-                      //   // pageManager.dispose();
-                      //   // await PageManager.checkUrl();
-                      //   // await PageManager.initAudioHandler();
-                      // }
-
+                        box.get(box.keys.last)!.artiste.toString(),
+                        box.get(box.keys.last)!.title.toString(),
+                        box.get(box.keys.last)!.title.toString(),
+                        box.get(box.keys.last)!.url.toString(),
+                        box.get(box.keys.last)!.cover.toString(),
+                      );
                       Navigator.pop(context);
                     }
                   }),

@@ -13,12 +13,13 @@ import './playlist_repository.dart';
 late AudioHandler _audioHandler;
 final pageManagerProvider = Provider((ref) => PageManager());
 final _audioPlayer = AudioPlayer();
-late bool isLoading = true;
 
 class PageManager {
   // Listeners: Updates going to the UI
+  // late bool isLoading = true;
+  late bool sortByMoreRecent = true;
   final currentSongTitleNotifier = ValueNotifier<String>('');
-  final playlistNotifier = ValueNotifier<List<String>>([]);
+  final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
   final isFirstSongNotifier = ValueNotifier<bool>(true);
@@ -52,26 +53,23 @@ class PageManager {
         });
       });
     }
-    isLoading = false;
     _audioPlayer.dispose();
   }
 
   // Events: Calls coming from the UI
   void init() async {
-    print("init");
+    // isLoading = true;
     await loadPlaylist();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
     _listenToBufferedPosition();
     _listenToTotalDuration();
-    _listenToChangesInSong();
+    listenToChangesInSong();
   }
 
   void checkIfInit() {
-    print("checkIfInit");
     _audioHandler.playbackState.listen((playbackState) {
-      print(playbackState.processingState);
       if (playbackState.processingState == AudioProcessingState.loading) {
         init();
       }
@@ -79,14 +77,22 @@ class PageManager {
   }
 
   Future<void> loadPlaylist() async {
-    print("loadPlaylist");
-    final playlist = await PlaylistRepository().fetchInitialPlaylist();
+    // var playlist =
+    //     await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
+    // if (!sortByMoreRecent) {
+    var playlist = await PlaylistRepository().fetchInitialPlaylist();
+    // }
+    // for (var i = 0; i < playlist.length; i++) {
+    //   print(playlist[i]);
+    // }
+
     final mediaItems = playlist
         .map((song) => MediaItem(
               id: song['id'] ?? '',
               album: song['album'] ?? '',
               title: song['title'] ?? '',
               extras: {'url': song['url']},
+              artUri: Uri.parse(song['artUri'] ?? ''),
             ))
         .toList();
     _audioHandler.addQueueItems(mediaItems);
@@ -98,7 +104,7 @@ class PageManager {
         playlistNotifier.value = [];
         currentSongTitleNotifier.value = '';
       } else {
-        final newList = playlist.map((item) => item.title).toList();
+        final newList = playlist.map((item) => item).toList();
         playlistNotifier.value = newList;
       }
     });
@@ -155,7 +161,7 @@ class PageManager {
     });
   }
 
-  void _listenToChangesInSong() {
+  void listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
     });
@@ -200,19 +206,43 @@ class PageManager {
     }
   }
 
-  Future<void> add(String id, String album, String title, String url) async {
+  add(String id, String album, String title, String url, String cover) async {
     final mediaItem = MediaItem(
       id: id,
       album: album,
       title: title,
       extras: {'url': url},
+      artUri: Uri.parse(cover),
     );
+    // var playlist =
+    //     await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
+
+    // final mediaItems = playlist
+    //     .map((song) => MediaItem(
+    //           id: song['id'] ?? '',
+    //           album: song['album'] ?? '',
+    //           title: song['title'] ?? '',
+    //           extras: {'url': song['url']},
+    //           artUri: Uri.parse(song['artUri'] ?? ''),
+    //         ))
+    //     .toList();
+    // if (!sortByMoreRecent) {
+    // _audioHandler.updateQueue(mediaItems);
+    // _audioHandler.insertQueueItem(0, mediaItem);
+    // } else {
     _audioHandler.addQueueItem(mediaItem);
+    // }
   }
 
   void remove(int index) {
     if (index < 0) return;
     _audioHandler.removeQueueItemAt(index);
+  }
+
+  clearPlaylist() {
+    while (_audioHandler.queue.value.isNotEmpty) {
+      _audioHandler.queue.value.removeLast();
+    }
   }
 
   void dispose() {

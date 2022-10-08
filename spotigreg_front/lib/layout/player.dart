@@ -25,12 +25,12 @@ class _PlayerState extends ConsumerState<Player> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 0.5,
-              child: ValueListenableBuilder<ProgressBarState>(
-                valueListenable: pageManager.progressNotifier,
-                builder: (_, value, __) {
-                  return ProgressBar(
+            ValueListenableBuilder<ProgressBarState>(
+              valueListenable: pageManager.progressNotifier,
+              builder: (_, value, __) {
+                return SizedBox(
+                  height: 15,
+                  child: ProgressBar(
                       thumbRadius: 6.0,
                       thumbGlowRadius: 20.0,
                       thumbColor: Colors.white,
@@ -41,9 +41,9 @@ class _PlayerState extends ConsumerState<Player> {
                       buffered: value.buffered,
                       total: value.total,
                       onSeek: pageManager.seek,
-                      timeLabelTextStyle: TextStyle(color: secondaryText));
-                },
-              ),
+                      timeLabelTextStyle: TextStyle(color: secondaryText)),
+                );
+              },
             ),
             Expanded(
               child: Row(
