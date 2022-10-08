@@ -47,12 +47,13 @@ class DownloadModalBottom extends ConsumerWidget {
           borderRadius: BorderRadius.circular(15),
           color: const Color.fromARGB(255, 61, 61, 61),
         ),
-        height: mHeight * 0.35,
+        height: mHeight * 0.70,
         child: Column(
           children: [
             Flexible(
                 flex: 5,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(150, 10, 150, 0),

@@ -20,36 +20,43 @@ class _PlayerState extends ConsumerState<Player> {
     double mHeight = MediaQuery.of(context).size.height;
     final pageManager = ref.read(pageManagerProvider);
     return SizedBox(
-        height: mHeight * 0.13,
+        height: mHeight * 0.15,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ValueListenableBuilder<ProgressBarState>(
-              valueListenable: pageManager.progressNotifier,
-              builder: (_, value, __) {
-                return ProgressBar(
-                    thumbRadius: 6.0,
-                    thumbGlowRadius: 20.0,
-                    thumbColor: Colors.white,
-                    progressBarColor: Colors.white,
-                    bufferedBarColor: primaryColor.withOpacity(0.5),
-                    baseBarColor: secondaryText,
-                    progress: value.current,
-                    buffered: value.buffered,
-                    total: value.total,
-                    onSeek: pageManager.seek,
-                    timeLabelTextStyle: TextStyle(color: secondaryText));
-              },
+            SizedBox(
+              height: 0.5,
+              child: ValueListenableBuilder<ProgressBarState>(
+                valueListenable: pageManager.progressNotifier,
+                builder: (_, value, __) {
+                  return ProgressBar(
+                      thumbRadius: 6.0,
+                      thumbGlowRadius: 20.0,
+                      thumbColor: Colors.white,
+                      progressBarColor: Colors.white,
+                      bufferedBarColor: primaryColor.withOpacity(0.5),
+                      baseBarColor: secondaryText,
+                      progress: value.current,
+                      buffered: value.buffered,
+                      total: value.total,
+                      onSeek: pageManager.seek,
+                      timeLabelTextStyle: TextStyle(color: secondaryText));
+                },
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                ShuffleButton(),
-                PreviousSongButton(),
-                PlayButton(),
-                NextSongButton(),
-                RepeatButton()
-              ],
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  ShuffleButton(),
+                  PreviousSongButton(),
+                  PlayButton(),
+                  NextSongButton(),
+                  RepeatButton()
+                ],
+              ),
             )
           ],
         ));

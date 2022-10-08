@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/layout/player.dart';
 import 'package:spotigreg_front/screens/search.dart';
+import 'package:spotigreg_front/utils/search_utils.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 import '../audio_service/page_manager.dart';
 import '../layout/topappbar.dart';
@@ -26,17 +27,24 @@ class _HomeState extends ConsumerState<Home> {
     super.initState();
     final pageManager = ref.read(pageManagerProvider);
     pageManager.init();
+    final searchHistory = ref.read(searchProvider);
+    searchHistory.updateSearch(searchHistory.searchHistoryList, ref);
   }
 
   @override
   void dispose() {
     final pageManager = ref.read(pageManagerProvider);
     pageManager.dispose();
+    final searchHistory = ref.read(searchProvider);
+    searchHistory.saveSearch(searchHistory.searchHistoryList, ref);
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final searchHistory = ref.read(searchProvider);
+    searchHistory.saveSearch(searchHistory.searchHistoryList, ref);
     Box<TracksHive> box = Boxes.getTracks();
     return Scaffold(
         key: _key,

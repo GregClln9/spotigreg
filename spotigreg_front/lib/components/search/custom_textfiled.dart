@@ -22,6 +22,7 @@ class CustomTextField extends StatelessWidget {
           child: Text(title),
         ),
         TextField(
+          autofocus: true,
           controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(

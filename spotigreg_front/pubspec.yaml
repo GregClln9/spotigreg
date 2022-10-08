@@ -19,6 +19,7 @@ dependencies:
   # STORAGE
   hive: ^2.1.0
   hive_flutter: ^1.1.0
+  shared_preferences: ^2.0.15
   # YTB
   youtube_explode_dart: ^1.12.1
   # STATE MANAGEMENT
@@ -26,7 +27,7 @@ dependencies:
   # UI
   cupertino_icons: ^1.0.2
   shimmer: ^2.0.0
-  google_fonts: ^2.2.0
+  google_fonts: ^3.0.1
   flutter_launcher_icons: ^0.9.2
 
 dev_dependencies:
