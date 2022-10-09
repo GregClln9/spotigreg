@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
+import 'package:spotigreg_front/layout/player.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends ConsumerStatefulWidget {
@@ -14,6 +15,7 @@ class VideoScreen extends ConsumerStatefulWidget {
 class _VideoScreenState extends ConsumerState<VideoScreen> {
   @override
   void initState() {
+    controller.play();
     super.initState();
   }
 
@@ -35,6 +37,16 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
     ]);
 
     return Scaffold(
+        bottomNavigationBar: const Player(false),
+
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // floatingActionButton: FloatingActionButton(
+        //   backgroundColor: Colors.black.withOpacity(0.5),
+        //   foregroundColor: Colors.green,
+        //   child: const PlayButton(),
+        //   onPressed: () {},
+        // ),
+        extendBody: true,
         body: ValueListenableBuilder(
             valueListenable: controller,
             builder: (__, VideoPlayerValue value, _) {

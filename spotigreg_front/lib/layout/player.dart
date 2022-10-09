@@ -8,7 +8,8 @@ import 'package:spotigreg_front/notifiers/repeat_button_notifier.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
 class Player extends ConsumerStatefulWidget {
-  const Player({Key? key}) : super(key: key);
+  const Player(this.isHome, {Key? key}) : super(key: key);
+  final bool isHome;
 
   @override
   _PlayerState createState() => _PlayerState();
@@ -19,8 +20,9 @@ class _PlayerState extends ConsumerState<Player> {
   Widget build(BuildContext context) {
     double mHeight = MediaQuery.of(context).size.height;
     final pageManager = ref.read(pageManagerProvider);
-    return SizedBox(
-        height: mHeight * 0.15,
+    return Container(
+        color: Colors.transparent,
+        height: widget.isHome ? mHeight * 0.15 : mHeight * 0.30,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

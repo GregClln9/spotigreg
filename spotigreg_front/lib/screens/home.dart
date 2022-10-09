@@ -71,7 +71,7 @@ class _HomeState extends ConsumerState<Home> {
     return Scaffold(
         key: _key,
         appBar: TopAppBar(scaffoldKey: _key),
-        bottomNavigationBar: const Player(),
+        bottomNavigationBar: const Player(true),
         floatingActionButton: FloatingActionButton(
             backgroundColor: primaryColor,
             onPressed: (() {
@@ -118,24 +118,24 @@ class _HomeState extends ConsumerState<Home> {
                     ]),
               ),
               // VIDEO
-              // ValueListenableBuilder(
-                  // valueListenable: controller,
-                  // builder: (__, VideoPlayerValue value, _) {
-                  //   // print(value.position);
-                  //   // print(value.isInitialized);
-                  //   // print(value.duration);
-                  //   return SizedBox(
-                  //     height: 200,
-                  //     child: value.isInitialized
-                  //         ? AspectRatio(
-                  //             aspectRatio: controller.value.aspectRatio,
-                  //             child: VideoPlayer(controller),
-                  //           )
-                  //         : const SizedBox(
-                  //             child: CircularProgressIndicator.adaptive(),
-                  //           ),
-                  //   );
-                  // }),
+              ValueListenableBuilder(
+                  valueListenable: controller,
+                  builder: (__, VideoPlayerValue value, _) {
+                    // print(value.position);
+                    // print(value.isInitialized);
+                    // print(value.duration);
+                    return SizedBox(
+                      height: 200,
+                      child: value.isInitialized
+                          ? AspectRatio(
+                              aspectRatio: controller.value.aspectRatio,
+                              child: VideoPlayer(controller),
+                            )
+                          : const SizedBox(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                    );
+                  }),
               // LIST OF SONG
               Expanded(
                   child: box.length > 0

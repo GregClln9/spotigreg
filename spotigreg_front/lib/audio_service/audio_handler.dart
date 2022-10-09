@@ -17,6 +17,7 @@ Future<AudioHandler> initAudioService() async {
 class MyAudioHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
   final _playlist = ConcatenatingAudioSource(children: []);
+  // late VideoPlayerController controller;
 
   MyAudioHandler() {
     _loadEmptyPlaylist();
@@ -97,11 +98,11 @@ class MyAudioHandler extends BaseAudioHandler {
     _player.currentIndexStream.listen((index) async {
       // print("INDEX CHANGE" + index.toString());
       final playlist = queue.value;
+      await PageManager().initVideoControllerWithId(index, playlist);
       if (index == null || playlist.isEmpty) return;
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
-      PageManager().initVideoControllerWithId(index, playlist);
       mediaItem.add(playlist[index]);
     });
   }
