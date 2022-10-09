@@ -10,7 +10,7 @@ import '../notifiers/repeat_button_notifier.dart';
 import 'package:audio_service/audio_service.dart';
 import './playlist_repository.dart';
 
-late AudioHandler _audioHandler;
+late MyAudioHandler _audioHandler;
 final pageManagerProvider = Provider((ref) => PageManager());
 final _audioPlayer = AudioPlayer();
 
@@ -77,14 +77,12 @@ class PageManager {
   }
 
   Future<void> loadPlaylist() async {
-    // var playlist =
-    //     await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
-    // if (!sortByMoreRecent) {
-    var playlist = await PlaylistRepository().fetchInitialPlaylist();
-    // }
-    // for (var i = 0; i < playlist.length; i++) {
-    //   print(playlist[i]);
-    // }
+    var playlist =
+        await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
+    if (!sortByMoreRecent) {
+      print("load PlaylistRepository");
+      playlist = await PlaylistRepository().fetchInitialPlaylist();
+    }
 
     final mediaItems = playlist
         .map((song) => MediaItem(
@@ -214,24 +212,19 @@ class PageManager {
       extras: {'url': url},
       artUri: Uri.parse(cover),
     );
-    // var playlist =
-    //     await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
-
-    // final mediaItems = playlist
-    //     .map((song) => MediaItem(
-    //           id: song['id'] ?? '',
-    //           album: song['album'] ?? '',
-    //           title: song['title'] ?? '',
-    //           extras: {'url': song['url']},
-    //           artUri: Uri.parse(song['artUri'] ?? ''),
-    //         ))
-    //     .toList();
-    // if (!sortByMoreRecent) {
-    // _audioHandler.updateQueue(mediaItems);
-    // _audioHandler.insertQueueItem(0, mediaItem);
-    // } else {
     _audioHandler.addQueueItem(mediaItem);
-    // }
+  }
+
+  addMoreRecent(
+      String id, String album, String title, String url, String cover) async {
+    final mediaItem = MediaItem(
+      id: id,
+      album: album,
+      title: title,
+      extras: {'url': url},
+      artUri: Uri.parse(cover),
+    );
+    _audioHandler.addQueueItemMorerecent(mediaItem);
   }
 
   void remove(int index) {

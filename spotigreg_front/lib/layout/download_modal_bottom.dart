@@ -89,7 +89,6 @@ class DownloadModalBottom extends ConsumerWidget {
                       }
                     }
                     if (!alreadyDownload) {
-                      final pageManager = ref.read(pageManagerProvider);
                       try {
                         TracksUtils.addTrack(
                             id.toString(),
@@ -108,13 +107,25 @@ class DownloadModalBottom extends ConsumerWidget {
                         return;
                       }
 
-                      pageManager.add(
-                        box.get(box.keys.last)!.artiste.toString(),
-                        box.get(box.keys.last)!.title.toString(),
-                        box.get(box.keys.last)!.title.toString(),
-                        box.get(box.keys.last)!.url.toString(),
-                        box.get(box.keys.last)!.cover.toString(),
-                      );
+                      final pageManager = ref.read(pageManagerProvider);
+                      if (pageManager.sortByMoreRecent) {
+                        pageManager.addMoreRecent(
+                          box.get(box.keys.last)!.artiste.toString(),
+                          box.get(box.keys.last)!.title.toString(),
+                          box.get(box.keys.last)!.title.toString(),
+                          box.get(box.keys.last)!.url.toString(),
+                          box.get(box.keys.last)!.cover.toString(),
+                        );
+                      } else {
+                        pageManager.add(
+                          box.get(box.keys.last)!.artiste.toString(),
+                          box.get(box.keys.last)!.title.toString(),
+                          box.get(box.keys.last)!.title.toString(),
+                          box.get(box.keys.last)!.url.toString(),
+                          box.get(box.keys.last)!.cover.toString(),
+                        );
+                      }
+
                       Navigator.pop(context);
                     }
                   }),

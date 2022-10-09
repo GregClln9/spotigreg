@@ -80,19 +80,20 @@ class _HomeState extends ConsumerState<Home> {
                             : box.length.toString() + " titres",
                         style: TextStyle(color: secondaryText),
                       ),
-                      // InkWell(
-                      //   child:
-                      //       Icon(Icons.swap_vert_rounded, color: secondaryText),
-                      //   onTap: () {
-                      //     setState(() {
-                      //       final pageManager = ref.read(pageManagerProvider);
-                      //       pageManager.sortByMoreRecent =
-                      //           !pageManager.sortByMoreRecent;
-                      //       pageManager.clearPlaylist();
-                      //       pageManager.init();
-                      //     });
-                      //   },
-                      // ),
+                      InkWell(
+                        child:
+                            Icon(Icons.swap_vert_rounded, color: secondaryText),
+                        onTap: () {
+                          setState(() {
+                            // final pageManager = ref.read(pageManagerProvider);
+                            // pageManager.sortByMoreRecent =
+                            //     !pageManager.sortByMoreRecent;
+                            // pageManager.clearPlaylist();
+                            // // pageManager.init();
+                            // pageManager.loadPlaylist();
+                          });
+                        },
+                      ),
                     ]),
               ),
               Expanded(
@@ -100,10 +101,13 @@ class _HomeState extends ConsumerState<Home> {
                       ? ListView.builder(
                           itemCount: box.length,
                           itemBuilder: ((context, index) {
-                            // final pageManager = ref.read(pageManagerProvider);
-                            // if (pageManager.sortByMoreRecent) {
-                            //   index = box.length - index - 1;
-                            // }
+                            int indexFake = index;
+                            final pageManager = ref.read(pageManagerProvider);
+                            if (pageManager.sortByMoreRecent) {
+                              indexFake = box.length - index - 1;
+                            } else {
+                              index = box.length - index - 1;
+                            }
 
                             return InkWell(
                               onTap: (() {
@@ -124,7 +128,10 @@ class _HomeState extends ConsumerState<Home> {
                                               ref.read(pageManagerProvider);
                                           pageManager.remove(index);
                                           TracksUtils.deleteTrack(
-                                              box.getAt(index)!.id.toString(),
+                                              box
+                                                  .getAt(indexFake)!
+                                                  .id
+                                                  .toString(),
                                               context);
                                         });
                                       }),
@@ -135,9 +142,10 @@ class _HomeState extends ConsumerState<Home> {
                                   ],
                                 ),
                                 child: TrackCard(
-                                  cover: box.getAt(index)!.cover.toString(),
-                                  artiste: box.getAt(index)!.artiste.toString(),
-                                  title: box.getAt(index)!.title.toString(),
+                                  cover: box.getAt(indexFake)!.cover.toString(),
+                                  artiste:
+                                      box.getAt(indexFake)!.artiste.toString(),
+                                  title: box.getAt(indexFake)!.title.toString(),
                                 ),
                               ),
                             );
