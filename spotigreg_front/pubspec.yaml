@@ -16,6 +16,8 @@ dependencies:
   just_audio: ^0.9.20
   audio_video_progress_bar: ^0.10.0
   audio_service: ^0.18.7
+  # VIDEO
+  video_player: ^2.4.7
   # STORAGE
   hive: ^2.1.0
   hive_flutter: ^1.1.0

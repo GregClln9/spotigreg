@@ -105,17 +105,17 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Padding(
+                children: const [
+                  Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                     child: Text("Recherches récentes"),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        searchHistory.searchHistoryList!.clear();
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.close))
+                  // IconButton(
+                  //     onPressed: () {
+                  //       searchHistory.searchHistoryList!.clear();
+                  //       setState(() {});
+                  //     },
+                  //     icon: const Icon(Icons.close))
                 ],
               ),
               Flexible(

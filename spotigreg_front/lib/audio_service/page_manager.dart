@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:spotigreg_front/audio_service/audio_handler.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
+import 'package:video_player/video_player.dart';
 import '../notifiers/play_button_notifier.dart';
 import '../notifiers/progress_notifier.dart';
 import '../notifiers/repeat_button_notifier.dart';
@@ -13,12 +14,12 @@ import './playlist_repository.dart';
 late MyAudioHandler _audioHandler;
 final pageManagerProvider = Provider((ref) => PageManager());
 final _audioPlayer = AudioPlayer();
+late VideoPlayerController controller;
 
 class PageManager {
-  // Listeners: Updates going to the UI
-  // late bool isLoading = true;
   late bool sortByMoreRecent = true;
   final currentSongTitleNotifier = ValueNotifier<String>('');
+  final currentSongUrlNotifier = ValueNotifier<String>('');
   final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
@@ -26,6 +27,23 @@ class PageManager {
   final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
+
+  Future<bool> initVideoController(String url) async {
+    controller = VideoPlayerController.network(url);
+    await controller.initialize();
+    await controller.setVolume(0);
+    return true;
+  }
+
+  Future<bool> initVideoControllerWithId(
+      int? index, List<MediaItem> playlist) async {
+    if (index == null) return false;
+    controller = VideoPlayerController.network(playlist[index].extras!["url"]);
+    await controller.initialize();
+    await controller.setVolume(0);
+    controller.play();
+    return true;
+  }
 
   static Future<void> initAudioHandler() async {
     _audioHandler = await AudioService.init(
@@ -58,7 +76,6 @@ class PageManager {
 
   // Events: Calls coming from the UI
   void init() async {
-    // isLoading = true;
     await loadPlaylist();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
@@ -80,7 +97,6 @@ class PageManager {
     var playlist =
         await PlaylistRepositorySortByMoreRecent().fetchInitialPlaylist();
     if (!sortByMoreRecent) {
-      print("load PlaylistRepository");
       playlist = await PlaylistRepository().fetchInitialPlaylist();
     }
 
@@ -93,6 +109,7 @@ class PageManager {
               artUri: Uri.parse(song['artUri'] ?? ''),
             ))
         .toList();
+    playlistNotifier.value = mediaItems;
     _audioHandler.addQueueItems(mediaItems);
   }
 
@@ -101,9 +118,12 @@ class PageManager {
       if (playlist.isEmpty) {
         playlistNotifier.value = [];
         currentSongTitleNotifier.value = '';
+        currentSongUrlNotifier.value = '';
       } else {
         final newList = playlist.map((item) => item).toList();
         playlistNotifier.value = newList;
+        // final newLisUrl = playlist.map((item) => item).toList();
+        // currentSongUrlNotifier.value = newLisUrl.;
       }
     });
   }
@@ -120,10 +140,15 @@ class PageManager {
       } else if (processingState != AudioProcessingState.completed) {
         playButtonNotifier.value = ButtonState.playing;
       } else {
+        controller.seekTo(Duration.zero);
         _audioHandler.seek(Duration.zero);
         _audioHandler.pause();
       }
     });
+  }
+
+  void controllerListener() {
+    controller.addListener(() {});
   }
 
   void _listenToCurrentPosition() {
@@ -162,18 +187,41 @@ class PageManager {
   void listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
+      currentSongUrlNotifier.value = mediaItem?.extras!["url"] ?? '';
     });
   }
 
-  void playFromSong(int index) {
-    _audioHandler.skipToQueueItem(index);
-    play();
+  void playFromSong(int? index) {
+    initVideoController(playlistNotifier.value[index ?? 0].extras!["url"]);
+    _audioHandler.skipToQueueItem(index ?? 0);
+    _audioHandler.play();
   }
 
-  void play() => _audioHandler.play();
-  void pause() => _audioHandler.pause();
+  void playFromSongForVideo(int? index) async {
+    await initVideoController(
+        playlistNotifier.value[index ?? 0].extras!["url"]);
+    _audioHandler.skipToQueueItem(index ?? 0);
+    _audioHandler.play();
+  }
 
-  void seek(Duration position) => _audioHandler.seek(position);
+  void play() {
+    if (controller.value.isInitialized) {
+      _audioHandler.play();
+      controller.play();
+    } else {
+      playFromSong(_audioHandler.currentIndex());
+    }
+  }
+
+  void pause() {
+    _audioHandler.pause();
+    controller.pause();
+  }
+
+  void seek(Duration position) {
+    _audioHandler.seek(position);
+    controller.seekTo(position);
+  }
 
   void previous() => _audioHandler.skipToPrevious();
   void next() => _audioHandler.skipToNext();

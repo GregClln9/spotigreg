@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:spotigreg_front/audio_service/page_manager.dart';
 
 Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
@@ -88,13 +89,19 @@ class MyAudioHandler extends BaseAudioHandler {
     });
   }
 
-  void _listenForCurrentSongIndexChanges() {
-    _player.currentIndexStream.listen((index) {
+  int? currentIndex() {
+    return _player.currentIndex;
+  }
+
+  _listenForCurrentSongIndexChanges() async {
+    _player.currentIndexStream.listen((index) async {
+      // print("INDEX CHANGE" + index.toString());
       final playlist = queue.value;
       if (index == null || playlist.isEmpty) return;
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
+      PageManager().initVideoControllerWithId(index, playlist);
       mediaItem.add(playlist[index]);
     });
   }
