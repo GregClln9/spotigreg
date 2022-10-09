@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotigreg_front/themes/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -24,7 +25,11 @@ class CustomTextField extends StatelessWidget {
         TextField(
           autofocus: true,
           controller: controller,
+          cursorColor: primaryColor,
           decoration: InputDecoration(
+            focusColor: primaryColor,
+            // fillColor: primaryColor,
+            hoverColor: primaryColor,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.transparent, width: 0),
@@ -32,6 +37,10 @@ class CustomTextField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.transparent, width: 0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: primaryColor, width: 0),
             ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

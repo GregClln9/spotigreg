@@ -34,8 +34,6 @@ class MyAudioHandler extends BaseAudioHandler {
     }
   }
 
- 
-
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
       final playing = _player.playing;

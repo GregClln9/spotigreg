@@ -29,10 +29,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // final searchProvider = Provider.of<SearchProvider>(context, listen: false);
-    // WidgetsBinding.instance
-    //     .addPostFrameCallback((_) => searchProvider.setSearchHistory(query));
-
     return StatefulBuilder(builder: (context, setState) {
       return Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
@@ -40,48 +36,54 @@ class CustomSearchDelegate extends SearchDelegate {
               future: YoutubeUtils.searchYoutube(query, ref),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          child: AspectRatio(
-                            aspectRatio: 1.4,
-                            child: YoutubeCard(
-                                author: snapshot.data[index].author,
-                                thumbnails: snapshot
-                                    .data[index].thumbnails.mediumResUrl,
-                                title: snapshot.data[index].title),
-                          ),
-                          onTap: () async {
-                            try {
-                              var url = await YoutubeUtils.getUrlYoutube(
-                                  snapshot.data[index].id);
+                  return RawScrollbar(
+                    mainAxisMargin: 50,
+                    thickness: 5,
+                    radius: const Radius.circular(30),
+                    thumbColor: secondaryText,
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            child: AspectRatio(
+                              aspectRatio: 1.4,
+                              child: YoutubeCard(
+                                  author: snapshot.data[index].author,
+                                  thumbnails: snapshot
+                                      .data[index].thumbnails.mediumResUrl,
+                                  title: snapshot.data[index].title),
+                            ),
+                            onTap: () async {
+                              try {
+                                var url = await YoutubeUtils.getUrlYoutube(
+                                    snapshot.data[index].id);
 
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (builder) {
-                                    return DownloadModalBottom(
-                                      id: snapshot.data[index].id.toString(),
-                                      title: snapshot.data[index].title,
-                                      duration: snapshot.data[index].duration
-                                          .toString(),
-                                      cover: snapshot
-                                          .data[index].thumbnails.mediumResUrl,
-                                      url: url,
-                                      artiste: snapshot.data[index].author,
-                                    );
-                                  }).then((value) {});
-                            } catch (e) {
-                              showSnackBar(
-                                  context,
-                                  "Oups, cette vidéo n'est pas disponible !",
-                                  SnackBarState.info);
-                            }
-                          },
-                        );
-                      });
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (builder) {
+                                      return DownloadModalBottom(
+                                        id: snapshot.data[index].id.toString(),
+                                        title: snapshot.data[index].title,
+                                        duration: snapshot.data[index].duration
+                                            .toString(),
+                                        cover: snapshot.data[index].thumbnails
+                                            .mediumResUrl,
+                                        url: url,
+                                        artiste: snapshot.data[index].author,
+                                      );
+                                    }).then((value) {});
+                              } catch (e) {
+                                showSnackBar(
+                                    context,
+                                    "Oups, cette vidéo n'est pas disponible !",
+                                    SnackBarState.info);
+                              }
+                            },
+                          );
+                        }),
+                  );
                 } else {
                   return const Center(
                       child: CircularProgressIndicator(color: Colors.white));
