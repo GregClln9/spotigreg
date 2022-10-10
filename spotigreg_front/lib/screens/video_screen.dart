@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotigreg_front/audio_service/page_manager.dart';
+import 'package:spotigreg_front/audio_service/video_handler.dart';
 import 'package:spotigreg_front/layout/player.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,7 +15,7 @@ class VideoScreen extends ConsumerStatefulWidget {
 class _VideoScreenState extends ConsumerState<VideoScreen> {
   @override
   void initState() {
-    controller.play();
+    videoController.play();
     super.initState();
   }
 
@@ -38,17 +38,9 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
 
     return Scaffold(
         bottomNavigationBar: const Player(false),
-
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        // floatingActionButton: FloatingActionButton(
-        //   backgroundColor: Colors.black.withOpacity(0.5),
-        //   foregroundColor: Colors.green,
-        //   child: const PlayButton(),
-        //   onPressed: () {},
-        // ),
         extendBody: true,
         body: ValueListenableBuilder(
-            valueListenable: controller,
+            valueListenable: videoController,
             builder: (__, VideoPlayerValue value, _) {
               if (value.isInitialized) {
                 return Container(
@@ -57,7 +49,7 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
                   decoration: const BoxDecoration(
                     color: Colors.black,
                   ),
-                  child: VideoPlayer(controller),
+                  child: VideoPlayer(videoController),
                 );
               } else {
                 return const CircularProgressIndicator.adaptive();

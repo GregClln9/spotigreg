@@ -1,15 +1,11 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
-import 'package:spotigreg_front/components/home/track_card.dart';
+import 'package:spotigreg_front/audio_service/video_handler.dart';
 import 'package:spotigreg_front/layout/player.dart';
+import 'package:spotigreg_front/layout/track_list.dart';
 import 'package:spotigreg_front/screens/search.dart';
-import 'package:spotigreg_front/screens/video_screen.dart';
 import 'package:spotigreg_front/utils/search_utils.dart';
-import 'package:spotigreg_front/utils/tracks_utils.dart';
 import 'package:video_player/video_player.dart';
 import '../audio_service/page_manager.dart';
 import '../layout/topappbar.dart';
@@ -31,35 +27,25 @@ class _HomeState extends ConsumerState<Home> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    // init audioController
     final pageManager = ref.read(pageManagerProvider);
     pageManager.init();
-    super.initState();
-    // if (pageManager.currentSongTitleNotifier)
-    pageManager.initVideoController(pageManager.currentSongUrlNotifier.value);
-    // _controller.play();
+    // init VideoController with first song
+    final videoHandler = VideoHandler();
+    Box<TracksHive> box = Boxes.getTracks();
+    videoHandler.initVideoController(box.values.last.url, true);
     final searchHistory = ref.read(searchProvider);
     searchHistory.updateSearch(searchHistory.searchHistoryList, ref);
   }
 
-  mySetState() {
-    setState(() {});
-  }
-
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     final pageManager = ref.read(pageManagerProvider);
     pageManager.dispose();
+    final videoHandler = VideoHandler();
+    videoHandler.dispose();
     final searchHistory = ref.read(searchProvider);
     searchHistory.saveSearch(searchHistory.searchHistoryList, ref);
-
     super.dispose();
   }
 
@@ -118,135 +104,36 @@ class _HomeState extends ConsumerState<Home> {
                     ]),
               ),
               // VIDEO
-              ValueListenableBuilder(
-                  valueListenable: controller,
-                  builder: (__, VideoPlayerValue value, _) {
-                    // print(value.position);
-                    // print(value.isInitialized);
-                    // print(value.duration);
-                    return SizedBox(
-                      height: 200,
-                      child: value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio: controller.value.aspectRatio,
-                              child: VideoPlayer(controller),
-                            )
-                          : const SizedBox(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
-                    );
+              FutureBuilder(
+                  future: initializeVideoPlayerFuture,
+                  builder: (context, snapshot) {
+                    if ((snapshot.connectionState == ConnectionState.none)) {
+                      return const CircularProgressIndicator.adaptive();
+                    } else {
+                      return ValueListenableBuilder(
+                          valueListenable: videoController,
+                          builder: (__, VideoPlayerValue value, _) {
+                            return SizedBox(
+                                height: 200,
+                                child: (value.isBuffering)
+                                    ? const SizedBox(
+                                        child: CircularProgressIndicator
+                                            .adaptive())
+                                    : (value.isInitialized)
+                                        ? AspectRatio(
+                                            aspectRatio: value.aspectRatio,
+                                            child: VideoPlayer(videoController),
+                                          )
+                                        : const SizedBox(
+                                            child: Text("No inizialized"),
+                                          ));
+                          });
+                    }
                   }),
-              // LIST OF SONG
-              Expanded(
-                  child: box.length > 0
-                      ? ListView.builder(
-                          itemCount: box.length,
-                          itemBuilder: ((context, index) {
-                            int indexFake = index;
-                            final pageManager = ref.read(pageManagerProvider);
-                            if (pageManager.sortByMoreRecent) {
-                              indexFake = box.length - index - 1;
-                            } else {
-                              index = box.length - index - 1;
-                            }
-
-                            return InkWell(
-                              onTap: (() {
-                                final pageManager =
-                                    ref.read(pageManagerProvider);
-                                pageManager.playFromSong(index);
-                              }),
-                              child: ValueListenableBuilder(
-                                  valueListenable:
-                                      pageManager.currentSongTitleNotifier,
-                                  builder: (_, title, __) {
-                                    return Slidable(
-                                      key: UniqueKey(),
-                                      dragStartBehavior:
-                                          DragStartBehavior.start,
-                                      startActionPane: ActionPane(
-                                        extentRatio: 0.3,
-                                        motion: const ScrollMotion(),
-                                        children: [
-                                          SlidableAction(
-                                            onPressed: ((context) {
-                                              if (!(title ==
-                                                  box
-                                                      .getAt(indexFake)!
-                                                      .title
-                                                      .toString())) {
-                                                final pageManager = ref
-                                                    .read(pageManagerProvider);
-                                                pageManager
-                                                    .playFromSongForVideo(
-                                                        index);
-                                              }
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const VideoScreen()));
-                                            }),
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    255, 44, 42, 42),
-                                            foregroundColor: secondaryText,
-                                            icon: Icons.play_arrow_rounded,
-                                          ),
-                                        ],
-                                      ),
-                                      endActionPane: ActionPane(
-                                        extentRatio: 0.2,
-                                        motion: const ScrollMotion(),
-                                        children: [
-                                          SlidableAction(
-                                            onPressed: ((context) {
-                                              setState(() {
-                                                final pageManager = ref
-                                                    .read(pageManagerProvider);
-                                                pageManager.remove(index);
-                                                TracksUtils.deleteTrack(
-                                                    box
-                                                        .getAt(indexFake)!
-                                                        .id
-                                                        .toString(),
-                                                    context);
-                                              });
-                                            }),
-                                            backgroundColor: redDiss,
-                                            foregroundColor: Colors.white,
-                                            icon: Icons.delete_outline_rounded,
-                                          ),
-                                        ],
-                                      ),
-                                      child: TrackCard(
-                                        cover: box
-                                            .getAt(indexFake)!
-                                            .cover
-                                            .toString(),
-                                        artiste: box
-                                            .getAt(indexFake)!
-                                            .artiste
-                                            .toString(),
-                                        title: box
-                                            .getAt(indexFake)!
-                                            .title
-                                            .toString(),
-                                      ),
-                                    );
-                                  }),
-                            );
-                          }))
-                      : Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                          child: Center(
-                            child: Text(
-                              "Aucun titre sauvargdé, cliquez sur + pour en ajouter.",
-                              style: TextStyle(color: secondaryText),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )),
+              // LIST OF TRACK
+              Expanded(child: Tracklist(callback: () {
+                setState(() {});
+              })),
             ],
           ),
         ));

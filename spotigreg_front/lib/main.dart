@@ -12,6 +12,8 @@ Future<void> main() async {
   await Hive.openBox<TracksHive>('tracks');
   await PageManager.checkUrl();
   await PageManager.initAudioHandler();
+  // VideoHandler().initVideoController(
+  //     'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
   runApp(const ProviderScope(child: MyApp()));
 }
 

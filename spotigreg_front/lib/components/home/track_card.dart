@@ -7,6 +7,7 @@ import 'package:spotigreg_front/themes/colors.dart';
 class TrackCard extends ConsumerStatefulWidget {
   const TrackCard(
       {Key? key,
+      required this.callback,
       required this.cover,
       required this.artiste,
       required this.title})
@@ -14,24 +15,34 @@ class TrackCard extends ConsumerStatefulWidget {
   final String cover;
   final String artiste;
   final String title;
+  final VoidCallback callback;
 
   @override
   _TrackCardState createState() => _TrackCardState();
 }
+
+String currentTitle = "";
 
 class _TrackCardState extends ConsumerState<TrackCard> {
   @override
   Widget build(BuildContext context) {
     final pageManager = ref.read(pageManagerProvider);
     bool currentStream = false;
+
     double mWidth = MediaQuery.of(context).size.width;
 
     return ValueListenableBuilder<String>(
         valueListenable: pageManager.currentSongTitleNotifier,
         builder: (_, title, __) {
-          (title == widget.title)
-              ? currentStream = true
-              : currentStream = false;
+          if (title == widget.title) {
+            currentStream = true;
+          }
+          if (currentTitle != title) {
+            currentTitle = title;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              widget.callback();
+            });
+          }
           return SizedBox(
             height: mWidth * 0.12,
             child: Row(

@@ -1,6 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:spotigreg_front/audio_service/page_manager.dart';
+import 'package:spotigreg_front/audio_service/video_handler.dart';
+
+final videoHandler = VideoHandler();
 
 Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
@@ -17,7 +19,6 @@ Future<AudioHandler> initAudioService() async {
 class MyAudioHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
   final _playlist = ConcatenatingAudioSource(children: []);
-  // late VideoPlayerController controller;
 
   MyAudioHandler() {
     _loadEmptyPlaylist();
@@ -96,14 +97,15 @@ class MyAudioHandler extends BaseAudioHandler {
 
   _listenForCurrentSongIndexChanges() async {
     _player.currentIndexStream.listen((index) async {
-      // print("INDEX CHANGE" + index.toString());
       final playlist = queue.value;
-      await PageManager().initVideoControllerWithId(index, playlist);
       if (index == null || playlist.isEmpty) return;
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices![index];
       }
       mediaItem.add(playlist[index]);
+      await videoHandler.initVideoController(
+          playlist[index].extras?["url"], false);
+      videoHandler.play();
     });
   }
 
@@ -162,6 +164,11 @@ class MyAudioHandler extends BaseAudioHandler {
     // notify system
     final newQueue = queue.value..removeAt(index);
     queue.add(newQueue);
+
+    final playlist = queue.value;
+    await videoHandler.initVideoController(
+        playlist[index].extras?["url"], false);
+    videoHandler.play();
   }
 
   @override
