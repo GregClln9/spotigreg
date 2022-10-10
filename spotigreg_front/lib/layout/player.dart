@@ -5,6 +5,7 @@ import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/notifiers/play_button_notifier.dart';
 import 'package:spotigreg_front/notifiers/progress_notifier.dart';
 import 'package:spotigreg_front/notifiers/repeat_button_notifier.dart';
+import 'package:spotigreg_front/screens/track_view.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
 class Player extends ConsumerStatefulWidget {
@@ -52,7 +53,8 @@ class _PlayerState extends ConsumerState<Player> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
-                  ShuffleButton(),
+                  // ShuffleButton(),
+                  ElevateButton(),
                   PreviousSongButton(),
                   PlayButton(),
                   NextSongButton(),
@@ -185,4 +187,40 @@ class ShuffleButton extends ConsumerWidget {
       },
     );
   }
+}
+
+class ElevateButton extends ConsumerWidget {
+  const ElevateButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      iconSize: 25,
+      onPressed: () {
+        navigateToLyrics(context);
+      },
+      icon: const Icon(
+        Icons.keyboard_arrow_up_rounded,
+      ),
+    );
+  }
+}
+
+void navigateToLyrics(BuildContext context) {
+  Navigator.of(context).push(
+    PageRouteBuilder(
+      transitionDuration: const Duration(seconds: 1),
+      reverseTransitionDuration: const Duration(seconds: 1),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return TrackView(
+          animation: animation,
+        );
+      },
+      transitionsBuilder: ((context, animation, secondaryAnimation, child) {
+        return Opacity(
+          opacity: animation.value,
+          child: child,
+        );
+      }),
+    ),
+  );
 }
