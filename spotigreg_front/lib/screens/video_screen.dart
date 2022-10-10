@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
-import 'package:spotigreg_front/layout/player.dart';
+import 'package:spotigreg_front/layout/player_track_view.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoScreen extends ConsumerStatefulWidget {
@@ -37,7 +37,9 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
     ]);
 
     return Scaffold(
-        bottomNavigationBar: const Player(false),
+        bottomNavigationBar: const PlayerTrackView(
+          title: "Track Video Screen",
+        ),
         extendBody: true,
         body: ValueListenableBuilder(
             valueListenable: videoController,

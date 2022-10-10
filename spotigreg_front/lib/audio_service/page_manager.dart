@@ -124,6 +124,15 @@ class PageManager {
 
   void _listenToCurrentPosition() {
     AudioService.position.listen((position) {
+      if (position > const Duration(seconds: 4) &&
+              position < const Duration(seconds: 5) ||
+          position > const Duration(seconds: 30) &&
+              position < const Duration(seconds: 31) ||
+          position > const Duration(seconds: 60) &&
+              position < const Duration(seconds: 61)) {
+        videoHandler.seekTo(position);
+      }
+
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
         current: position,

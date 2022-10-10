@@ -8,18 +8,18 @@ Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
     builder: () => MyAudioHandler(),
     config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.mycompany.myapp.audio',
-      androidNotificationChannelName: 'Audio Service Demo',
+      androidNotificationChannelId: 'com.example.spotigreg_front',
+      androidNotificationChannelName: 'SpotiGreg',
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
     ),
   );
 }
 
-class MyAudioHandler extends BaseAudioHandler {
-  final _player = AudioPlayer();
-  final _playlist = ConcatenatingAudioSource(children: []);
+final player = AudioPlayer();
+final _playlist = ConcatenatingAudioSource(children: []);
 
+class MyAudioHandler extends BaseAudioHandler {
   MyAudioHandler() {
     _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
@@ -30,7 +30,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   Future<void> _loadEmptyPlaylist() async {
     try {
-      await _player.setAudioSource(_playlist);
+      await player.setAudioSource(_playlist);
     } catch (e) {
       // ignore: avoid_print
       print("Error: $e");
@@ -38,8 +38,8 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
-    _player.playbackEventStream.listen((PlaybackEvent event) {
-      final playing = _player.playing;
+    player.playbackEventStream.listen((PlaybackEvent event) {
+      final playing = player.playing;
       playbackState.add(playbackState.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,
@@ -57,31 +57,31 @@ class MyAudioHandler extends BaseAudioHandler {
           ProcessingState.buffering: AudioProcessingState.buffering,
           ProcessingState.ready: AudioProcessingState.ready,
           ProcessingState.completed: AudioProcessingState.completed,
-        }[_player.processingState]!,
+        }[player.processingState]!,
         repeatMode: const {
           LoopMode.off: AudioServiceRepeatMode.none,
           LoopMode.one: AudioServiceRepeatMode.one,
           LoopMode.all: AudioServiceRepeatMode.all,
-        }[_player.loopMode]!,
-        shuffleMode: (_player.shuffleModeEnabled)
+        }[player.loopMode]!,
+        shuffleMode: (player.shuffleModeEnabled)
             ? AudioServiceShuffleMode.all
             : AudioServiceShuffleMode.none,
         playing: playing,
-        updatePosition: _player.position,
-        bufferedPosition: _player.bufferedPosition,
-        speed: _player.speed,
+        updatePosition: player.position,
+        bufferedPosition: player.bufferedPosition,
+        speed: player.speed,
         queueIndex: event.currentIndex,
       ));
     });
   }
 
   void _listenForDurationChanges() {
-    _player.durationStream.listen((duration) {
-      var index = _player.currentIndex;
+    player.durationStream.listen((duration) {
+      var index = player.currentIndex;
       final newQueue = queue.value;
       if (index == null || newQueue.isEmpty) return;
-      if (_player.shuffleModeEnabled) {
-        index = _player.shuffleIndices![index];
+      if (player.shuffleModeEnabled) {
+        index = player.shuffleIndices![index];
       }
       final oldMediaItem = newQueue[index];
       final newMediaItem = oldMediaItem.copyWith(duration: duration);
@@ -92,15 +92,16 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   int? currentIndex() {
-    return _player.currentIndex;
+    return player.currentIndex;
   }
 
   _listenForCurrentSongIndexChanges() async {
-    _player.currentIndexStream.listen((index) async {
+    player.currentIndexStream.listen((index) async {
+      print("currentIndexStream: " + index.toString());
       final playlist = queue.value;
       if (index == null || playlist.isEmpty) return;
-      if (_player.shuffleModeEnabled) {
-        index = _player.shuffleIndices![index];
+      if (player.shuffleModeEnabled) {
+        index = player.shuffleIndices![index];
       }
       mediaItem.add(playlist[index]);
       await videoHandler.initVideoController(
@@ -110,7 +111,7 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   void _listenForSequenceStateChanges() {
-    _player.sequenceStateStream.listen((SequenceState? sequenceState) {
+    player.sequenceStateStream.listen((SequenceState? sequenceState) {
       final sequence = sequenceState?.effectiveSequence;
       if (sequence == null || sequence.isEmpty) return;
       final items = sequence.map((source) => source.tag as MediaItem);
@@ -165,48 +166,50 @@ class MyAudioHandler extends BaseAudioHandler {
     final newQueue = queue.value..removeAt(index);
     queue.add(newQueue);
 
-    final playlist = queue.value;
-    await videoHandler.initVideoController(
-        playlist[index].extras?["url"], false);
+    // check if current playing
+
+    // final playlist = queue.value;
+    // await videoHandler.initVideoController(
+    //     playlist[index].extras?["url"], false);
     videoHandler.play();
   }
 
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() => player.play();
 
   @override
-  Future<void> pause() => _player.pause();
+  Future<void> pause() => player.pause();
 
   @override
-  Future<void> seek(Duration position) => _player.seek(position);
+  Future<void> seek(Duration position) => player.seek(position);
 
   @override
   Future<void> skipToQueueItem(int index) async {
     if (index < 0 || index >= queue.value.length) return;
-    if (_player.shuffleModeEnabled) {
-      index = _player.shuffleIndices![index];
+    if (player.shuffleModeEnabled) {
+      index = player.shuffleIndices![index];
     }
-    _player.seek(Duration.zero, index: index);
+    player.seek(Duration.zero, index: index);
   }
 
   @override
-  Future<void> skipToNext() => _player.seekToNext();
+  Future<void> skipToNext() => player.seekToNext();
 
   @override
-  Future<void> skipToPrevious() => _player.seekToPrevious();
+  Future<void> skipToPrevious() => player.seekToPrevious();
 
   @override
   Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
     switch (repeatMode) {
       case AudioServiceRepeatMode.none:
-        _player.setLoopMode(LoopMode.off);
+        player.setLoopMode(LoopMode.off);
         break;
       case AudioServiceRepeatMode.one:
-        _player.setLoopMode(LoopMode.one);
+        player.setLoopMode(LoopMode.one);
         break;
       case AudioServiceRepeatMode.group:
       case AudioServiceRepeatMode.all:
-        _player.setLoopMode(LoopMode.all);
+        player.setLoopMode(LoopMode.all);
         break;
     }
   }
@@ -214,24 +217,24 @@ class MyAudioHandler extends BaseAudioHandler {
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
     if (shuffleMode == AudioServiceShuffleMode.none) {
-      _player.setShuffleModeEnabled(false);
+      player.setShuffleModeEnabled(false);
     } else {
-      await _player.shuffle();
-      _player.setShuffleModeEnabled(true);
+      await player.shuffle();
+      player.setShuffleModeEnabled(true);
     }
   }
 
   @override
   Future customAction(String name, [Map<String, dynamic>? extras]) async {
     if (name == 'dispose') {
-      await _player.dispose();
+      await player.dispose();
       super.stop();
     }
   }
 
   @override
   Future<void> stop() async {
-    await _player.stop();
+    await player.stop();
     return super.stop();
   }
 }

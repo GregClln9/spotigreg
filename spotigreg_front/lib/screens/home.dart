@@ -57,7 +57,7 @@ class _HomeState extends ConsumerState<Home> {
     return Scaffold(
         key: _key,
         appBar: TopAppBar(scaffoldKey: _key),
-        bottomNavigationBar: const Player(true),
+        bottomNavigationBar: const PlayerHome(),
         floatingActionButton: FloatingActionButton(
             backgroundColor: primaryColor,
             onPressed: (() {

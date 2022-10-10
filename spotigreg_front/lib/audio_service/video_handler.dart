@@ -13,8 +13,8 @@ class VideoHandler {
     return true;
   }
 
-  void play() {
-    videoController.play();
+  void play() async {
+    await videoController.play();
   }
 
   void pause() {
