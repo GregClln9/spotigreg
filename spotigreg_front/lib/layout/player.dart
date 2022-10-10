@@ -13,37 +13,35 @@ class PlayerHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double mHeight = MediaQuery.of(context).size.height;
 
-    return GestureDetector(
-      onTap: () {
-        navigateToLyrics(context);
-      },
-      onVerticalDragStart: (e) {
-        navigateToLyrics(context);
-      },
-      child: Container(
-          color: Colors.transparent,
-          height: mHeight * 0.15,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const MyProgressBar(),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    // ShuffleButton(),
-                    ElevateButton(),
-                    PreviousSongButton(),
-                    PlayButton(),
-                    NextSongButton(),
-                    RepeatButton()
-                  ],
-                ),
-              )
-            ],
-          )),
-    );
+    return Container(
+        color: Colors.transparent,
+        height: mHeight * 0.15,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const MyProgressBar(),
+            GestureDetector(
+              onTap: () {
+                navigateToLyrics(context);
+              },
+              onVerticalDragStart: (e) {
+                navigateToLyrics(context);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const [
+                  // ShuffleButton(),
+                  ElevateButton(),
+                  PreviousSongButton(),
+                  PlayButton(),
+                  NextSongButton(),
+                  RepeatButton()
+                ],
+              ),
+            )
+          ],
+        ));
   }
 }

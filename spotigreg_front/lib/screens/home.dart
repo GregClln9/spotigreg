@@ -33,7 +33,15 @@ class _HomeState extends ConsumerState<Home> {
     // init VideoController with first song
     final videoHandler = VideoHandler();
     Box<TracksHive> box = Boxes.getTracks();
-    videoHandler.initVideoController(box.values.last.url, true);
+
+    if (box.length > 0) {
+      videoHandler.initVideoController(box.values.last.url, true);
+    } else {
+      videoHandler.initVideoController(
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+          true);
+    }
+
     final searchHistory = ref.read(searchProvider);
     searchHistory.updateSearch(searchHistory.searchHistoryList, ref);
   }
@@ -104,32 +112,32 @@ class _HomeState extends ConsumerState<Home> {
                     ]),
               ),
               // VIDEO
-              FutureBuilder(
-                  future: initializeVideoPlayerFuture,
-                  builder: (context, snapshot) {
-                    if ((snapshot.connectionState == ConnectionState.none)) {
-                      return const CircularProgressIndicator.adaptive();
-                    } else {
-                      return ValueListenableBuilder(
-                          valueListenable: videoController,
-                          builder: (__, VideoPlayerValue value, _) {
-                            return SizedBox(
-                                height: 200,
-                                child: (value.isBuffering)
-                                    ? const SizedBox(
-                                        child: CircularProgressIndicator
-                                            .adaptive())
-                                    : (value.isInitialized)
-                                        ? AspectRatio(
-                                            aspectRatio: value.aspectRatio,
-                                            child: VideoPlayer(videoController),
-                                          )
-                                        : const SizedBox(
-                                            child: Text("No inizialized"),
-                                          ));
-                          });
-                    }
-                  }),
+              // FutureBuilder(
+              //     future: initializeVideoPlayerFuture,
+              //     builder: (context, snapshot) {
+              //       if ((snapshot.connectionState == ConnectionState.none)) {
+              //         return const CircularProgressIndicator.adaptive();
+              //       } else {
+              //         return ValueListenableBuilder(
+              //             valueListenable: videoController,
+              //             builder: (__, VideoPlayerValue value, _) {
+              //               return SizedBox(
+              //                   height: 200,
+              //                   child: (value.isBuffering)
+              //                       ? const SizedBox(
+              //                           child: CircularProgressIndicator
+              //                               .adaptive())
+              //                       : (value.isInitialized)
+              //                           ? AspectRatio(
+              //                               aspectRatio: value.aspectRatio,
+              //                               child: VideoPlayer(videoController),
+              //                             )
+              //                           : const SizedBox(
+              //                               child: Text("No inizialized"),
+              //                             ));
+              //             });
+              //       }
+              //     }),
               // LIST OF TRACK
               Expanded(child: Tracklist(callback: () {
                 setState(() {});

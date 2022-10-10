@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:spotigreg_front/audio_service/audio_handler.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
+import 'package:spotigreg_front/notifiers/speed_button_notifier.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
 import '../notifiers/play_button_notifier.dart';
@@ -24,6 +25,7 @@ class PageManager {
   final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
+  final speedButtonNotifier = SpeedButtonNotifier();
   final isFirstSongNotifier = ValueNotifier<bool>(true);
   final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
@@ -209,6 +211,21 @@ class PageManager {
         break;
       case RepeatState.repeatPlaylist:
         _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
+        break;
+    }
+  }
+
+  void speed(SpeedState speed) {
+    speedButtonNotifier.nextState(speed);
+    switch (speed) {
+      case SpeedState.x1:
+        _audioHandler.setSpeedMode(SpeedState.x1);
+        break;
+      case SpeedState.x2:
+        _audioHandler.setSpeedMode(SpeedState.x2);
+        break;
+      case SpeedState.x3:
+        _audioHandler.setSpeedMode(SpeedState.x3);
         break;
     }
   }

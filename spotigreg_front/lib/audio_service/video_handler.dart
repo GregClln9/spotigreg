@@ -21,6 +21,10 @@ class VideoHandler {
     videoController.pause();
   }
 
+  void speed(double speed) {
+    videoController.setPlaybackSpeed(speed);
+  }
+
   void dispose() {
     videoController.dispose();
   }

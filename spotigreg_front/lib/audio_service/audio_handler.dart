@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
+import 'package:spotigreg_front/notifiers/speed_button_notifier.dart';
 
 final videoHandler = VideoHandler();
 
@@ -97,7 +98,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   _listenForCurrentSongIndexChanges() async {
     player.currentIndexStream.listen((index) async {
-      print("currentIndexStream: " + index.toString());
+      // print("currentIndexStream: " + index.toString());
       final playlist = queue.value;
       if (index == null || playlist.isEmpty) return;
       if (player.shuffleModeEnabled) {
@@ -203,6 +204,7 @@ class MyAudioHandler extends BaseAudioHandler {
     switch (repeatMode) {
       case AudioServiceRepeatMode.none:
         player.setLoopMode(LoopMode.off);
+
         break;
       case AudioServiceRepeatMode.one:
         player.setLoopMode(LoopMode.one);
@@ -210,6 +212,23 @@ class MyAudioHandler extends BaseAudioHandler {
       case AudioServiceRepeatMode.group:
       case AudioServiceRepeatMode.all:
         player.setLoopMode(LoopMode.all);
+        break;
+    }
+  }
+
+  Future<void> setSpeedMode(SpeedState speedMode) async {
+    switch (speedMode) {
+      case SpeedState.x1:
+        player.setSpeed(1);
+        videoHandler.speed(1);
+        break;
+      case SpeedState.x2:
+        player.setSpeed(2);
+        videoHandler.speed(2);
+        break;
+      case SpeedState.x3:
+        player.setSpeed(0.5);
+        videoHandler.speed(0.5);
         break;
     }
   }

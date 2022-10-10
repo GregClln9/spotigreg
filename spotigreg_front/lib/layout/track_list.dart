@@ -64,8 +64,7 @@ class Tracklist extends ConsumerWidget {
                             SlidableAction(
                               onPressed: ((context) => watchTrack(
                                   index, indexFake, title.toString())),
-                              backgroundColor:
-                                  const Color.fromARGB(255, 44, 42, 42),
+                              backgroundColor: greyDark,
                               foregroundColor: secondaryText,
                               icon: Icons.play_arrow_rounded,
                             ),

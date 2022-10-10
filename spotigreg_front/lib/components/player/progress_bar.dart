@@ -14,7 +14,7 @@ class MyProgressBar extends ConsumerWidget {
       valueListenable: pageManager.progressNotifier,
       builder: (_, value, __) {
         return SizedBox(
-          height: 15,
+          height: 20,
           child: ProgressBar(
               thumbRadius: 6.0,
               thumbGlowRadius: 20.0,
