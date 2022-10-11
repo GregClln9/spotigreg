@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
+import 'package:spotigreg_front/models/track_model.dart';
 
 class TrackCard extends ConsumerStatefulWidget {
   const TrackCard(
@@ -30,14 +31,14 @@ class _TrackCardState extends ConsumerState<TrackCard> {
 
     double mWidth = MediaQuery.of(context).size.width;
 
-    return ValueListenableBuilder<String>(
-        valueListenable: pageManager.currentSongTitleNotifier,
-        builder: (_, title, __) {
-          if (title == widget.title) {
+    return ValueListenableBuilder<TrackModel>(
+        valueListenable: pageManager.currentSongNotifier,
+        builder: (_, currentTrack, __) {
+          if (currentTrack.title == widget.title) {
             currentStream = true;
           }
-          if (currentTitle != title) {
-            currentTitle = title;
+          if (currentTitle != currentTrack.title) {
+            currentTitle = currentTrack.title;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               widget.callback();
             });

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
+import 'package:spotigreg_front/models/track_model.dart';
 import 'package:spotigreg_front/screens/video_screen.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
@@ -52,9 +53,9 @@ class Tracklist extends ConsumerWidget {
                 onTap: (() {
                   clickTrack(index);
                 }),
-                child: ValueListenableBuilder(
-                    valueListenable: pageManager.currentSongTitleNotifier,
-                    builder: (_, title, __) {
+                child: ValueListenableBuilder<TrackModel>(
+                    valueListenable: pageManager.currentSongNotifier,
+                    builder: (_, currentTrack, __) {
                       return Slidable(
                         key: UniqueKey(),
                         startActionPane: ActionPane(
@@ -63,7 +64,7 @@ class Tracklist extends ConsumerWidget {
                           children: [
                             SlidableAction(
                               onPressed: ((context) => watchTrack(
-                                  index, indexFake, title.toString())),
+                                  index, indexFake, currentTrack.title)),
                               backgroundColor: greyDark,
                               foregroundColor: secondaryText,
                               icon: Icons.play_arrow_rounded,

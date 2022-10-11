@@ -10,8 +10,10 @@ import 'package:spotigreg_front/components/player/shuffle_button.dart';
 import 'package:spotigreg_front/components/player/speed_button.dart';
 
 class PlayerTrackView extends ConsumerWidget {
-  const PlayerTrackView({Key? key, required this.title}) : super(key: key);
+  const PlayerTrackView({Key? key, required this.title, required this.artist})
+      : super(key: key);
   final String title;
+  final String artist;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -50,7 +52,7 @@ class PlayerTrackView extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 5, 0, 25),
               child: Text(
-                "Artist",
+                artist,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.headline6,
                 maxLines: 1,

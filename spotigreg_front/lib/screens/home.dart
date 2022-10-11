@@ -36,12 +36,9 @@ class _HomeState extends ConsumerState<Home> {
     final videoHandler = VideoHandler();
     Box<TracksHive> box = Boxes.getTracks();
     if (box.length > 0) {
-      print(box.values.last.url);
       videoHandler.initVideoController(box.values.last.url, true);
       loadHome = true;
-      print("va dans le if");
     } else {
-      print("va dans le else");
       loadWelcomeTrack();
     }
 
@@ -63,13 +60,10 @@ class _HomeState extends ConsumerState<Home> {
   loadWelcomeTrack() async {
     addWelcomeTrack().then((successLoaded) {
       if (successLoaded) {
-        print("successLoaded");
-        print(box.values.last.url);
         videoHandler.initVideoController(box.values.last.url, true);
         loadHome = true;
         setState(() {});
       } else {
-        print("successLoaded false");
         loadHome = false;
       }
     });
@@ -90,14 +84,14 @@ class _HomeState extends ConsumerState<Home> {
           context);
 
       await pageManager.addMoreRecent(
+        "79DijItQXMM",
+        "Welcome To",
+        "Welcome To",
+        url,
+        url,
         "SpotiGreg !",
-        "Welcome To",
-        "Welcome To",
-        url,
-        url,
       );
       await PageManager.checkUrl();
-      // pageManager.repeatAll();
       return true;
     } catch (e) {
       return false;

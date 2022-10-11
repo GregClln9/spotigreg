@@ -110,19 +110,21 @@ class DownloadModalBottom extends ConsumerWidget {
                       final pageManager = ref.read(pageManagerProvider);
                       if (pageManager.sortByMoreRecent) {
                         pageManager.addMoreRecent(
-                          box.get(box.keys.last)!.artiste.toString(),
+                          box.get(box.keys.last)!.id.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.url.toString(),
                           box.get(box.keys.last)!.cover.toString(),
+                          box.get(box.keys.last)!.artiste.toString(),
                         );
                       } else {
                         pageManager.add(
-                          box.get(box.keys.last)!.artiste.toString(),
+                          box.get(box.keys.last)!.id.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.title.toString(),
                           box.get(box.keys.last)!.url.toString(),
                           box.get(box.keys.last)!.cover.toString(),
+                          box.get(box.keys.last)!.artiste.toString(),
                         );
                       }
 

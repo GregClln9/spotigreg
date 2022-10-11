@@ -39,6 +39,7 @@ class _VideoScreenState extends ConsumerState<VideoScreen> {
     return Scaffold(
         bottomNavigationBar: const PlayerTrackView(
           title: "Track Video Screen",
+          artist: "Artist",
         ),
         extendBody: true,
         body: ValueListenableBuilder(

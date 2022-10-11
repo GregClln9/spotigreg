@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
 import 'package:spotigreg_front/layout/player_track_view.dart';
+import 'package:spotigreg_front/models/track_model.dart';
 import 'package:video_player/video_player.dart';
 
 class TrackView extends ConsumerStatefulWidget {
@@ -15,6 +16,8 @@ class TrackView extends ConsumerStatefulWidget {
 }
 
 String currentTitle = "";
+String currentArtist = "";
+
 bool touch = false;
 
 class _TrackViewState extends ConsumerState<TrackView> {
@@ -28,11 +31,14 @@ class _TrackViewState extends ConsumerState<TrackView> {
           if ((snapshot.connectionState == ConnectionState.none)) {
             return const CircularProgressIndicator.adaptive();
           } else {
-            return ValueListenableBuilder<String>(
-                valueListenable: pageManager.currentSongTitleNotifier,
-                builder: (_, title, __) {
-                  if (currentTitle != title) {
-                    currentTitle = title;
+            return ValueListenableBuilder<TrackModel>(
+                valueListenable: pageManager.currentSongNotifier,
+                builder: (_, currentTrack, __) {
+                  print(currentTrack.artist);
+                  print(currentTrack.title);
+                  if (currentTitle != currentTrack.title) {
+                    currentTitle = currentTrack.title;
+                    currentArtist = currentTrack.artist;
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {});
                     });
@@ -105,6 +111,7 @@ class StackTrackView extends StatelessWidget {
               child: !touch
                   ? PlayerTrackView(
                       title: currentTitle,
+                      artist: currentArtist,
                     )
                   : const SizedBox()),
         ),

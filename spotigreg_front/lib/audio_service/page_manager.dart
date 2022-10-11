@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:spotigreg_front/audio_service/audio_handler.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
+import 'package:spotigreg_front/models/track_model.dart';
 import 'package:spotigreg_front/notifiers/speed_button_notifier.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 import 'package:spotigreg_front/utils/youtube_utils.dart';
@@ -20,7 +21,8 @@ final videoHandler = VideoHandler();
 
 class PageManager {
   late bool sortByMoreRecent = true;
-  final currentSongTitleNotifier = ValueNotifier<String>('');
+  final currentSongNotifier = ValueNotifier<TrackModel>(TrackModel(
+      album: "", artist: "", id: "", duration: "", title: "", url: ""));
   final currentSongUrlNotifier = ValueNotifier<String>('');
   final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
   final progressNotifier = ProgressNotifier();
@@ -82,6 +84,7 @@ class PageManager {
         .map((song) => MediaItem(
               id: song['id'] ?? '',
               album: song['album'] ?? '',
+              artist: song['artist'] ?? '',
               title: song['title'] ?? '',
               extras: {'url': song['url']},
               artUri: Uri.parse(song['artUri'] ?? ''),
@@ -95,7 +98,8 @@ class PageManager {
     _audioHandler.queue.listen((playlist) {
       if (playlist.isEmpty) {
         playlistNotifier.value = [];
-        currentSongTitleNotifier.value = '';
+        currentSongNotifier.value = TrackModel(
+            album: "", artist: "", id: "", duration: "", title: "", url: "");
         currentSongUrlNotifier.value = '';
       } else {
         final newList = playlist.map((item) => item).toList();
@@ -168,7 +172,24 @@ class PageManager {
 
   void listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      currentSongTitleNotifier.value = mediaItem?.title ?? '';
+      print(mediaItem?.artist);
+      TrackModel currentTrack = TrackModel(
+        id: mediaItem?.id ?? '',
+        title: mediaItem?.title ?? '',
+        album: mediaItem?.album ?? '',
+        url: mediaItem?.extras!['url'] ?? '',
+        duration: mediaItem?.duration.toString() ?? '',
+        artist: mediaItem?.artist ?? '',
+      );
+
+      // List<String> currentTrack = [
+      //   mediaItem?.id ?? '',
+      //   mediaItem?.title ?? '',
+      //   mediaItem?.duration.toString() ?? '',
+      //   mediaItem?.extras!["url"].toString() ?? '',
+      //   mediaItem?.artist ?? '',
+      // ];
+      currentSongNotifier.value = currentTrack;
       currentSongUrlNotifier.value = mediaItem?.extras!["url"] ?? '';
     });
   }
@@ -244,22 +265,25 @@ class PageManager {
     }
   }
 
-  add(String id, String album, String title, String url, String cover) async {
+  add(String id, String album, String title, String url, String cover,
+      String artist) async {
     final mediaItem = MediaItem(
       id: id,
       album: album,
       title: title,
+      artist: artist,
       extras: {'url': url},
       artUri: Uri.parse(cover),
     );
     _audioHandler.addQueueItem(mediaItem);
   }
 
-  addMoreRecent(
-      String id, String album, String title, String url, String cover) async {
+  addMoreRecent(String id, String album, String title, String url, String cover,
+      String artist) async {
     final mediaItem = MediaItem(
       id: id,
       album: album,
+      artist: artist,
       title: title,
       extras: {'url': url},
       artUri: Uri.parse(cover),

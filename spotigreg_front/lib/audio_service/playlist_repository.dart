@@ -23,7 +23,8 @@ class PlaylistRepository {
     return {
       'id': box.get(boxIndex)!.id.toString(),
       'title': box.get(boxIndex)!.title.toString(),
-      'album': box.get(boxIndex)!.title.toString(),
+      'artist': box.get(boxIndex)!.artiste.toString(),
+      'album': "SpotiGreg",
       'url': box.get(boxIndex)!.url.toString(),
       'artUri': box.get(boxIndex)!.cover.toString(),
     };
@@ -49,10 +50,13 @@ class PlaylistRepositorySortByMoreRecent {
     _songIndex -= 1;
     int boxIndex = box.keys.elementAt(_songIndex);
 
+    print(box.get(boxIndex)!.artiste.toString() + " test");
+
     return {
       'id': box.get(boxIndex)!.id.toString(),
       'title': box.get(boxIndex)!.title.toString(),
-      'album': box.get(boxIndex)!.title.toString(),
+      'album': "SpotiGreg",
+      'artist': box.get(boxIndex)!.artiste.toString(),
       'url': box.get(boxIndex)!.url.toString(),
       'artUri': box.get(boxIndex)!.cover.toString(),
     };
