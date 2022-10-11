@@ -10,7 +10,7 @@ Box<TracksHive> box = Boxes.getTracks();
 
 class TracksUtils {
   static addTrack(String id, String title, String artiste, String duration,
-      String cover, String url, BuildContext context) {
+      String cover, String url, BuildContext? context) {
     final track = TracksHive(
       id: id,
       title: title,
@@ -20,11 +20,15 @@ class TracksUtils {
       url: url,
     );
     box.add(track).catchError((error) {
-      showSnackBar(
-          context, "Erreur durant l'ajout de " + title, SnackBarState.error);
+      if (context != null) {
+        showSnackBar(
+            context, "Erreur durant l'ajout de " + title, SnackBarState.error);
+      }
     }).then((value) {
-      showSnackBar(context, title + " est ajouté dans la playlist",
-          SnackBarState.success);
+      if (context != null) {
+        showSnackBar(context, title + " est ajouté dans la playlist",
+            SnackBarState.success);
+      }
     });
   }
 

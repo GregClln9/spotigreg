@@ -61,6 +61,19 @@ class PageManager {
     _audioPlayer.dispose();
   }
 
+  static welcomeCheck() async {
+    await _audioPlayer
+        .setAudioSource(ClippingAudioSource(
+      child: AudioSource.uri(Uri.parse(box.get(0)!.url.toString())),
+    ))
+        .catchError((onError) async {
+      await YoutubeUtils.getUrlYoutube(box.get(0)!.id.toString())
+          .then((newUrlValue) {
+        TracksUtils.putTrackUrl(box.get(0)!.id.toString(), newUrlValue);
+      });
+    });
+  }
+
   // Events: Calls coming from the UI
   void init() async {
     await loadPlaylist();
