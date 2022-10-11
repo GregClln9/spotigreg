@@ -215,6 +215,10 @@ class PageManager {
     }
   }
 
+  void repeatAll() {
+    _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
+  }
+
   void speed(SpeedState speed) {
     speedButtonNotifier.nextState(speed);
     switch (speed) {

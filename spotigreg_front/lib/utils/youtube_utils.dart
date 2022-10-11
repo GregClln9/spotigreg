@@ -5,9 +5,10 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class YoutubeUtils {
   static searchYoutube(query, WidgetRef ref) async {
     final searchHistory = ref.read(searchProvider);
-    searchHistory.searchHistoryList!.add(query);
+    if (searchHistory.searchHistoryList != null) {
+      searchHistory.searchHistoryList!.add(query);
+    }
     var yt = YoutubeExplode();
-
     // var test = await yt.search.getVideos(
     //   query,
     // );

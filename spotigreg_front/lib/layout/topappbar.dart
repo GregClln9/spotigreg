@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:spotigreg_front/route/route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:spotigreg_front/themes/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -71,7 +70,7 @@ class _TopAppBarState extends State<TopAppBar> {
       elevation: 0,
       title: Text(
         "SpotiGreg. " + listOfEmoji[_random.nextInt(listOfEmoji.length)],
-        style: GoogleFonts.raleway(fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.headline4,
       ),
       centerTitle: false,
     );

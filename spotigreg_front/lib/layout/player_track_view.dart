@@ -8,7 +8,6 @@ import 'package:spotigreg_front/components/player/progress_bar.dart';
 import 'package:spotigreg_front/components/player/repeat_button.dart';
 import 'package:spotigreg_front/components/player/shuffle_button.dart';
 import 'package:spotigreg_front/components/player/speed_button.dart';
-import 'package:spotigreg_front/themes/colors.dart';
 
 class PlayerTrackView extends ConsumerWidget {
   const PlayerTrackView({Key? key, required this.title}) : super(key: key);
@@ -31,7 +30,9 @@ class PlayerTrackView extends ConsumerWidget {
         actions: const [Padding(padding: EdgeInsets.only(right: 30))],
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 60),
-          child: Text(title, overflow: TextOverflow.ellipsis),
+          child: Text(title,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.headline5),
         ),
       ),
       body: Padding(
@@ -40,12 +41,20 @@ class PlayerTrackView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(title),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.headline4,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
-              child: Text("Album",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: secondaryText)),
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 25),
+              child: Text(
+                "Artist",
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headline6,
+                maxLines: 1,
+              ),
             ),
             const MyProgressBar(),
             Padding(

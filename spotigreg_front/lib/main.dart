@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/route/route.dart' as route;
 import 'package:spotigreg_front/storage/tracks_hive.dart';
+import 'package:spotigreg_front/themes/colors.dart';
 
 Future<void> main() async {
   // Hive
@@ -12,8 +13,6 @@ Future<void> main() async {
   await Hive.openBox<TracksHive>('tracks');
   await PageManager.checkUrl();
   await PageManager.initAudioHandler();
-  // VideoHandler().initVideoController(
-  //     'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SpotiGreg',
-      theme: ThemeData.dark(),
+      theme: themedataDark,
       onGenerateRoute: route.controller,
       initialRoute: route.homePage,
     );

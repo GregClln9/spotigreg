@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
-import 'package:spotigreg_front/themes/colors.dart';
 
 class TrackCard extends ConsumerStatefulWidget {
   const TrackCard(
@@ -92,14 +91,12 @@ class _TrackCardState extends ConsumerState<TrackCard> {
                         widget.title,
                         overflow: TextOverflow.ellipsis,
                         style: currentStream
-                            ? TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.bold)
-                            : const TextStyle(color: Colors.white),
+                            ? Theme.of(context).textTheme.headline3
+                            : Theme.of(context).textTheme.headline1,
                       ),
                       Text(widget.artiste,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: secondaryText))
+                          style: Theme.of(context).textTheme.headline2)
                     ],
                   ),
                 ),
