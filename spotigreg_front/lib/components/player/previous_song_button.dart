@@ -7,9 +7,12 @@ class PreviousSongButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-    return IconButton(
-        iconSize: 45,
-        onPressed: pageManager.previous,
-        icon: const Icon(Icons.skip_previous_rounded));
+    return GestureDetector(
+      onTap: (() {
+        pageManager.seek(const Duration(seconds: 0));
+      }),
+      onDoubleTap: pageManager.previous,
+      child: const Icon(Icons.skip_previous_rounded, size: 45),
+    );
   }
 }

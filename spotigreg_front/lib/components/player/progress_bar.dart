@@ -13,21 +13,18 @@ class MyProgressBar extends ConsumerWidget {
     return ValueListenableBuilder<ProgressBarState>(
       valueListenable: pageManager.progressNotifier,
       builder: (_, value, __) {
-        return SizedBox(
-          height: 20,
-          child: ProgressBar(
-              thumbRadius: 6.0,
-              thumbGlowRadius: 20.0,
-              thumbColor: Colors.white,
-              progressBarColor: Colors.white,
-              bufferedBarColor: primaryColor.withOpacity(0.5),
-              baseBarColor: secondaryText,
-              progress: value.current,
-              buffered: value.buffered,
-              total: value.total,
-              onSeek: pageManager.seek,
-              timeLabelTextStyle: TextStyle(color: secondaryText)),
-        );
+        return ProgressBar(
+            thumbRadius: 6.0,
+            thumbGlowRadius: 20.0,
+            thumbColor: Colors.white,
+            progressBarColor: Colors.white,
+            bufferedBarColor: primaryColor.withOpacity(0.5),
+            baseBarColor: secondaryText,
+            progress: value.current,
+            buffered: value.buffered,
+            total: value.total,
+            onSeek: pageManager.seek,
+            timeLabelTextStyle: TextStyle(color: secondaryText));
       },
     );
   }

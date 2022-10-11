@@ -9,6 +9,8 @@ Color greyDark = const Color.fromARGB(255, 44, 42, 42);
 ThemeData themedataDark = ThemeData.dark().copyWith(
   primaryColor: primaryColor,
   errorColor: redDiss,
+  scaffoldBackgroundColor: Colors.black,
+  appBarTheme: const AppBarTheme(color: Colors.black),
   textTheme: TextTheme(
     headline1: TextStyle(
         fontSize: 14,

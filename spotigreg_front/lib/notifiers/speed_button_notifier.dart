@@ -18,7 +18,12 @@ class SpeedButtonNotifier extends ValueNotifier<SpeedState> {
 }
 
 enum SpeedState {
+  x0v25,
+  x0v5,
+  x0v75,
   x1,
+  x1v25,
+  x1v5,
+  x1v75,
   x2,
-  x3,
 }

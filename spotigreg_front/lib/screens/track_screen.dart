@@ -25,63 +25,60 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
   @override
   Widget build(BuildContext context) {
     final pageManager = ref.read(pageManagerProvider);
-
-    final trackBox = FutureBuilder(
-        future: initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if ((snapshot.connectionState == ConnectionState.none)) {
-            return const CircularProgressIndicator.adaptive();
-          } else {
-            return ValueListenableBuilder<TrackModel>(
-                valueListenable: pageManager.currentSongNotifier,
-                builder: (_, currentTrack, __) {
-                  if (currentTitle != currentTrack.title) {
-                    currentTitle = currentTrack.title;
-                    currentArtist = currentTrack.artist;
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {});
-                    });
-                  }
-                  return ValueListenableBuilder(
-                      valueListenable: videoController,
-                      builder: (__, VideoPlayerValue value, _) {
-                        return (value.isBuffering)
-                            ? const StackTrackScreen(
-                                childVideo:
-                                    CircularProgressIndicator.adaptive(),
-                                childVideoBackground:
-                                    CircularProgressIndicator.adaptive(),
-                              )
-                            : (value.isInitialized)
-                                ? StackTrackScreen(
-                                    childVideo: AspectRatio(
-                                        aspectRatio: value.aspectRatio,
-                                        child: VideoPlayer(videoController)),
-                                    childVideoBackground:
-                                        VideoPlayer(videoController))
-                                : const StackTrackScreen(
-                                    childVideo:
-                                        CircularProgressIndicator.adaptive(),
-                                    childVideoBackground:
-                                        CircularProgressIndicator.adaptive(),
-                                  );
-                      });
-                });
-          }
-        });
-
     return Scaffold(
       key: _navigatorKey3,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      body: trackBox,
+      body: FutureBuilder(
+          future: initializeVideoPlayerFuture,
+          builder: (context, snapshot) {
+            if ((snapshot.connectionState == ConnectionState.none)) {
+              return const CircularProgressIndicator.adaptive();
+            } else {
+              return ValueListenableBuilder<TrackModel>(
+                  valueListenable: pageManager.currentSongNotifier,
+                  builder: (_, currentTrack, __) {
+                    if (currentTitle != currentTrack.title) {
+                      currentTitle = currentTrack.title;
+                      currentArtist = currentTrack.artist;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {});
+                      });
+                    }
+                    return ValueListenableBuilder(
+                        valueListenable: videoController,
+                        builder: (__, VideoPlayerValue value, _) {
+                          return (value.isBuffering)
+                              ? const StackTrackScreen(
+                                  childVideo:
+                                      CircularProgressIndicator.adaptive(),
+                                  childVideoBackground:
+                                      CircularProgressIndicator.adaptive(),
+                                )
+                              : (value.isInitialized)
+                                  ? StackTrackScreen(
+                                      childVideo: AspectRatio(
+                                          aspectRatio: value.aspectRatio,
+                                          child: VideoPlayer(videoController)),
+                                      childVideoBackground:
+                                          VideoPlayer(videoController))
+                                  : const StackTrackScreen(
+                                      childVideo:
+                                          CircularProgressIndicator.adaptive(),
+                                      childVideoBackground:
+                                          CircularProgressIndicator.adaptive(),
+                                    );
+                        });
+                  });
+            }
+          }),
     );
   }
 }
 
 final touch = ValueNotifier<bool>(false);
 
-class StackTrackScreen extends StatelessWidget {
+class StackTrackScreen extends ConsumerWidget {
   const StackTrackScreen(
       {Key? key, required this.childVideo, required this.childVideoBackground})
       : super(key: key);
@@ -89,15 +86,23 @@ class StackTrackScreen extends StatelessWidget {
   final Widget childVideoBackground;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pageManager = ref.read(pageManagerProvider);
+
+    return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (details.primaryVelocity! > 0) {
+          pageManager.previous();
+        } else if (details.primaryVelocity! < 0) {
+          pageManager.next();
+        }
+      },
       onTap: () {
         touch.value = !touch.value;
       },
       child: Stack(
         fit: StackFit.expand,
         children: [
-          const Opacity(opacity: 0.1),
           childVideoBackground,
           ClipRRect(
               child: BackdropFilter(

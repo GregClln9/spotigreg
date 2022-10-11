@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:spotigreg_front/layout/player_home.dart';
 import 'package:spotigreg_front/screens/home.dart';
@@ -36,6 +37,12 @@ class MenuBottom extends StatelessWidget {
                 minHeight: mHeight * 0.15,
                 maxHeight: mHeight,
                 builder: (height, percentage) {
+                  if (percentage < 0.5) {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                      DeviceOrientation.portraitDown,
+                    ]);
+                  }
                   if (percentage > 0.5) {
                     return const TrackScreen();
                   } else {

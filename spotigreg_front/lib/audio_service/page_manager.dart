@@ -128,12 +128,16 @@ class PageManager {
 
   void _listenToCurrentPosition() {
     AudioService.position.listen((position) {
-      if (position > const Duration(seconds: 4) &&
-              position < const Duration(seconds: 5) ||
+      if (position > const Duration(seconds: 9) &&
+              position < const Duration(seconds: 10) ||
           position > const Duration(seconds: 30) &&
               position < const Duration(seconds: 31) ||
           position > const Duration(seconds: 60) &&
-              position < const Duration(seconds: 61)) {
+              position < const Duration(seconds: 61) ||
+          position > const Duration(seconds: 90) &&
+              position < const Duration(seconds: 91) ||
+          position > const Duration(seconds: 120) &&
+              position < const Duration(seconds: 121)) {
         videoHandler.seekTo(position);
       }
 
@@ -237,8 +241,23 @@ class PageManager {
       case SpeedState.x2:
         _audioHandler.setSpeedMode(SpeedState.x2);
         break;
-      case SpeedState.x3:
-        _audioHandler.setSpeedMode(SpeedState.x3);
+      case SpeedState.x0v5:
+        _audioHandler.setSpeedMode(SpeedState.x0v5);
+        break;
+      case SpeedState.x0v25:
+        _audioHandler.setSpeedMode(SpeedState.x0v25);
+        break;
+      case SpeedState.x0v75:
+        _audioHandler.setSpeedMode(SpeedState.x0v75);
+        break;
+      case SpeedState.x1v25:
+        _audioHandler.setSpeedMode(SpeedState.x1v25);
+        break;
+      case SpeedState.x1v5:
+        _audioHandler.setSpeedMode(SpeedState.x1v5);
+        break;
+      case SpeedState.x1v75:
+        _audioHandler.setSpeedMode(SpeedState.x1v75);
         break;
     }
   }

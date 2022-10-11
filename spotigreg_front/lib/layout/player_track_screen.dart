@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spotigreg_front/components/player/next_song_button.dart';
+import 'package:spotigreg_front/components/player/orientation_button.dart';
 import 'package:spotigreg_front/components/player/play_button.dart';
 import 'package:spotigreg_front/components/player/previous_song_button.dart';
 import 'package:spotigreg_front/components/player/progress_bar.dart';
@@ -17,16 +18,13 @@ class PlayerTrackScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // double mHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         leading: IconButton(
           iconSize: 40,
           icon: const Icon(Icons.keyboard_arrow_down_rounded),
-          onPressed: () => print("ferme"),
-          // onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {},
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -82,7 +80,13 @@ class PlayerTrackScreen extends ConsumerWidget {
                   "SpotiGreg.",
                   style: GoogleFonts.raleway(fontWeight: FontWeight.bold),
                 ),
-                const SpeedButton(),
+                Row(
+                  children: const [
+                    SpeedButton(),
+                    SizedBox(width: 25),
+                    OrientationButton(),
+                  ],
+                )
               ],
             )
           ],

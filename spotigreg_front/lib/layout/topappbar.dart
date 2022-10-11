@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:spotigreg_front/route/route.dart' as route;
 import 'package:flutter/material.dart';
+import 'package:spotigreg_front/screens/settings.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 
 class TopAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -63,8 +63,8 @@ class _TopAppBarState extends State<TopAppBar> {
             color: secondaryText,
           ),
           onPressed: () {
-         
-            Navigator.pushNamed(context, route.settingsPage);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Settings()));
           },
         ),
       ],

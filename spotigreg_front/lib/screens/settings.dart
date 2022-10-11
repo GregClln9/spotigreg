@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+final GlobalKey<ScaffoldState> _keySettings = GlobalKey();
+
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -10,6 +12,7 @@ class Settings extends StatelessWidget {
       "SpotiGreg version 1.0",
     ];
     return Scaffold(
+        key: _keySettings,
         appBar: AppBar(title: const Text("Préferences")),
         body: Padding(
           padding: const EdgeInsets.only(top: 20),

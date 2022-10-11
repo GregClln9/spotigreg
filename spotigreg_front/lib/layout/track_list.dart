@@ -4,7 +4,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
 import 'package:spotigreg_front/models/track_model.dart';
-import 'package:spotigreg_front/screens/video_screen.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
 
@@ -32,9 +31,9 @@ class Tracklist extends ConsumerWidget {
         final pageManager = ref.read(pageManagerProvider);
         pageManager.playFromSong(index);
       }
-      Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const VideoScreen()))
-          .then((value) => callback());
+      // Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => const VideoScreen()))
+      //     .then((value) => callback());
     }
 
     return box.length > 0

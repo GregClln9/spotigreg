@@ -13,8 +13,8 @@ class SpeedButton extends ConsumerWidget {
         valueListenable: pageManager.speedButtonNotifier,
         builder: (context, speed, child) {
           List<String> allValue = SpeedButtonNotifier().speedState();
-
           return DropdownButton(
+              menuMaxHeight: 250,
               dropdownColor: greyDark.withOpacity(0.5),
               value: speed.name.toString(),
               items: allValue.map((String item) {
@@ -38,27 +38,30 @@ class SpeedButton extends ConsumerWidget {
                   case "x2":
                     pageManager.speed(SpeedState.x2);
                     break;
-                  case "x3":
-                    pageManager.speed(SpeedState.x3);
+                  case "x0v5":
+                    pageManager.speed(SpeedState.x0v5);
                     break;
+                  case "x0v25":
+                    pageManager.speed(SpeedState.x0v25);
+                    break;
+                  case "x0v75":
+                    pageManager.speed(SpeedState.x0v75);
+                    break;
+                  case "x1v25":
+                    pageManager.speed(SpeedState.x1v25);
+                    break;
+                  case "x1v5":
+                    pageManager.speed(SpeedState.x1v5);
+                    break;
+                  case "x1v75":
+                    pageManager.speed(SpeedState.x1v75);
+                    break;
+
                   default:
                     pageManager.speed(SpeedState.x1);
                     break;
                 }
               });
         });
-
-    // return IconButton(
-    //     onPressed: () {
-    //       print(speed);
-    //       // pageManager.speed(speed);
-    //     },
-    //     icon: const Icon(Icons.speed_rounded));
-    // return IconButton(
-    //   icon: ()
-    //       ? const Icon(Icons.shuffle)
-    //       : const Icon(Icons.shuffle, color: Colors.grey),
-    //   onPressed: pageManager.shuffle,
-    // );
   }
 }

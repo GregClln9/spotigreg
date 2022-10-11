@@ -7,11 +7,9 @@ class NextSongButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageManager = ref.read(pageManagerProvider);
-    return IconButton(
-        iconSize: 45,
-        onPressed: pageManager.next,
-        icon: const Icon(
-          Icons.skip_next_rounded,
-        ));
+    return GestureDetector(
+      onTap: pageManager.next,
+      child: const Icon(Icons.skip_next_rounded, size: 45),
+    );
   }
 }

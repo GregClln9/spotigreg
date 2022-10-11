@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
@@ -27,6 +28,10 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.initState();
     // init audioController
     final pageManager = ref.read(pageManagerProvider);

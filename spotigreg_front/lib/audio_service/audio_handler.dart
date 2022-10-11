@@ -226,9 +226,29 @@ class MyAudioHandler extends BaseAudioHandler {
         player.setSpeed(2);
         videoHandler.speed(2);
         break;
-      case SpeedState.x3:
+      case SpeedState.x0v5:
         player.setSpeed(0.5);
         videoHandler.speed(0.5);
+        break;
+      case SpeedState.x0v25:
+        player.setSpeed(0.25);
+        videoHandler.speed(0.25);
+        break;
+      case SpeedState.x0v75:
+        player.setSpeed(0.75);
+        videoHandler.speed(0.75);
+        break;
+      case SpeedState.x1v25:
+        player.setSpeed(1.25);
+        videoHandler.speed(1.25);
+        break;
+      case SpeedState.x1v5:
+        player.setSpeed(1.5);
+        videoHandler.speed(1.5);
+        break;
+      case SpeedState.x1v75:
+        player.setSpeed(1.75);
+        videoHandler.speed(1.75);
         break;
     }
   }
