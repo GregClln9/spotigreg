@@ -12,7 +12,6 @@ class OrientationButton extends StatelessWidget {
         if (!deviceLandscape) {
           SystemChrome.setPreferredOrientations([
             DeviceOrientation.landscapeLeft,
-            DeviceOrientation.landscapeRight,
           ]);
         } else {
           SystemChrome.setPreferredOrientations([
