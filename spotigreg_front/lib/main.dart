@@ -16,17 +16,20 @@ Future<void> main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
+final _navigatorKey = GlobalKey();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: _navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'SpotiGreg',
       theme: themedataDark,
       onGenerateRoute: route.controller,
-      initialRoute: route.homePage,
+      initialRoute: route.menuBottom,
     );
   }
 }

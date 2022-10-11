@@ -25,7 +25,8 @@ class PlayerTrackScreen extends ConsumerWidget {
         leading: IconButton(
           iconSize: 40,
           icon: const Icon(Icons.keyboard_arrow_down_rounded),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => print("ferme"),
+          // onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,

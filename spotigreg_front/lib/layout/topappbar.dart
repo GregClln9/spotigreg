@@ -63,6 +63,7 @@ class _TopAppBarState extends State<TopAppBar> {
             color: secondaryText,
           ),
           onPressed: () {
+         
             Navigator.pushNamed(context, route.settingsPage);
           },
         ),

@@ -8,9 +8,11 @@ import 'package:spotigreg_front/layout/player_track_screen.dart';
 import 'package:spotigreg_front/models/track_model.dart';
 import 'package:video_player/video_player.dart';
 
+final GlobalKey<ScaffoldState> _navigatorKey3 = GlobalKey<ScaffoldState>();
+
 class TrackScreen extends ConsumerStatefulWidget {
-  const TrackScreen({Key? key, required this.animation}) : super(key: key);
-  final Animation<double> animation;
+  const TrackScreen({Key? key, this.animation}) : super(key: key);
+  final Animation<double>? animation;
 
   @override
   _TrackScreenState createState() => _TrackScreenState();
@@ -69,24 +71,10 @@ class _TrackScreenState extends ConsumerState<TrackScreen> {
         });
 
     return Scaffold(
+      key: _navigatorKey3,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      body: AnimatedBuilder(
-          animation: widget.animation,
-          child: Hero(
-            tag: "Lyrics",
-            flightShuttleBuilder: ((flightContext, animation, flightDirection,
-                fromHeroContext, toHeroContext) {
-              return FadeTransition(opacity: animation, child: trackBox);
-            }),
-            child: trackBox,
-          ),
-          builder: (context, child) {
-            return FadeTransition(
-              opacity: widget.animation,
-              child: child,
-            );
-          }),
+      body: trackBox,
     );
   }
 }
@@ -121,7 +109,7 @@ class StackTrackScreen extends StatelessWidget {
                   child: ValueListenableBuilder<bool>(
                       valueListenable: touch,
                       builder: (_, touch, __) {
-                        return touch
+                        return (!touch)
                             ? Container(
                                 color: Colors.black,
                               )
@@ -135,7 +123,7 @@ class StackTrackScreen extends StatelessWidget {
                 child: ValueListenableBuilder<bool>(
                     valueListenable: touch,
                     builder: (_, touch, __) {
-                      return touch
+                      return (!touch)
                           ? PlayerTrackScreen(
                               title: currentTitle,
                               artist: currentArtist,
