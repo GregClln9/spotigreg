@@ -9,8 +9,8 @@ import 'package:spotigreg_front/components/player/repeat_button.dart';
 import 'package:spotigreg_front/components/player/shuffle_button.dart';
 import 'package:spotigreg_front/components/player/speed_button.dart';
 
-class PlayerTrackView extends ConsumerWidget {
-  const PlayerTrackView({Key? key, required this.title, required this.artist})
+class PlayerTrackScreen extends ConsumerWidget {
+  const PlayerTrackScreen({Key? key, required this.title, required this.artist})
       : super(key: key);
   final String title;
   final String artist;

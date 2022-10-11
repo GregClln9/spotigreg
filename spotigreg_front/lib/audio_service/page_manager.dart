@@ -23,7 +23,6 @@ class PageManager {
   late bool sortByMoreRecent = true;
   final currentSongNotifier = ValueNotifier<TrackModel>(TrackModel(
       album: "", artist: "", id: "", duration: "", title: "", url: ""));
-  final currentSongUrlNotifier = ValueNotifier<String>('');
   final playlistNotifier = ValueNotifier<List<MediaItem>>([]);
   final progressNotifier = ProgressNotifier();
   final repeatButtonNotifier = RepeatButtonNotifier();
@@ -100,7 +99,6 @@ class PageManager {
         playlistNotifier.value = [];
         currentSongNotifier.value = TrackModel(
             album: "", artist: "", id: "", duration: "", title: "", url: "");
-        currentSongUrlNotifier.value = '';
       } else {
         final newList = playlist.map((item) => item).toList();
         playlistNotifier.value = newList;
@@ -172,7 +170,6 @@ class PageManager {
 
   void listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
-      print(mediaItem?.artist);
       TrackModel currentTrack = TrackModel(
         id: mediaItem?.id ?? '',
         title: mediaItem?.title ?? '',
@@ -181,16 +178,7 @@ class PageManager {
         duration: mediaItem?.duration.toString() ?? '',
         artist: mediaItem?.artist ?? '',
       );
-
-      // List<String> currentTrack = [
-      //   mediaItem?.id ?? '',
-      //   mediaItem?.title ?? '',
-      //   mediaItem?.duration.toString() ?? '',
-      //   mediaItem?.extras!["url"].toString() ?? '',
-      //   mediaItem?.artist ?? '',
-      // ];
       currentSongNotifier.value = currentTrack;
-      currentSongUrlNotifier.value = mediaItem?.extras!["url"] ?? '';
     });
   }
 

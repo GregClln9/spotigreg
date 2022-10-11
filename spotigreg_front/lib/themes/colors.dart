@@ -19,7 +19,7 @@ ThemeData themedataDark = ThemeData.dark().copyWith(
         fontFamily:
             GoogleFonts.archivoBlack(textStyle: const TextStyle()).fontFamily),
     headline5: TextStyle(
-        fontSize: 23,
+        fontSize: 15,
         fontFamily: GoogleFonts.inter(
                 textStyle: const TextStyle(fontWeight: FontWeight.bold))
             .fontFamily),

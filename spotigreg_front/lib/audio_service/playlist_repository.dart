@@ -49,9 +49,6 @@ class PlaylistRepositorySortByMoreRecent {
 
     _songIndex -= 1;
     int boxIndex = box.keys.elementAt(_songIndex);
-
-    print(box.get(boxIndex)!.artiste.toString() + " test");
-
     return {
       'id': box.get(boxIndex)!.id.toString(),
       'title': box.get(boxIndex)!.title.toString(),

@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_artists
-
 class TrackModel {
   final String id;
   final String album;
@@ -17,7 +15,7 @@ class TrackModel {
     required this.duration,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, String> toMap() {
     return {
       'id': id,
       'album': album,
@@ -28,7 +26,7 @@ class TrackModel {
     };
   }
 
-  factory TrackModel.fromMap(Map<String, dynamic> map) {
+  factory TrackModel.fromMap(Map<String, String> map) {
     return TrackModel(
       id: map['id'] ?? '',
       album: map['album'] ?? '',

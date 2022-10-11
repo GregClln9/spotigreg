@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:spotigreg_front/audio_service/video_handler.dart';
-import 'package:spotigreg_front/layout/player.dart';
+import 'package:spotigreg_front/layout/player_home.dart';
 import 'package:spotigreg_front/layout/track_list.dart';
 import 'package:spotigreg_front/screens/search.dart';
 import 'package:spotigreg_front/utils/search_utils.dart';

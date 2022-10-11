@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:spotigreg_front/screens/track_view.dart';
+import 'package:spotigreg_front/screens/track_screen.dart';
 
 class ElevateButton extends ConsumerWidget {
   const ElevateButton({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ void navigateToLyrics(BuildContext context) {
       transitionDuration: const Duration(microseconds: 300000),
       reverseTransitionDuration: const Duration(microseconds: 300000),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return TrackView(
+        return TrackScreen(
           animation: animation,
         );
       },
