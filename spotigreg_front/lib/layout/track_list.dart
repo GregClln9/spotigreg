@@ -57,19 +57,19 @@ class Tracklist extends ConsumerWidget {
                     builder: (_, currentTrack, __) {
                       return Slidable(
                         key: UniqueKey(),
-                        startActionPane: ActionPane(
-                          extentRatio: 0.3,
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: ((context) => watchTrack(
-                                  index, indexFake, currentTrack.title)),
-                              backgroundColor: greyDark,
-                              foregroundColor: secondaryText,
-                              icon: Icons.play_arrow_rounded,
-                            ),
-                          ],
-                        ),
+                        // startActionPane: ActionPane(
+                        //   extentRatio: 0.3,
+                        //   motion: const ScrollMotion(),
+                        //   children: [
+                        //     SlidableAction(
+                        //       onPressed: ((context) => watchTrack(
+                        //           index, indexFake, currentTrack.title)),
+                        //       backgroundColor: greyDark,
+                        //       foregroundColor: secondaryText,
+                        //       icon: Icons.play_arrow_rounded,
+                        //     ),
+                        //   ],
+                        // ),
                         endActionPane: ActionPane(
                           extentRatio: 0.2,
                           motion: const ScrollMotion(),
