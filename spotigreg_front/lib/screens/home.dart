@@ -119,18 +119,9 @@ class _HomeState extends ConsumerState<Home> {
                                     : box.length.toString() + " titres",
                                 style: Theme.of(context).textTheme.headline2),
                             InkWell(
-                              // child: Icon(Icons.swap_vert_rounded,
-                              //     color: secondaryText),
                               child: Icon(Icons.add, color: primaryColor),
-
                               onTap: () {
                                 setState(() {
-                                  // final pageManager = ref.read(pageManagerProvider);
-                                  // pageManager.sortByMoreRecent =
-                                  //     !pageManager.sortByMoreRecent;
-                                  // pageManager.clearPlaylist();
-                                  // // pageManager.init();
-                                  // pageManager.loadPlaylist();
                                   showSearch(
                                           context: context,
                                           delegate: CustomSearchDelegate(),
@@ -138,6 +129,28 @@ class _HomeState extends ConsumerState<Home> {
                                       .then((value) {
                                     setState(() {});
                                   });
+                                });
+                              },
+                            ),
+                            InkWell(
+                              child: Icon(Icons.swap_vert_rounded,
+                                  color: secondaryText),
+                              onTap: () {
+                                setState(() {
+                                  final pageManager =
+                                      ref.read(pageManagerProvider);
+                                  pageManager.sortByMoreRecent =
+                                      !pageManager.sortByMoreRecent;
+                                });
+                              },
+                            ),
+                            InkWell(
+                              child: Icon(Icons.circle, color: secondaryText),
+                              onTap: () {
+                                setState(() {
+                                  final pageManager =
+                                      ref.read(pageManagerProvider);
+                                  pageManager.moreRecent();
                                 });
                               },
                             ),

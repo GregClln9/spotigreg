@@ -311,6 +311,10 @@ class PageManager {
     _audioHandler.addQueueItemMorerecent(mediaItem);
   }
 
+  void moreRecent() {
+    _audioHandler.moreRecent();
+  }
+
   void remove(int index) {
     videoHandler.pause();
     if (index < 0) return;

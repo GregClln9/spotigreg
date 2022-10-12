@@ -151,6 +151,38 @@ class MyAudioHandler extends BaseAudioHandler {
     queue.add(newQueue);
   }
 
+  void moreRecent() {
+    print("moreRecent start");
+    // _playlist.sequence
+    //   ..clear()
+    //   ..addAll(_playlist.sequence.reversed);
+
+    var newKe = queue.value.reversed;
+
+    print(queue.value.first.title);
+    print(newKe.first.title);
+    late List<MediaItem> newQueue;
+    for (var mediaItem in newKe) {
+      var n = queue.value.add(mediaItem);
+    }
+    // queue.value.clear();
+
+    // print(newQueue);
+
+    // queue.add(newQueue);
+
+    print(queue.value.first.title);
+
+    // print(_playlist.sequence[0].tag);
+    // int count = 0;
+    // for (dynamic zik in queue.value.reversed) {
+    //   removeQueueItemAt(count);
+    //   count++;
+    // }
+
+    // notify system
+  }
+
   UriAudioSource _createAudioSource(MediaItem mediaItem) {
     return AudioSource.uri(
       Uri.parse(mediaItem.extras!['url']),
