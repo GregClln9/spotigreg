@@ -53,7 +53,7 @@ class PlayerTrackScreen extends ConsumerWidget {
               child: Text(
                 artist,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.subtitle1,
                 maxLines: 1,
               ),
             ),

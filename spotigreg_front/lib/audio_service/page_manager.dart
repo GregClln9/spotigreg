@@ -180,7 +180,7 @@ class PageManager {
       progressNotifier.value = ProgressBarState(
         current: oldState.current,
         buffered: oldState.buffered,
-        total: mediaItem?.duration ?? Duration.zero,
+        total: mediaItem?.duration ?? oldState.total,
       );
     });
   }

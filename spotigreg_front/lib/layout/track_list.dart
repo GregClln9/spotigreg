@@ -26,15 +26,15 @@ class Tracklist extends ConsumerWidget {
       callback();
     }
 
-    watchTrack(int index, int indexFake, String currentTitle) {
-      if (!(currentTitle == box.getAt(indexFake)!.title.toString())) {
-        final pageManager = ref.read(pageManagerProvider);
-        pageManager.playFromSong(index);
-      }
-      // Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => const VideoScreen()))
-      //     .then((value) => callback());
-    }
+    // watchTrack(int index, int indexFake, String currentTitle) {
+    //   if (!(currentTitle == box.getAt(indexFake)!.title.toString())) {
+    //     final pageManager = ref.read(pageManagerProvider);
+    //     pageManager.playFromSong(index);
+    //   }
+    //   // Navigator.push(context,
+    //   //         MaterialPageRoute(builder: (context) => const VideoScreen()))
+    //   //     .then((value) => callback());
+    // }
 
     return box.length > 0
         ? ListView.builder(

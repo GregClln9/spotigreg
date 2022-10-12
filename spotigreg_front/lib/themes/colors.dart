@@ -36,6 +36,9 @@ ThemeData themedataDark = ThemeData.dark().copyWith(
         fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),
     headline6: TextStyle(
         fontSize: 20,
+        fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),
+    subtitle1: TextStyle(
+        fontSize: 20,
         color: secondaryText,
         fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),
   ),
