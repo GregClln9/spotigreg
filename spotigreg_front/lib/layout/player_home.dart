@@ -77,7 +77,7 @@ class _VideoPlayerHomeState extends ConsumerState<VideoPlayerHome> {
                       valueListenable: videoController,
                       builder: (__, VideoPlayerValue value, _) {
                         return (value.isBuffering)
-                            ? const CircularProgressIndicator.adaptive()
+                            ? const SizedBox()
                             : (value.isInitialized)
                                 ? Opacity(
                                     opacity: 0.08,
@@ -88,7 +88,7 @@ class _VideoPlayerHomeState extends ConsumerState<VideoPlayerHome> {
                                           child: VideoPlayer(videoController)),
                                     ),
                                   )
-                                : const CircularProgressIndicator.adaptive();
+                                : const SizedBox();
                       });
                 });
           }
