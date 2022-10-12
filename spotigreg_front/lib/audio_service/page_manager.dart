@@ -203,8 +203,8 @@ class PageManager {
     await videoHandler.initVideoController(
         playlistNotifier.value[index ?? 0].extras!["url"], false);
     _audioHandler.play();
-    videoHandler.play();
     _audioHandler.skipToQueueItem(index ?? 0);
+    videoHandler.play();
   }
 
   void play() {
