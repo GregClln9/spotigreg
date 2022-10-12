@@ -47,6 +47,22 @@ class TracksUtils {
     }
   }
 
+  static putTrack(String id, String title, String artiste) async {
+    TracksHive? track;
+    for (int key in box.keys) {
+      if (box.get(key)!.id == id) {
+        track = box.get(key);
+        track!.title = title;
+        track.artiste = artiste;
+        await box.put(key, track).catchError((error) {
+          print("Error when updated " + id + " track");
+        }).then((value) {
+          print("Track with id: " + id + " UPDATED.");
+        });
+      }
+    }
+  }
+
   static deleteTrack(String id, BuildContext context) {
     for (int key in box.keys) {
       if (box.get(key)!.id == id) {

@@ -6,7 +6,6 @@ late Future<void> initializeVideoPlayerFuture;
 
 class VideoHandler {
   Future<bool> initVideoController(String url, bool initState) async {
-    if (!initState) await videoController.dispose();
     videoController = VideoPlayerController.network(url);
     initializeVideoPlayerFuture = videoController.initialize();
     await videoController.setVolume(0);

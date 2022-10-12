@@ -76,6 +76,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                             .mediumResUrl,
                                         url: url,
                                         artiste: snapshot.data[index].author,
+                                        isUpdate: false,
                                       );
                                     }).then((value) {});
                               } catch (e) {
@@ -107,20 +108,27 @@ class CustomSearchDelegate extends SearchDelegate {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Text("Recherches récentes"),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        searchHistory.searchHistoryList!.clear();
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.close_rounded))
-                ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: Text("Recherches récentes"),
+                    ),
+                    InkWell(
+                        onTap: () {
+                          searchHistory.searchHistoryList!.clear();
+                          setState(() {});
+                        },
+                        child: Icon(
+                          Icons.close_rounded,
+                          color: secondaryText,
+                        ))
+                  ],
+                ),
               ),
               Flexible(
                   child: (searchHistory.searchHistoryList != null)
@@ -159,26 +167,3 @@ class CustomSearchDelegate extends SearchDelegate {
     });
   }
 }
-
-
-
-  // Center(
-                  //     child: InkWell(
-                  //         onTap: () {
-                  //           // searchProvider.removeAllSearchHistory();
-                  //           setState(() {});
-                  //         },
-                  //         child: Container(
-                  //           child: const Padding(
-                  //             padding: EdgeInsets.fromLTRB(15, 4, 15, 4),
-                  //             child: Text(
-                  //               'Effacer les recherces récentes',
-                  //             ),
-                  //           ),
-                  //           decoration: BoxDecoration(
-                  //               border: Border.all(width: 2, color: secondaryText),
-                  //               borderRadius: const BorderRadius.all(
-                  //                 Radius.circular(20),
-                  //               )),
-                  //
-                  //       )))

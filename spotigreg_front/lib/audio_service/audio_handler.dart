@@ -151,6 +151,26 @@ class MyAudioHandler extends BaseAudioHandler {
     queue.add(newQueue);
   }
 
+  void update(MediaItem mediaItem, String id) {
+    print("oki");
+    // print(mediaItem);
+    print(id);
+
+    final audioSource = _createAudioSource(mediaItem);
+    _playlist.sequence[int.parse(id)] = audioSource;
+    // print(_playlist.children.);
+    // _playlist.[foods.indexWhere((element) => element.uid == food.uid)] = food;
+    // audioSource;
+
+    // notify system
+    // queue.value[int.parse(id)] = mediaItem;
+    queue.value[queue.value
+        .indexWhere((element) => element.id == mediaItem.id)] = mediaItem;
+
+    // final newQueue = queue.value..insert(0, mediaItem);
+    // queue.add(newQueue);
+  }
+
   UriAudioSource _createAudioSource(MediaItem mediaItem) {
     return AudioSource.uri(
       Uri.parse(mediaItem.extras!['url']),

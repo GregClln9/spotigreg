@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:spotigreg_front/audio_service/page_manager.dart';
 import 'package:spotigreg_front/components/home/track_card.dart';
+import 'package:spotigreg_front/layout/download_modal_bottom.dart';
 import 'package:spotigreg_front/models/track_model.dart';
 import 'package:spotigreg_front/themes/colors.dart';
 import 'package:spotigreg_front/utils/tracks_utils.dart';
@@ -26,15 +27,12 @@ class Tracklist extends ConsumerWidget {
       callback();
     }
 
-    watchTrack(int index, int indexFake, String currentTitle) {
-      if (!(currentTitle == box.getAt(indexFake)!.title.toString())) {
-        final pageManager = ref.read(pageManagerProvider);
-        pageManager.playFromSong(index);
-      }
-      // Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => const VideoScreen()))
-      //     .then((value) => callback());
-    }
+    // watchTrack(int index, int indexFake, String currentTitle) {
+    //   if (!(currentTitle == box.getAt(indexFake)!.title.toString())) {
+    //     final pageManager = ref.read(pageManagerProvider);
+    //     pageManager.playFromSong(index);
+    //   }
+    // }
 
     return box.length > 0
         ? ListView.builder(
@@ -57,23 +55,46 @@ class Tracklist extends ConsumerWidget {
                     builder: (_, currentTrack, __) {
                       return Slidable(
                         key: UniqueKey(),
-                        startActionPane: ActionPane(
+                        // startActionPane: ActionPane(
+                        //   extentRatio: 0.3,
+                        //   motion: const ScrollMotion(),
+                        //   children: [
+                        //     SlidableAction(
+                        //       onPressed: ((context) => watchTrack(
+                        //           index, indexFake, currentTrack.title)),
+                        //       backgroundColor: greyDark,
+                        //       foregroundColor: secondaryText,
+                        //       icon: Icons.play_arrow_rounded,
+                        //     ),
+                        //   ],
+                        // ),
+                        endActionPane: ActionPane(
                           extentRatio: 0.3,
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: ((context) => watchTrack(
-                                  index, indexFake, currentTrack.title)),
-                              backgroundColor: greyDark,
-                              foregroundColor: secondaryText,
-                              icon: Icons.play_arrow_rounded,
+                              onPressed: ((context) => showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (builder) {
+                                    return DownloadModalBottom(
+                                      idUpdate: index,
+                                      title: box
+                                          .getAt(indexFake)!
+                                          .title
+                                          .toString(),
+                                      artiste: box
+                                          .getAt(indexFake)!
+                                          .artiste
+                                          .toString(),
+                                      isUpdate: true,
+                                    );
+                                  }).then((value) => callback())),
+                              backgroundColor: primaryColor.withOpacity(0.7),
+                              foregroundColor: Colors.white,
+                              icon: Icons.mode,
                             ),
-                          ],
-                        ),
-                        endActionPane: ActionPane(
-                          extentRatio: 0.2,
-                          motion: const ScrollMotion(),
-                          children: [
                             SlidableAction(
                               onPressed: ((context) =>
                                   deleteTrack(index, indexFake)),

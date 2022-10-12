@@ -298,6 +298,20 @@ class PageManager {
     _audioHandler.addQueueItem(mediaItem);
   }
 
+  update(String id, String title, String artist) {
+    final mediaItem = MediaItem(
+      id: _audioHandler.queue.value[int.parse(id)].id,
+      album: _audioHandler.queue.value[int.parse(id)].album,
+      artist: artist,
+      title: title,
+      extras: {'url': _audioHandler.queue.value[int.parse(id)].extras!["url"]},
+      artUri: _audioHandler.queue.value[int.parse(id)].artUri,
+    );
+
+    _audioHandler.update(mediaItem, id);
+    // _audioHandler.queue.value[int.parse(id)] = mediaItem;
+  }
+
   addMoreRecent(String id, String album, String title, String url, String cover,
       String artist) async {
     final mediaItem = MediaItem(
