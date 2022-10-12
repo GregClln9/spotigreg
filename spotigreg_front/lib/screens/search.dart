@@ -23,7 +23,11 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
-      IconButton(onPressed: () => query = '', icon: const Icon(Icons.clear))
+      IconButton(
+          onPressed: () {
+            showResults(context);
+          },
+          icon: const Icon(Icons.search_rounded))
     ];
   }
 
@@ -105,17 +109,17 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Padding(
+                children: [
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                     child: Text("Recherches récentes"),
                   ),
-                  // IconButton(
-                  //     onPressed: () {
-                  //       searchHistory.searchHistoryList!.clear();
-                  //       setState(() {});
-                  //     },
-                  //     icon: const Icon(Icons.close))
+                  IconButton(
+                      onPressed: () {
+                        searchHistory.searchHistoryList!.clear();
+                        setState(() {});
+                      },
+                      icon: const Icon(Icons.close_rounded))
                 ],
               ),
               Flexible(
