@@ -1,4 +1,5 @@
 import 'package:video_player/video_player.dart';
+import 'dart:io' show Platform;
 
 // final videoHandlerProvider = Provider((ref) => VideoHandler());
 late VideoPlayerController videoController;
@@ -8,7 +9,9 @@ class VideoHandler {
   Future<bool> initVideoController(String url, bool initState) async {
     if (!initState) await videoController.dispose();
     videoController = VideoPlayerController.network(url,
-        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+        videoPlayerOptions: VideoPlayerOptions(
+            mixWithOthers: Platform.isAndroid ? true : false,
+            allowBackgroundPlayback: Platform.isAndroid ? true : false));
     initializeVideoPlayerFuture = videoController.initialize();
     await videoController.setVolume(0);
     return true;
