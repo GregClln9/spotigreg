@@ -15,20 +15,20 @@ class PlayerHome extends StatelessWidget {
   const PlayerHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       fit: StackFit.expand,
       children: [
-        const VideoPlayerHome(),
+        VideoPlayerHome(),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const MyProgressBar(),
+            MyProgressBar(),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   ShuffleButton(),
                   // ElevateButton(),
                   PreviousSongButton(),

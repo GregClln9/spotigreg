@@ -71,7 +71,7 @@ class _TopAppBarState extends State<TopAppBar> {
       elevation: 0,
       title: Text(
         "SpotiGreg. " + listOfEmoji[_random.nextInt(listOfEmoji.length)],
-        style: Theme.of(context).textTheme.headline4,
+        style: Theme.of(context).textTheme.headlineMedium,
       ),
       centerTitle: false,
     );

@@ -12,32 +12,32 @@ ThemeData themedataDark = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(color: Colors.black),
   textTheme: TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
         fontSize: 14,
         fontFamily:
             GoogleFonts.archivoBlack(textStyle: const TextStyle()).fontFamily),
-    headline4: TextStyle(
+    headlineMedium: TextStyle(
         fontSize: 20,
         fontFamily:
             GoogleFonts.archivoBlack(textStyle: const TextStyle()).fontFamily),
-    headline5: TextStyle(
+    headlineSmall: TextStyle(
         fontSize: 15,
         fontFamily: GoogleFonts.inter(
                 textStyle: const TextStyle(fontWeight: FontWeight.bold))
             .fontFamily),
-    headline3: TextStyle(
+    displaySmall: TextStyle(
         fontSize: 14,
         color: primaryColor,
         fontFamily:
             GoogleFonts.archivoBlack(textStyle: const TextStyle()).fontFamily),
-    headline2: TextStyle(
+    displayMedium: TextStyle(
         fontSize: 15,
         color: secondaryText,
         fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),
-    headline6: TextStyle(
+    titleLarge: TextStyle(
         fontSize: 20,
         fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),
-    subtitle1: TextStyle(
+    titleMedium: TextStyle(
         fontSize: 20,
         color: secondaryText,
         fontFamily: GoogleFonts.inter(textStyle: const TextStyle()).fontFamily),

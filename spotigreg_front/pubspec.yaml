@@ -29,10 +29,11 @@ dependencies:
   # UI
   cupertino_icons: ^1.0.2
   shimmer: ^2.0.0
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.4
   flutter_launcher_icons: ^0.9.2
   flutter_slidable: ^2.0.0
   miniplayer: ^1.0.1
+  file: ^6.1.4
 
 dev_dependencies:
   flutter_test:

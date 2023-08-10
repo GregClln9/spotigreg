@@ -33,7 +33,7 @@ class PlayerTrackScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 60),
           child: Text(title,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headline5),
+              style: Theme.of(context).textTheme.headlineSmall),
         ),
       ),
       body: Padding(
@@ -44,7 +44,7 @@ class PlayerTrackScreen extends ConsumerWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
@@ -53,17 +53,17 @@ class PlayerTrackScreen extends ConsumerWidget {
               child: Text(
                 artist,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
                 maxLines: 1,
               ),
             ),
             const MyProgressBar(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
                   ShuffleButton(),
                   PreviousSongButton(),
                   PlayButton(),
@@ -80,8 +80,8 @@ class PlayerTrackScreen extends ConsumerWidget {
                   "SpotiGreg.",
                   style: GoogleFonts.raleway(fontWeight: FontWeight.bold),
                 ),
-                Row(
-                  children: const [
+                const Row(
+                  children: [
                     SpeedButton(),
                     SizedBox(width: 25),
                     OrientationButton(),

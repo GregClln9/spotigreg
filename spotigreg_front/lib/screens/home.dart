@@ -117,7 +117,8 @@ class _HomeState extends ConsumerState<Home> {
                                 box.length <= 1
                                     ? box.length.toString() + " titre"
                                     : box.length.toString() + " titres",
-                                style: Theme.of(context).textTheme.headline2),
+                                style:
+                                    Theme.of(context).textTheme.displayMedium),
                             InkWell(
                               // child: Icon(Icons.swap_vert_rounded,
                               //     color: secondaryText),

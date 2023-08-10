@@ -92,12 +92,12 @@ class _TrackCardState extends ConsumerState<TrackCard> {
                         widget.title,
                         overflow: TextOverflow.ellipsis,
                         style: currentStream
-                            ? Theme.of(context).textTheme.headline3
-                            : Theme.of(context).textTheme.headline1,
+                            ? Theme.of(context).textTheme.displaySmall
+                            : Theme.of(context).textTheme.displayLarge,
                       ),
                       Text(widget.artiste,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.headline2)
+                          style: Theme.of(context).textTheme.displayMedium)
                     ],
                   ),
                 ),
